@@ -1,0 +1,9 @@
+# Cloudflare Pages. Files under /assets carry a hash of their contents in their names, so they
+# can be kept for good. Pages already has every other file checked again on each visit; a
+# Cache-Control under /* would be joined onto the one for /assets/*, so there is none.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin

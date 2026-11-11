@@ -244,18 +244,24 @@ const imagePrivacy: ImageEditPrivacy = {
   },
 }
 
-// Video and files need real addresses to play and download, so these use the dev server.
-async function store(file: File) {
-  await new Promise(resolve => setTimeout(resolve, 300))
-  if (failUploads.value)
-    throw new Error('模擬的上傳失敗')
-  const response = await fetch(`/__uploads/${encodeURIComponent(file.name)}`, {
-    method: 'POST',
-    headers: { 'content-type': file.type || 'application/octet-stream' },
-    body: file,
-  })
-  return await response.json() as { src: string }
-}
+/*
+ * Video and files need real addresses to play and download, so these use the dev server.
+ * The built site has no server to keep them: there the editor is given no uploader for
+ * them, and it asks for an address instead.
+ */
+const store = import.meta.env.DEV
+  ? async (file: File) => {
+    await new Promise(resolve => setTimeout(resolve, 300))
+    if (failUploads.value)
+      throw new Error('模擬的上傳失敗')
+    const response = await fetch(`/__uploads/${encodeURIComponent(file.name)}`, {
+      method: 'POST',
+      headers: { 'content-type': file.type || 'application/octet-stream' },
+      body: file,
+    })
+    return await response.json() as { src: string }
+  }
+  : undefined
 
 // What a server would send for this document: the renderer through renderToString.
 const ssrHtml = shallowRef('')
@@ -415,6 +421,9 @@ watch([tab, doc, variant, scheme, theme], async () => {
             模擬上傳失敗
             <input v-model="failUploads" type="checkbox" class="pg-switch">
           </label>
+          <p v-if="!DEV" class="upload-note">
+            展示網站沒有上傳服務：影片和檔案請貼網址，圖片可以直接上傳。
+          </p>
           <p v-if="lastUpload" class="last-upload" role="status">
             最後上傳：{{ lastUpload }}
           </p>
@@ -634,6 +643,13 @@ body {
 
 .inspector-row:first-child {
   margin-top: 0;
+}
+
+.upload-note {
+  margin: 8px 0 0;
+  color: var(--hlx-color-text-tertiary);
+  font-size: 12px;
+  line-height: 1.6;
 }
 
 .last-upload {

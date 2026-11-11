@@ -7,6 +7,8 @@ A rich text editor for Vue 3, built on Lexical. One JSON document, from editing 
 
 **一份文件，從編輯到呈現。** hakulex 是給 Vue 3 的富文本編輯器，建立在 [Lexical](https://lexical.dev) 上。編輯和閱讀共用同一份 JSON 文件，需要哪些功能就裝哪些外掛。
 
+**展示網站：[hakulex.dev](https://hakulex.dev)**，可以直接在瀏覽器裡試用編輯器，並看每一種節點、外掛和套件的範例。
+
 ![hakulex 的首頁：左邊是說明和安裝指令，右邊是可以直接打字的編輯器](./docs/assets/home.png)
 
 > [!NOTE]

@@ -2,7 +2,7 @@ import type { Plugin } from 'vite'
 import { Buffer } from 'node:buffer'
 import { readFileSync } from 'node:fs'
 import vue from '@vitejs/plugin-vue'
-import { defineConfig } from 'vite'
+import { defineConfig, runnerImport } from 'vite'
 
 /*
  * Workspace packages are served from source, so Vite discovers their deps only
@@ -124,10 +124,33 @@ function devUploads(): Plugin {
   }
 }
 
+/**
+ * Writes sitemap.xml into the build from the site's own list of pages, so the two cannot drift.
+ * The list is the app's TypeScript, loaded here the way Vite loads a config.
+ */
+function sitemap(): Plugin {
+  return {
+    name: 'hakulex-demo-sitemap',
+    apply: 'build',
+    async generateBundle() {
+      const options = { configFile: false as const, logLevel: 'silent' as const }
+      const { module: pages } = await runnerImport<typeof import('./src/site/pages')>(new URL('./src/site/pages.ts', import.meta.url).pathname, options)
+      const { module: seo } = await runnerImport<typeof import('./src/site/seo')>(new URL('./src/site/seo.ts', import.meta.url).pathname, options)
+      const urls = pages.sitePaths().map(path => `  <url><loc>${seo.pageUrl(path)}</loc></url>`)
+      this.emitFile({
+        type: 'asset',
+        fileName: 'sitemap.xml',
+        source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`,
+      })
+    },
+  }
+}
+
 export default defineConfig({
   plugins: [
     vue(),
     devUploads(),
+    sitemap(),
   ],
   resolve: {
     // Lexical keeps editor state in module scope; two copies break `$` helpers.
