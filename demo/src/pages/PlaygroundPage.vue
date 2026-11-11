@@ -510,10 +510,6 @@ body {
   min-width: 0;
 }
 
-.editor-frame > .hlx-editor > .hlx-content {
-  min-width: 0;
-}
-
 /* Under the bar on top. */
 .editor-frame .hlx-fixed-toolbar {
   position: sticky;

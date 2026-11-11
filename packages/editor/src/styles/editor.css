@@ -14,9 +14,17 @@
   padding-bottom: 2em;
 }
 
-/* What the placeholder is placed against: the document, not a toolbar above it. */
+/*
+ * The document's own box. The placeholder is placed against it, so under a toolbar and not
+ * behind one. Where the editor is laid out as a grid or a flex column, this box is the item:
+ * it may be narrower than a wide table inside it, and when it is given more height than the
+ * document needs, the content takes all of it, so a click on the blank space is in the editor.
+ */
 .hlx-editor .hlx-editor-body {
   position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
 }
 
 .hlx-editor [data-lexical-placeholder] {
