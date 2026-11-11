@@ -504,6 +504,9 @@ describe('toolbar slot', () => {
 
     const plain = mountEditor().wrapper
     await flushPromises()
-    expect(plain.find('.hlx-editor').element.firstElementChild?.classList.contains('hlx-content')).toBe(true)
+    // Nothing from the slot: the editor starts with the document's own box, and that with the content.
+    const first = plain.find('.hlx-editor').element.firstElementChild
+    expect(first?.classList.contains('hlx-editor-body')).toBe(true)
+    expect(first?.firstElementChild?.classList.contains('hlx-content')).toBe(true)
   })
 })

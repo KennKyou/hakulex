@@ -116,7 +116,9 @@ watch(revision, () => {
 
 /** A fixed toolbar on the same editor still has to be reachable, so this stays out of its way. */
 function fixedToolbarBottom() {
-  const fixed = editor.getRootElement()?.parentElement?.querySelector('.hlx-fixed-toolbar')
+  // The document sits in its own box inside the editor; the toolbar is beside that box.
+  const root = editor.getRootElement()
+  const fixed = (root?.closest('.hlx-editor-body') ?? root)?.parentElement?.querySelector('.hlx-fixed-toolbar')
   return fixed
     ? fixed.getBoundingClientRect().bottom + 8
     : 8

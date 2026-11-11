@@ -199,6 +199,25 @@ describe('validateUrl', () => {
   })
 })
 
+it('keeps the placeholder with the document, so a toolbar above does not cover it', async () => {
+  const wrapper = mount(RichEditor, {
+    props: { placeholder: 'Write' },
+    slots: { toolbar: '<div class="hlx-fixed-toolbar">toolbar</div>' },
+    attachTo: document.body,
+  })
+  await nextTick()
+  // The placeholder is placed from the top of what holds it: that has to be the document's
+  // own box, which starts under the toolbar, and not the whole editor.
+  const body = wrapper.find('.hlx-editor-body')
+  expect(body.exists()).toBe(true)
+  expect(body.find('.hlx-content').exists()).toBe(true)
+  expect(body.find('[data-lexical-placeholder]').text()).toBe('Write')
+  expect(body.find('.hlx-fixed-toolbar').exists()).toBe(false)
+  const children = [...wrapper.element.children]
+  expect(children.indexOf(wrapper.find('.hlx-fixed-toolbar').element)).toBeLessThan(children.indexOf(body.element))
+  wrapper.unmount()
+})
+
 it('re-renders after async props without losing the editor', async () => {
   const wrapper = mountEditor({ placeholder: 'Write' })
   await nextTick()

@@ -14,6 +14,11 @@
   padding-bottom: 2em;
 }
 
+/* What the placeholder is placed against: the document, not a toolbar above it. */
+.hlx-editor .hlx-editor-body {
+  position: relative;
+}
+
 .hlx-editor [data-lexical-placeholder] {
   position: absolute;
   top: 0;

@@ -137,7 +137,10 @@ const initialConfig: InitialConfig = {
   >
     <LexicalComposer :initial-config="initialConfig">
       <slot name="toolbar" />
-      <ContentEditable class="hlx-content" :placeholder="placeholder" />
+      <!-- The document's own box: the placeholder is placed inside it, so under any toolbar. -->
+      <div class="hlx-editor-body">
+        <ContentEditable class="hlx-content" :placeholder="placeholder" />
+      </div>
       <EditorCorePlugins :nodes="nodes" />
       <EditorModelPlugin
         v-model="model"
