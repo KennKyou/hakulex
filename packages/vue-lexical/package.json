@@ -16,7 +16,7 @@
     "composition-api"
   ],
   "sideEffects": [
-    "*.css"
+    "**/*.css"
   ],
   "exports": {
     ".": "./src/index.ts"

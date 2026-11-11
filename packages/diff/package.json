@@ -16,7 +16,8 @@
     "compare"
   ],
   "sideEffects": [
-    "*.css"
+    "**/*.css",
+    "./src/index.ts"
   ],
   "exports": {
     ".": "./src/index.ts",
