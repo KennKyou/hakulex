@@ -1,0 +1,263 @@
+/*
+ * The link panel, in the
+ * editor's interface tokens like the other floating panels.
+ */
+.hlx-link-panel {
+  z-index: 50;
+  width: 320px;
+  max-width: calc(100vw - 16px);
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: var(--hlx-chrome-radius-lg);
+  background: var(--hlx-color-bg-elevated);
+  box-shadow: var(--hlx-chrome-shadow-popup);
+  color: var(--hlx-color-text);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.hlx-link-panel-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px;
+}
+
+.hlx-link-panel-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-fill-secondary);
+  color: var(--hlx-color-text-tertiary);
+}
+
+.hlx-link-panel-meta {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.hlx-link-panel-title,
+.hlx-link-panel-url {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hlx-link-panel-title {
+  color: var(--hlx-color-text);
+  font-weight: 600;
+}
+
+.hlx-link-panel-title[data-empty] {
+  color: var(--hlx-color-text-tertiary);
+  font-weight: 400;
+}
+
+.hlx-link-panel-url {
+  color: var(--hlx-color-text-tertiary);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.hlx-link-panel-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  padding: 6px 6px 6px 12px;
+  border-top: 1px solid var(--hlx-chrome-border-subtle);
+}
+
+.hlx-link-panel-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--hlx-chrome-height-md);
+  height: var(--hlx-chrome-height-md);
+  padding: 0;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: transparent;
+  color: var(--hlx-color-text-secondary);
+  cursor: pointer;
+}
+
+.hlx-link-panel-button:hover:not(:disabled) {
+  background: var(--hlx-chrome-fill);
+  color: var(--hlx-color-text);
+}
+
+.hlx-link-panel-button[data-danger]:hover {
+  color: var(--hlx-chrome-caution);
+}
+
+.hlx-link-panel-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.hlx-link-panel-button:focus-visible {
+  outline: none;
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+/* Editing: the text and the address, then Cancel and Save. */
+.hlx-link-panel-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 12px;
+}
+
+.hlx-link-panel-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hlx-link-panel-field > span {
+  color: var(--hlx-color-text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.hlx-link-panel-field > input {
+  width: 100%;
+  height: 32px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg-elevated);
+  box-shadow: var(--hlx-chrome-shadow-control), inset 0 0 0 1px var(--hlx-chrome-border-subtle);
+  color: var(--hlx-color-text);
+  font: inherit;
+}
+
+.hlx-link-panel-field > input::placeholder {
+  color: var(--hlx-chrome-text-faint);
+}
+
+.hlx-link-panel-field > input:focus {
+  outline: none;
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+.hlx-link-panel-field > input[aria-invalid='true'] {
+  box-shadow: 0 0 0 1px var(--hlx-chrome-caution);
+}
+
+.hlx-link-panel-error {
+  margin: 0;
+  color: var(--hlx-chrome-caution);
+  font-size: 12px;
+}
+
+.hlx-link-panel-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.hlx-link-panel-text-button {
+  height: var(--hlx-chrome-height-md);
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--hlx-chrome-border-subtle);
+  color: var(--hlx-color-text);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.hlx-link-panel-text-button:hover:not(:disabled) {
+  background: var(--hlx-chrome-fill);
+}
+
+.hlx-link-panel-text-button[data-primary] {
+  background: var(--hlx-color-text);
+  box-shadow: none;
+  color: var(--hlx-color-bg);
+}
+
+.hlx-link-panel-text-button[data-primary]:hover:not(:disabled) {
+  background: var(--hlx-color-text-secondary);
+}
+
+.hlx-link-panel-text-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.hlx-link-panel-text-button:focus-visible {
+  outline: none;
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+/* While ⌘ (Ctrl) is held, links in the editor show they open on a click. */
+.hlx-link-mod a {
+  cursor: pointer;
+}
+
+/* Link or card: a segmented switch, at the start of the buttons. */
+.hlx-link-panel-spacer {
+  flex: 1;
+}
+
+.hlx-link-panel-kinds {
+  display: inline-flex;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 112px;
+  height: var(--hlx-chrome-height-md);
+  padding: 2px;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-chrome-fill);
+  font-family: var(--hlx-font-family-sans);
+}
+
+.hlx-link-panel-kind {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--hlx-color-text-secondary);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.hlx-link-panel-kind:hover,
+.hlx-link-panel-kind[aria-pressed='true'] {
+  color: var(--hlx-color-text);
+}
+
+.hlx-link-panel-kind[aria-pressed='true'] {
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-control);
+  cursor: default;
+}
+
+.hlx-link-panel-kind:focus-visible {
+  outline: none;
+  box-shadow: var(--hlx-chrome-ring);
+}

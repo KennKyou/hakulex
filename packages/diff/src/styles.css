@@ -1,0 +1,99 @@
+/*
+ * The diff view: a bordered box, a header over two columns,
+ * rows divided by lines, removed parts on a red tint and added ones on a green one. Inside a
+ * cell the document is set compactly, whatever the variant.
+ */
+.hlx-diff {
+  border: 1px solid var(--hlx-color-border);
+  border-radius: var(--hlx-chrome-radius-md);
+  overflow: hidden;
+  background: var(--hlx-color-bg);
+  font-family: var(--hlx-font-sans);
+  font-size: 14px;
+}
+
+.hlx-diff-header,
+.hlx-diff-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.hlx-diff-header {
+  border-bottom: 1px solid var(--hlx-color-border);
+  background: var(--hlx-color-bg-secondary);
+}
+
+.hlx-diff-header > * {
+  padding: 8px 16px;
+  color: var(--hlx-color-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.hlx-diff-header > :first-child,
+.hlx-diff-row > :first-child {
+  border-right: 1px solid var(--hlx-color-border);
+}
+
+.hlx-diff-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.hlx-diff-row,
+.hlx-diff-body > .hlx-diff-cell,
+.hlx-diff-collapsed {
+  border-bottom: 1px solid var(--hlx-color-border);
+}
+
+.hlx-diff-row:last-child,
+.hlx-diff-body > :last-child {
+  border-bottom: none;
+}
+
+.hlx-diff-cell {
+  min-height: 32px;
+  padding: 4px 12px;
+  overflow: hidden;
+}
+
+.hlx-diff-cell[data-diff-type='delete'] {
+  background-color: color-mix(in srgb, var(--hlx-color-alert-caution) 15%, transparent);
+}
+
+.hlx-diff-cell[data-diff-type='insert'] {
+  background-color: color-mix(in srgb, var(--hlx-color-alert-tip) 15%, transparent);
+}
+
+.hlx-diff-cell[data-diff-type='empty'] {
+  background-color: var(--hlx-color-bg-secondary);
+}
+
+.hlx-diff-cell[data-diff-type='delete'] > .hlx-renderer {
+  opacity: 0.85;
+}
+
+.hlx-diff-collapsed {
+  padding: 4px 12px;
+  background: var(--hlx-color-bg-secondary);
+  color: var(--hlx-color-text-secondary);
+  font-size: 12px;
+}
+
+/* Compact, over the variant's own spacing. */
+.hlx-diff .hlx-diff-cell > .hlx-renderer {
+  --hlx-font-size-base: 13px;
+  --hlx-font-size: 13px;
+  --hlx-line-height: 1.55;
+  --hlx-flow-paragraph: 2px;
+  --hlx-flow-list: 0;
+  --hlx-flow-block: 4px;
+  --hlx-flow-heading: 4px;
+}
+
+.hlx-diff .hlx-diff-cell > .hlx-renderer :is(.hlx-h1, .hlx-h2, .hlx-h3, .hlx-h4, .hlx-h5, .hlx-h6) {
+  font-size: 1em;
+  font-weight: 600;
+  line-height: 1.35;
+}

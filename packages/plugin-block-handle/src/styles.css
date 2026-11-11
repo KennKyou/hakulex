@@ -1,0 +1,106 @@
+.hlx-block-handle {
+  position: fixed;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  height: 24px;
+  background: transparent;
+}
+
+.hlx-block-grip-wrap {
+  display: inline-flex;
+}
+
+.hlx-block-add,
+.hlx-block-grip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-sm);
+  background: transparent;
+  color: var(--hlx-color-text-muted);
+  cursor: pointer;
+}
+
+.hlx-block-grip {
+  cursor: grab;
+}
+
+.hlx-block-grip:active {
+  cursor: grabbing;
+}
+
+.hlx-block-add:hover,
+.hlx-block-grip:hover,
+.hlx-block-grip[data-state='open'] {
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-text);
+}
+
+.hlx-block-add:focus-visible,
+.hlx-block-grip:focus-visible {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: -2px;
+}
+
+.hlx-block-drop-line {
+  position: fixed;
+  z-index: 40;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--hlx-color-accent);
+  pointer-events: none;
+}
+
+.hlx-block-menu {
+  z-index: 50;
+  min-width: 160px;
+  padding: 4px;
+  border-radius: var(--hlx-chrome-radius-lg);
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-popup);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+}
+
+.hlx-block-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: var(--hlx-chrome-radius-item);
+  color: var(--hlx-color-text);
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+}
+
+.hlx-block-menu-item[data-highlighted] {
+  background: var(--hlx-color-bg-subtle);
+}
+
+.hlx-block-menu-item[data-disabled] {
+  color: var(--hlx-color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.hlx-block-menu-item[aria-checked='true'] {
+  color: var(--hlx-color-accent);
+  font-weight: 600;
+}
+
+.hlx-block-menu-item[data-destructive] {
+  color: var(--hlx-color-alert-caution);
+}
+
+
+.hlx-block-menu-separator {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--hlx-color-border);
+}

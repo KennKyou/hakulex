@@ -1,0 +1,3 @@
+/* Dev-time entry for @hakulex/style-token/style.css; the build bundles both into dist/style.css. */
+@import './tokens.css';
+@import './content.css';

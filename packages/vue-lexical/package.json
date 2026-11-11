@@ -1,0 +1,60 @@
+{
+  "name": "@hakulex/vue-lexical",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Vue 3 bindings for Lexical",
+  "license": "MIT",
+  "keywords": [
+    "hakulex",
+    "vue",
+    "vue3",
+    "lexical",
+    "rich-text-editor",
+    "wysiwyg",
+    "editor",
+    "bindings",
+    "composition-api"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "main": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev:build": "vite build --watch"
+  },
+  "peerDependencies": {
+    "lexical": "^0.53.0",
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@lexical/extension": "^0.53.0",
+    "@lexical/history": "^0.53.0",
+    "@lexical/link": "^0.53.0",
+    "@lexical/list": "^0.53.0",
+    "@lexical/markdown": "^0.53.0",
+    "@lexical/rich-text": "^0.53.0",
+    "@lexical/text": "^0.53.0",
+    "@lexical/utils": "^0.53.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs"
+      }
+    },
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
+  "devDependencies": {
+    "lexical": "^0.53.0"
+  }
+}

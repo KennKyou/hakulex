@@ -1,0 +1,95 @@
+.hlx-floating-toolbar {
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border-radius: var(--hlx-chrome-radius-lg);
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-popup);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.hlx-toolbar-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: transparent;
+  color: var(--hlx-color-text-muted);
+  cursor: pointer;
+}
+
+.hlx-toolbar-button:hover {
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-text);
+}
+
+.hlx-toolbar-button[aria-pressed='true'] {
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-accent);
+}
+
+.hlx-toolbar-button:disabled {
+  background: transparent;
+  color: var(--hlx-color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.hlx-toolbar-button:focus-visible,
+.hlx-toolbar-input:focus-visible {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: -2px;
+}
+
+.hlx-toolbar-divider {
+  width: 1px;
+  height: 18px;
+  margin: 0 4px;
+  background: var(--hlx-color-border);
+}
+
+.hlx-toolbar-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+}
+
+.hlx-toolbar-input {
+  width: 240px;
+  max-width: calc(100vw - 140px);
+  height: 28px;
+  box-sizing: border-box;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-text);
+  font: inherit;
+}
+
+.hlx-toolbar-input[aria-invalid='true'] {
+  border-color: var(--hlx-color-alert-caution);
+}
+
+.hlx-toolbar-error {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  margin: 0;
+  padding: 4px 8px;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-alert-caution);
+  color: #fff;
+  font-size: 12px;
+  white-space: nowrap;
+}

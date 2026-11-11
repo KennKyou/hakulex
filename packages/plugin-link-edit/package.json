@@ -1,0 +1,61 @@
+{
+  "name": "@hakulex/plugin-link-edit",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Link panel plugin for hakulex: view, open, copy, edit and remove the link under the caret",
+  "license": "MIT",
+  "keywords": [
+    "hakulex",
+    "vue",
+    "vue3",
+    "lexical",
+    "rich-text-editor",
+    "wysiwyg",
+    "editor",
+    "plugin",
+    "link"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./style.css": "./src/styles.css"
+  },
+  "main": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev:build": "vite build --watch"
+  },
+  "peerDependencies": {
+    "lexical": "^0.53.0",
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@floating-ui/vue": "^2.0.1",
+    "@hakulex/editor": "workspace:*",
+    "@hakulex/plugin-floating-toolbar": "workspace:*",
+    "@hakulex/vue-lexical": "workspace:*",
+    "@lexical/link": "^0.53.0",
+    "@lexical/utils": "^0.53.0",
+    "@lucide/vue": "^1.66.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs"
+      },
+      "./style.css": "./dist/style.css"
+    },
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
+  "devDependencies": {
+    "lexical": "^0.53.0"
+  }
+}

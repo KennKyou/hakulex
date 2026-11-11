@@ -1,0 +1,270 @@
+import type { SerializedEditorState } from 'lexical'
+import { describe, expect, it } from 'vitest'
+
+import { createDefaultRegistry } from '../src/default-registry'
+import { deserializeFromXml, deserializeNodesFromXml } from '../src/deserializer'
+import { LitexmlRegistry } from '../src/registry'
+import { serializeToXml } from '../src/serializer'
+import '../src/index-browser'
+
+describe('deserializeFromXml', () => {
+  it('deserializes empty doc', () => {
+    const registry = new LitexmlRegistry()
+    const state = deserializeFromXml('<doc></doc>', registry)
+    expect(state.root.type).toBe('root')
+    expect((state.root as any).children).toEqual([])
+  })
+
+  it('parses fallback <node> elements', () => {
+    const registry = new LitexmlRegistry()
+    const xml = `<doc><node type="custom-thing" id="abc" data='{"foo":"bar"}' /></doc>`
+    const state = deserializeFromXml(xml, registry)
+    const children = (state.root as any).children
+    expect(children).toHaveLength(1)
+    expect(children[0].type).toBe('custom-thing')
+    expect(children[0].foo).toBe('bar')
+    expect(children[0].$?.blockId).toBe('abc')
+  })
+
+  it('calls registered reader', () => {
+    const registry = new LitexmlRegistry()
+    registry.registerReader('p', (element, ctx) => {
+      const children = ctx.parseChildren(element)
+      const id = element.getAttribute('id')
+      return {
+        type: 'paragraph',
+        ...(id
+          ? {
+              $: { blockId: id },
+            }
+          : {}),
+        children,
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        textFormat: 0,
+        textStyle: '',
+        version: 1,
+      } as any
+    })
+    const xml = '<doc><p id="p1">hello</p></doc>'
+    const state = deserializeFromXml(xml, registry)
+    const children = (state.root as any).children
+    expect(children).toHaveLength(1)
+    expect(children[0].type).toBe('paragraph')
+    expect(children[0].$?.blockId).toBe('p1')
+  })
+})
+
+describe('self-closing tag normalization', () => {
+  it('does not swallow siblings after a custom self-closing tag', () => {
+    const registry = new LitexmlRegistry()
+    registry.registerReader(
+      'p',
+      (el, ctx) =>
+        ({
+          type: 'paragraph',
+          children: ctx.parseChildren(el),
+          direction: 'ltr',
+          format: '',
+          indent: 0,
+          textFormat: 0,
+          textStyle: '',
+          version: 1,
+        }) as any,
+    )
+    registry.registerReader(
+      'link-card',
+      el =>
+        ({
+          type: 'link-card',
+          url: el.getAttribute('url') ?? '',
+          version: 1,
+        }) as any,
+    )
+    const xml = '<doc><link-card url="https://x.com" /><p>a</p><p>b</p><p>c</p></doc>'
+    const state = deserializeFromXml(xml, registry)
+    const children = (state.root as any).children
+    expect(children.map((c: any) => c.type)).toEqual([
+      'link-card',
+      'paragraph',
+      'paragraph',
+      'paragraph',
+    ])
+  })
+
+  it('handles multi-line attributes on self-closing tags', () => {
+    const registry = new LitexmlRegistry()
+    registry.registerReader(
+      'p',
+      (el, ctx) =>
+        ({
+          type: 'paragraph',
+          children: ctx.parseChildren(el),
+          direction: 'ltr',
+          format: '',
+          indent: 0,
+          textFormat: 0,
+          textStyle: '',
+          version: 1,
+        }) as any,
+    )
+    registry.registerReader(
+      'video',
+      el =>
+        ({
+          type: 'video',
+          src: el.getAttribute('src') ?? '',
+          poster: el.getAttribute('poster') ?? undefined,
+          version: 1,
+        }) as any,
+    )
+    const xml = `<doc><video
+        src="https://x.com/clip.mp4"
+        poster="https://x.com/poster.jpg" /><p>after</p></doc>`
+    const state = deserializeFromXml(xml, registry)
+    const children = (state.root as any).children
+    expect(children.map((c: any) => c.type)).toEqual(['video', 'paragraph'])
+    expect(children[0].src).toBe('https://x.com/clip.mp4')
+    expect(children[0].poster).toBe('https://x.com/poster.jpg')
+  })
+
+  it('leaves HTML void elements untouched', () => {
+    const registry = new LitexmlRegistry()
+    registry.registerReader('hr', () => ({ type: 'horizontalrule', version: 1 }) as any)
+    registry.registerReader(
+      'img',
+      el =>
+        ({
+          type: 'image',
+          src: el.getAttribute('src') ?? '',
+          version: 1,
+        }) as any,
+    )
+    registry.registerReader(
+      'p',
+      (el, ctx) =>
+        ({
+          type: 'paragraph',
+          children: ctx.parseChildren(el),
+          direction: 'ltr',
+          format: '',
+          indent: 0,
+          textFormat: 0,
+          textStyle: '',
+          version: 1,
+        }) as any,
+    )
+    const xml = '<doc><hr /><img src="x.jpg" /><p>after</p></doc>'
+    const state = deserializeFromXml(xml, registry)
+    const children = (state.root as any).children
+    expect(children.map((c: any) => c.type)).toEqual(['horizontalrule', 'image', 'paragraph'])
+  })
+})
+
+describe('deserializeNodesFromXml', () => {
+  it('parses xml fragment into node array', () => {
+    const registry = new LitexmlRegistry()
+    registry.registerReader(
+      'p',
+      (element, ctx) =>
+        ({
+          type: 'paragraph',
+          children: ctx.parseChildren(element),
+          direction: 'ltr',
+          format: '',
+          indent: 0,
+          textFormat: 0,
+          textStyle: '',
+          version: 1,
+        }) as any,
+    )
+    const nodes = deserializeNodesFromXml('<p>one</p><p>two</p>', registry)
+    expect(nodes).toHaveLength(2)
+    expect(nodes[0].type).toBe('paragraph')
+    expect(nodes[1].type).toBe('paragraph')
+  })
+})
+
+/**
+ * The pretty printer puts each block child on its own indented line, so the
+ * indentation comes back as text. It must not survive as content: inside an
+ * element that holds a block child it is layout, while a purely inline run has
+ * to keep the spacing it was written with.
+ */
+describe('formatting whitespace', () => {
+  const registry = createDefaultRegistry()
+
+  const childrenOf = (xml: string) => {
+    const state = deserializeFromXml(xml, registry)
+    return (state.root as any).children[0].children
+  }
+
+  it('keeps the space between format tags beside a <strike>', () => {
+    const children = childrenOf('<doc><p id="p1">a <strike>x</strike> <b>b</b> <i>c</i></p></doc>')
+    expect(children.map((c: any) => c.text)).toEqual(['a ', 'x', ' ', 'b', ' ', 'c'])
+  })
+
+  it('keeps text spacing when a paragraph is inline only', () => {
+    const children = childrenOf('<doc><p id="p1">  padded text  </p></doc>')
+    expect(children.map((c: any) => c.type)).toEqual(['text'])
+    expect(children[0].text).toBe('  padded text  ')
+  })
+
+  // The real failure mode is a full cycle: the pretty printer decides whether
+  // to indent by asking if every child is inline, so a line break must count as
+  // inline or the indentation ends up fused onto the surrounding text.
+  it('does not fold indentation into text beside a line break', () => {
+    const state = {
+      root: {
+        type: 'root',
+        children: [
+          {
+            type: 'paragraph',
+            $: { blockId: 'p1' },
+            children: [
+              {
+                type: 'text',
+                text: 'hello',
+                format: 0,
+                detail: 0,
+                mode: 'normal',
+                style: '',
+                version: 1,
+              },
+              { type: 'linebreak', version: 1 },
+              {
+                type: 'text',
+                text: 'world',
+                format: 0,
+                detail: 0,
+                mode: 'normal',
+                style: '',
+                version: 1,
+              },
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            version: 1,
+          },
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        version: 1,
+      },
+    } as unknown as SerializedEditorState
+
+    const xml = serializeToXml(state, registry, { compact: false })
+    const back = deserializeFromXml(xml, registry)
+    const children = (back.root as any).children[0].children
+    expect(children.map((c: any) => (c.type === 'text'
+      ? c.text
+      : `<${c.type}>`))).toEqual([
+      'hello',
+      '<linebreak>',
+      'world',
+    ])
+  })
+})

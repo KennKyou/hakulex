@@ -1,0 +1,46 @@
+{
+  "name": "@hakulex/diff-core",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Compare two hakulex documents: aligned blocks, character marks and change counts",
+  "license": "MIT",
+  "keywords": [
+    "hakulex",
+    "vue",
+    "vue3",
+    "lexical",
+    "rich-text-editor",
+    "wysiwyg",
+    "editor",
+    "diff",
+    "compare"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "main": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev:build": "vite build --watch"
+  },
+  "peerDependencies": {
+    "lexical": "^0.53.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs"
+      }
+    },
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
+  "devDependencies": {
+    "lexical": "^0.53.0"
+  }
+}

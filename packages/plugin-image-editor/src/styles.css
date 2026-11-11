@@ -1,0 +1,431 @@
+/*
+ * The image edit screen:
+ * nearly the whole screen, tools on the left, options on top, the picture on a checkerboard.
+ */
+.hlx-picture-editor {
+  position: fixed;
+  z-index: 70;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+  animation: hlx-picture-editor-in 150ms ease-out;
+}
+
+@keyframes hlx-picture-editor-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hlx-picture-editor {
+    animation: none;
+  }
+}
+
+.hlx-picture-editor button {
+  font: inherit;
+}
+
+/* Sizes include borders: a 48px top bar, a 56px rail and footer. */
+.hlx-picture-editor,
+.hlx-picture-editor *,
+.hlx-picture-editor *::before,
+.hlx-picture-editor *::after {
+  box-sizing: border-box;
+}
+
+.hlx-picture-editor-top {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 12px;
+  height: 48px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--hlx-color-border);
+}
+
+.hlx-picture-editor-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.hlx-picture-editor-controls {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+}
+
+.hlx-picture-editor-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.hlx-picture-editor-rail {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  width: 56px;
+  padding: 12px 0;
+  border-right: 1px solid var(--hlx-color-border);
+}
+
+.hlx-picture-editor-tool,
+.hlx-picture-editor-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: var(--hlx-chrome-radius-sm);
+  background: transparent;
+  color: var(--hlx-color-text-tertiary);
+  cursor: pointer;
+}
+
+.hlx-picture-editor-tool {
+  width: 36px;
+  height: 36px;
+}
+
+.hlx-picture-editor-option {
+  width: 26px;
+  height: 26px;
+}
+
+:is(.hlx-picture-editor-tool, .hlx-picture-editor-option, .hlx-picture-editor-segment):hover:not(:disabled) {
+  background: var(--hlx-color-fill-secondary);
+  color: var(--hlx-color-text);
+}
+
+:is(.hlx-picture-editor-tool, .hlx-picture-editor-option, .hlx-picture-editor-segment):disabled {
+  color: var(--hlx-color-text-quaternary);
+  cursor: default;
+  opacity: 0.55;
+}
+
+:is(.hlx-picture-editor-tool, .hlx-picture-editor-option, .hlx-picture-editor-segment)[aria-pressed='true'],
+:is(.hlx-picture-editor-tool, .hlx-picture-editor-option, .hlx-picture-editor-segment)[aria-pressed='true']:hover:not(:disabled) {
+  background: var(--hlx-color-fill);
+  color: var(--hlx-color-text);
+}
+
+.hlx-picture-editor-rail-divider {
+  width: 28px;
+  height: 1px;
+  margin: 6px 0;
+  background: var(--hlx-color-border);
+}
+
+.hlx-picture-editor-canvas {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  padding: 24px;
+  overflow: hidden;
+  /* The tokens keep the checkerboard quiet in dark mode too. */
+  background: repeating-conic-gradient(var(--hlx-color-bg-tertiary) 0% 25%, var(--hlx-color-bg) 0% 50%) 50% / 20px 20px;
+}
+
+.hlx-picture-editor-picture,
+.hlx-crop {
+  max-width: 100%;
+  max-height: 100%;
+  box-shadow: var(--hlx-shadow-modal);
+}
+
+.hlx-picture-editor-picture {
+  display: block;
+  object-fit: contain;
+}
+
+/* The selection over the picture, as react-image-crop's: the rest is dimmed. */
+.hlx-crop {
+  position: relative;
+  display: inline-block;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+}
+
+.hlx-crop[data-disabled] {
+  cursor: default;
+}
+
+.hlx-crop-image {
+  display: block;
+  max-width: 100%;
+  /* The top bar, the footer and the canvas's padding. */
+  max-height: calc(100vh - 152px);
+  pointer-events: none;
+}
+
+.hlx-crop-shade {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hlx-crop-shade > div {
+  position: absolute;
+  box-shadow: 0 0 0 9999em rgb(0 0 0 / 0.5);
+}
+
+.hlx-crop-selection {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px dashed rgb(255 255 255 / 0.8);
+  cursor: move;
+}
+
+.hlx-crop[data-tool='mosaic'] .hlx-crop-shade {
+  display: none;
+}
+
+.hlx-crop[data-tool='mosaic'] .hlx-crop-selection {
+  background: rgb(255 255 255 / 0.15);
+}
+
+.hlx-crop-handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  box-sizing: border-box;
+  border: 1px solid rgb(255 255 255 / 0.7);
+  background: rgb(0 0 0 / 0.2);
+  transform: translate(-50%, -50%);
+}
+
+.hlx-crop[data-tool='mosaic'] .hlx-crop-handle {
+  display: none;
+}
+
+.hlx-crop-handle[data-handle='nw'] { top: 0; left: 0; cursor: nwse-resize; }
+.hlx-crop-handle[data-handle='n'] { top: 0; left: 50%; cursor: ns-resize; }
+.hlx-crop-handle[data-handle='ne'] { top: 0; left: 100%; cursor: nesw-resize; }
+.hlx-crop-handle[data-handle='e'] { top: 50%; left: 100%; cursor: ew-resize; }
+.hlx-crop-handle[data-handle='se'] { top: 100%; left: 100%; cursor: nwse-resize; }
+.hlx-crop-handle[data-handle='s'] { top: 100%; left: 50%; cursor: ns-resize; }
+.hlx-crop-handle[data-handle='sw'] { top: 100%; left: 0; cursor: nesw-resize; }
+.hlx-crop-handle[data-handle='w'] { top: 50%; left: 0; cursor: ew-resize; }
+
+.hlx-picture-editor-options {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.hlx-picture-editor-options-divider {
+  width: 1px;
+  height: 18px;
+  margin: 0 4px;
+  background: var(--hlx-color-border);
+}
+
+.hlx-picture-editor-segment {
+  height: 26px;
+  padding: 0 10px;
+  border: none;
+  border-radius: var(--hlx-chrome-radius-sm);
+  background: transparent;
+  color: var(--hlx-color-text-tertiary);
+  font-size: 12px !important;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.hlx-picture-editor-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--hlx-color-text-tertiary);
+  font-size: 12px;
+}
+
+.hlx-picture-editor-range input[type='range'] {
+  width: 110px;
+  accent-color: var(--hlx-color-text);
+}
+
+.hlx-picture-editor-range-value {
+  min-width: 36px;
+  color: var(--hlx-color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.hlx-picture-editor-error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text-tertiary);
+  box-shadow: var(--hlx-shadow-modal);
+}
+
+.hlx-picture-editor-credit {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  color: var(--hlx-color-text-quaternary);
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.hlx-picture-editor-credit:hover {
+  color: var(--hlx-color-text-tertiary);
+  text-decoration: underline;
+}
+
+.hlx-picture-editor-footer {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  height: 56px;
+  padding: 0 16px;
+  border-top: 1px solid var(--hlx-color-border);
+}
+
+.hlx-picture-editor-spacer {
+  flex: 1;
+  text-align: right;
+}
+
+.hlx-picture-editor-error {
+  color: var(--hlx-color-alert-caution);
+  font-size: 12px;
+}
+
+.hlx-picture-editor-ghost,
+.hlx-picture-editor-secondary,
+.hlx-picture-editor-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--hlx-chrome-radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+:is(.hlx-picture-editor-ghost, .hlx-picture-editor-secondary, .hlx-picture-editor-primary):disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.hlx-picture-editor-ghost {
+  height: 26px;
+  margin-left: auto;
+  padding: 0 10px;
+  border: none;
+  background: transparent;
+  color: var(--hlx-color-text-tertiary);
+  font-size: 12px;
+}
+
+.hlx-picture-editor-ghost:hover:not(:disabled) {
+  background: var(--hlx-color-fill-secondary);
+  color: var(--hlx-color-text);
+}
+
+.hlx-picture-editor-secondary {
+  border: 1px solid var(--hlx-color-border);
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+}
+
+.hlx-picture-editor-secondary:hover:not(:disabled) {
+  background: var(--hlx-color-fill-secondary);
+}
+
+.hlx-picture-editor-primary {
+  border: 1px solid transparent;
+  background: var(--hlx-color-text);
+  color: var(--hlx-color-bg);
+}
+
+.hlx-picture-editor-primary:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.hlx-picture-editor-size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hlx-picture-editor-size select,
+.hlx-picture-editor-size input {
+  height: 30px;
+  box-sizing: border-box;
+  padding: 0 8px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: var(--hlx-chrome-radius-sm);
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  font: inherit;
+  font-size: 12px;
+}
+
+.hlx-picture-editor-size input {
+  width: 72px;
+  font-variant-numeric: tabular-nums;
+}
+
+.hlx-picture-editor-size-output {
+  color: var(--hlx-color-text-tertiary);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.hlx-picture-editor-swatch {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.hlx-picture-editor-swatch[aria-pressed='true'] {
+  box-shadow:
+    0 0 0 2px var(--hlx-color-bg),
+    0 0 0 4px var(--hlx-color-text-tertiary);
+}
+
+.hlx-picture-editor-stroke-dot {
+  border-radius: 50%;
+  background: currentcolor;
+}
+
+/* marker.js's own element fills the canvas and zooms the picture to fit. */
+.hlx-picture-editor-marks {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}

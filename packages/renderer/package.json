@@ -1,0 +1,58 @@
+{
+  "name": "@hakulex/renderer",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "SSR-safe read-only renderer for hakulex (Lexical JSON → Vue), no Lexical runtime",
+  "license": "MIT",
+  "keywords": [
+    "hakulex",
+    "vue",
+    "vue3",
+    "lexical",
+    "rich-text-editor",
+    "wysiwyg",
+    "editor",
+    "renderer",
+    "ssr",
+    "read-only"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "main": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev:build": "vite build --watch"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@hakulex/style-token": "workspace:*",
+    "katex": "^0.19.1",
+    "markdown-it": "^15.0.3",
+    "pele": "^1.13.0",
+    "shiki": "^4.5.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs"
+      }
+    },
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
+  "devDependencies": {
+    "@iconify-json/material-icon-theme": "1.2.77",
+    "@types/markdown-it": "^14.2.0"
+  }
+}

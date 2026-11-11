@@ -1,0 +1,70 @@
+{
+  "name": "@hakulex/litexml",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Convert hakulex documents to and from LiteXML, a compact XML format for documents",
+  "license": "MIT",
+  "keywords": [
+    "hakulex",
+    "vue",
+    "vue3",
+    "lexical",
+    "rich-text-editor",
+    "wysiwyg",
+    "editor",
+    "xml",
+    "llm",
+    "ai"
+  ],
+  "sideEffects": [
+    "./src/index-browser.ts",
+    "./src/index-node.ts",
+    "./dist/browser.mjs",
+    "./dist/node.mjs"
+  ],
+  "exports": {
+    ".": {
+      "browser": "./src/index-browser.ts",
+      "node": "./src/index-node.ts",
+      "default": "./src/index-node.ts"
+    }
+  },
+  "main": "./src/index-node.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev:build": "vite build --watch"
+  },
+  "peerDependencies": {
+    "lexical": "^0.53.0"
+  },
+  "dependencies": {
+    "linkedom": "^0.18.14"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "browser": {
+          "types": "./dist/index-browser.d.ts",
+          "import": "./dist/browser.mjs"
+        },
+        "node": {
+          "types": "./dist/index-node.d.ts",
+          "import": "./dist/node.mjs"
+        },
+        "default": {
+          "types": "./dist/index-node.d.ts",
+          "import": "./dist/node.mjs"
+        }
+      }
+    },
+    "main": "./dist/node.mjs",
+    "types": "./dist/index-node.d.ts"
+  },
+  "devDependencies": {
+    "lexical": "^0.53.0"
+  }
+}

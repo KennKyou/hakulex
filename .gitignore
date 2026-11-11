@@ -1,0 +1,14 @@
+node_modules
+dist
+*.local
+.DS_Store
+*.log
+coverage
+.eslintcache
+
+# Editor and agent settings
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.claude/
+.codex/

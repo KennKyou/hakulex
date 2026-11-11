@@ -1,0 +1,2688 @@
+/*
+ * Content styles shared by the editor and the read-only renderer.
+ * Class names come from contentTheme (content-theme.ts); everything is scoped
+ * under .hlx-root, and the document container carries .hlx-content.
+ */
+.hlx-root {
+  color: var(--hlx-color-text);
+  font-family: var(--hlx-font-family);
+  font-size: var(--hlx-font-size);
+  line-height: var(--hlx-line-height);
+}
+
+/* Lexical sets pre-wrap inline on the editor root; the renderer needs it too. */
+.hlx-content {
+  /* Holds a floating image at the end of a document inside. */
+  display: flow-root;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+/* Blocks */
+
+.hlx-root .hlx-paragraph {
+  margin: 0 0 var(--hlx-flow-paragraph);
+}
+
+/* The document's ends don't push away from its box. */
+.hlx-content > :first-child {
+  margin-top: 0;
+}
+
+.hlx-content > :last-child {
+  margin-bottom: 0;
+}
+
+/*
+ * Headings. The space above is the flow's heading gap, in body ems, so it
+ * is divided by the heading's own size.
+ */
+.hlx-root .hlx-h1 {
+  margin-top: calc(var(--hlx-flow-heading) * 0.6667);
+  margin-bottom: 0.6em;
+  font-size: 1.875em;
+  font-weight: 700;
+  line-height: 1.2667;
+  letter-spacing: -0.015em;
+}
+
+.hlx-root .hlx-h2 {
+  margin-top: calc(var(--hlx-flow-heading) * 0.7333);
+  margin-bottom: 0.5em;
+  font-size: 1.5em;
+  font-weight: 650;
+  line-height: 1.3333;
+  letter-spacing: -0.01em;
+}
+
+.hlx-root .hlx-h3 {
+  margin-top: calc(var(--hlx-flow-heading) * 0.8);
+  margin-bottom: 0.4em;
+  font-size: 1.25em;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.hlx-root .hlx-h4 {
+  margin-top: calc(var(--hlx-flow-heading) * 0.8471);
+  margin-bottom: 0.35em;
+  font-size: 1.0625em;
+  font-weight: 600;
+  line-height: 1.5294;
+}
+
+.hlx-root .hlx-h5 {
+  margin-top: calc(var(--hlx-flow-heading) * 0.9);
+  margin-bottom: 0.3em;
+  font-size: 1em;
+  font-weight: 600;
+  line-height: var(--hlx-line-height-tight);
+}
+
+.hlx-root .hlx-h6 {
+  margin-top: calc(var(--hlx-flow-heading) * 1.0286);
+  margin-bottom: 0.25em;
+  color: var(--hlx-color-text-secondary);
+  font-size: 0.875em;
+  font-weight: 600;
+  line-height: var(--hlx-line-height-tight);
+}
+
+/*
+ * A heading's link to itself, for readers: on its left, hidden until the heading is pointed at.
+ * The editor has none.
+ */
+.hlx-renderer .hlx-heading {
+  position: relative;
+}
+
+.hlx-renderer .hlx-heading-anchor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1.25rem;
+  display: flex;
+  align-items: center;
+  /* The heading's own color; its links' color wins over the secondary one. */
+  color: inherit;
+  font-size: 0.8rem;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.hlx-renderer .hlx-heading-anchor svg {
+  flex-shrink: 0;
+}
+
+.hlx-renderer .hlx-heading:hover .hlx-heading-anchor {
+  opacity: 0.5;
+}
+
+.hlx-renderer .hlx-heading .hlx-heading-anchor:hover,
+.hlx-renderer .hlx-heading .hlx-heading-anchor:focus-visible {
+  opacity: 1;
+}
+
+.hlx-root .hlx-quote {
+  position: relative;
+  margin: var(--hlx-flow-block) 0;
+  padding-block: 0.125em;
+  padding-left: 1.125em;
+  color: var(--hlx-color-text-secondary);
+}
+
+.hlx-root .hlx-quote::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--hlx-color-quote-border);
+}
+
+.hlx-root .hlx-quote > .hlx-paragraph:first-child {
+  margin-top: 0;
+}
+
+.hlx-root .hlx-quote > .hlx-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+/* Who a quote is by. */
+.hlx-root .hlx-quote-attribution {
+  display: block;
+  margin-top: var(--hlx-space-sm);
+  color: var(--hlx-color-text-tertiary);
+  font-size: var(--hlx-font-size-caption);
+  font-style: normal;
+}
+
+/* Mentions: kept to one line, so the icon never ends up apart from the name. */
+.hlx-root .hlx-mention {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  margin-inline: 0.25em;
+  padding: 0.05em 0.55em;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 999px;
+  background: var(--hlx-color-bg-secondary);
+  color: var(--hlx-color-text);
+  font-family: var(--hlx-font-family);
+  font-size: var(--hlx-font-size-sm);
+  line-height: 1.5;
+  /* The pill is taller than the text: this puts their centers on the same line. */
+  position: relative;
+  top: 0.15em;
+  vertical-align: text-bottom;
+  white-space: nowrap;
+}
+
+.hlx-root .hlx-mention-icon {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+.hlx-root .hlx-mention-icon svg {
+  display: inline;
+  width: 0.85em;
+  height: 0.85em;
+}
+
+.hlx-root .hlx-mention-handle {
+  color: inherit;
+  font-family: var(--hlx-font-family-sans);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+
+
+.hlx-root .hlx-mention--plain {
+  color: var(--hlx-color-text-secondary);
+}
+
+/* Tags: the renderer and editor set the hue, the color scheme decides the rest. */
+.hlx-root .hlx-tag {
+  display: inline-block;
+  padding-inline: 0.75em;
+  border-radius: 999px;
+  background: hsl(var(--hlx-tag-hue, 0) 70% 90%);
+  color: hsl(var(--hlx-tag-hue, 0) 60% 22%);
+  font-size: 0.875em;
+  line-height: 1.6;
+}
+
+.hlx-root[data-color-scheme='dark'] .hlx-tag,
+[data-color-scheme='dark'] .hlx-root .hlx-tag {
+  background: hsl(var(--hlx-tag-hue, 0) 35% 26%);
+  color: hsl(var(--hlx-tag-hue, 0) 70% 90%);
+}
+
+/* Lists */
+
+.hlx-root .hlx-list {
+  margin: 0 0 var(--hlx-flow-paragraph);
+  padding-left: 1.375em;
+}
+
+.hlx-root .hlx-list .hlx-list {
+  margin: var(--hlx-flow-list) 0 0;
+}
+
+.hlx-root .hlx-listitem {
+  margin: 0 0 var(--hlx-flow-list);
+}
+
+.hlx-root .hlx-listitem::marker {
+  color: var(--hlx-color-text-tertiary);
+}
+
+.hlx-root .hlx-listitem:not(.hlx-listitem-checked, .hlx-listitem-unchecked) {
+  padding-left: 0.25em;
+}
+
+/* Lists inside lists: letters for numbered ones, open circles for the rest. */
+.hlx-root .hlx-listitem-nested .hlx-ol {
+  list-style-type: lower-alpha;
+}
+
+.hlx-root .hlx-listitem-nested .hlx-ul {
+  list-style-type: circle;
+}
+
+/* Nested lists render inside an extra <li>; hide its marker. */
+.hlx-root .hlx-listitem-nested {
+  list-style: none;
+}
+
+.hlx-root .hlx-checklist {
+  padding-left: 0;
+  list-style: none;
+}
+
+.hlx-root .hlx-listitem-checked,
+.hlx-root .hlx-listitem-unchecked {
+  --hlx-checkbox-size: 1.125rem;
+  position: relative;
+  padding-left: 2em;
+  list-style: none;
+  outline: none;
+  transition: color 0.25s ease;
+}
+
+/* The box: a thin outline, filled with the text color once ticked. */
+.hlx-root .hlx-listitem-checked::before,
+.hlx-root .hlx-listitem-unchecked::before {
+  content: '';
+  position: absolute;
+  top: calc((1lh - var(--hlx-checkbox-size)) / 2);
+  left: 0;
+  width: var(--hlx-checkbox-size);
+  height: var(--hlx-checkbox-size);
+  box-sizing: border-box;
+  border: 1.5px solid var(--hlx-color-text-quaternary);
+  border-radius: var(--hlx-radius-sm);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hlx-root .hlx-listitem-checked::before {
+  border-color: var(--hlx-color-text);
+  background: var(--hlx-color-text);
+}
+
+/* The tick, in the background color, drawn in once ticked. */
+.hlx-root .hlx-listitem-checked::after {
+  content: '';
+  position: absolute;
+  top: calc((1lh - var(--hlx-checkbox-size)) / 2 + var(--hlx-checkbox-size) * 0.14);
+  left: calc(var(--hlx-checkbox-size) * 0.36);
+  width: calc(var(--hlx-checkbox-size) * 0.28);
+  height: calc(var(--hlx-checkbox-size) * 0.55);
+  box-sizing: border-box;
+  border-right: 2px solid var(--hlx-color-bg);
+  border-bottom: 2px solid var(--hlx-color-bg);
+  pointer-events: none;
+  transform: rotate(45deg);
+}
+
+.hlx-root .hlx-listitem-checked {
+  color: var(--hlx-color-text-tertiary);
+  text-decoration: line-through;
+  text-decoration-color: var(--hlx-color-text-quaternary);
+}
+
+.hlx-root [contenteditable='true'] .hlx-listitem-unchecked:hover::before {
+  border-color: var(--hlx-color-text-tertiary);
+}
+
+.hlx-root [contenteditable='true'] .hlx-listitem-checked:hover::before {
+  background: color-mix(in oklab, var(--hlx-color-text) 80%, transparent);
+}
+
+.hlx-root .hlx-listitem-unchecked:focus-visible::before,
+.hlx-root .hlx-listitem-checked:focus-visible::before {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+/* Inline */
+
+.hlx-root .hlx-link {
+  color: var(--hlx-color-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in oklab, var(--hlx-color-link) 35%, transparent);
+  text-underline-offset: 0.22em;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.hlx-root .hlx-link:hover {
+  text-decoration-color: var(--hlx-color-link);
+}
+
+.hlx-root .hlx-bold {
+  font-weight: 600;
+}
+
+.hlx-root .hlx-italic {
+  font-style: italic;
+}
+
+.hlx-root .hlx-underline {
+  text-decoration: underline;
+}
+
+.hlx-root .hlx-strikethrough {
+  text-decoration: line-through;
+}
+
+.hlx-root .hlx-underline-strikethrough {
+  text-decoration: underline line-through;
+}
+
+.hlx-root .hlx-code {
+  padding: 0.12em 0.4em;
+  border-radius: var(--hlx-radius-sm);
+  background: var(--hlx-color-code-bg);
+  font-family: var(--hlx-font-mono);
+  font-size: 0.875em;
+}
+
+.hlx-root .hlx-highlight {
+  --hlx-highlighted: 1;
+  --hlx-highlight-color: var(--hlx-color-accent-light);
+  background: linear-gradient(120deg, var(--hlx-highlight-color) 50%, transparent 50%) 110% 0 / 200% 100% no-repeat;
+  background-position: calc((1 - var(--hlx-highlighted)) * 110%) 0;
+  color: var(--hlx-color-text);
+  transition: background-position 1s;
+}
+
+@keyframes hlx-highlight-in {
+  to {
+    --hlx-highlighted: 1;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .hlx-root .hlx-highlight {
+    --hlx-highlighted: 0;
+    animation: hlx-highlight-in steps(1) both;
+    animation-timeline: view();
+    animation-range: entry 100% cover 10%;
+  }
+}
+
+.hlx-root [contenteditable='true'] .hlx-highlight {
+  --hlx-highlighted: 1;
+  animation: none;
+}
+
+.hlx-root .hlx-subscript {
+  vertical-align: sub;
+  font-size: 0.8em;
+}
+
+.hlx-root .hlx-superscript {
+  vertical-align: super;
+  font-size: 0.8em;
+}
+
+/* Spoiler and ruby */
+
+.hlx-root .hlx-spoiler {
+  padding-inline: 4px;
+  border-radius: var(--hlx-radius-sm);
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* While editing, the text shows through a tint. */
+.hlx-root [contenteditable='true'] .hlx-spoiler {
+  background: color-mix(in srgb, var(--hlx-color-text) 30%, transparent);
+  color: inherit;
+  cursor: text;
+}
+
+.hlx-root .hlx-spoiler:focus-visible {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 1px;
+}
+
+/* Hover and focus show the text without JavaScript. Once a reader covers it
+   again, data-rehidden keeps it covered until the pointer or focus leaves. */
+.hlx-root .hlx-spoiler--hidden:not(:hover, :focus-visible, [contenteditable='true'] *),
+.hlx-root .hlx-spoiler--hidden[data-rehidden] {
+  background: var(--hlx-color-text-tertiary);
+  color: transparent;
+}
+
+.hlx-root .hlx-spoiler--hidden:not(:hover, :focus-visible, [contenteditable='true'] *) *,
+.hlx-root .hlx-spoiler--hidden[data-rehidden] * {
+  border-color: transparent;
+  background: transparent;
+  color: transparent;
+}
+
+.hlx-root .hlx-spoiler--hidden:hover:not([data-rehidden]),
+.hlx-root .hlx-spoiler--hidden:focus-visible:not([data-rehidden]) {
+  background: transparent;
+}
+
+.hlx-root .hlx-ruby rt {
+  color: var(--hlx-color-text-muted);
+  font-size: 0.6em;
+  font-weight: 400;
+}
+
+/* Video and files */
+
+.hlx-root .hlx-video-block,
+.hlx-root .hlx-file-block {
+  margin: var(--hlx-flow-block) 0;
+}
+
+/* Full width: a stored width and height give only the ratio. */
+.hlx-root .hlx-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background: #000;
+}
+
+.hlx-root .hlx-video--unsized {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.hlx-root .hlx-media-invalid {
+  display: block;
+  padding: 12px 16px;
+  border: 1px dashed var(--hlx-color-border);
+  border-radius: 8px;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+  text-align: center;
+}
+
+.hlx-root .hlx-file {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 8px;
+  color: var(--hlx-color-text);
+  text-decoration: none;
+}
+
+.hlx-root a.hlx-file:hover {
+  background: var(--hlx-color-bg-subtle);
+}
+
+.hlx-root .hlx-file-icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--hlx-color-text-muted);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.75;
+}
+
+.hlx-root .hlx-file-name {
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hlx-root .hlx-file-meta {
+  flex: none;
+  margin-inline-start: auto;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.8125em;
+}
+
+.hlx-root .hlx-file--invalid {
+  border-style: dashed;
+  color: var(--hlx-color-text-muted);
+}
+
+.hlx-root .hlx-file--inline {
+  display: inline-flex;
+  gap: 4px;
+  max-width: 100%;
+  padding: 0 6px;
+  border-radius: 4px;
+  vertical-align: bottom;
+}
+
+.hlx-root .hlx-file--inline .hlx-file-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.hlx-root .hlx-file--inline .hlx-file-meta {
+  margin-inline-start: 4px;
+}
+
+/* Footnotes */
+
+.hlx-root .hlx-footnote-ref {
+  margin-inline: 0.1em;
+  color: var(--hlx-color-accent);
+  font-size: 0.75em;
+  line-height: 0;
+}
+
+.hlx-root .hlx-footnote-ref a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hlx-root .hlx-footnote-ref a:hover {
+  text-decoration: underline;
+}
+
+.hlx-root .hlx-footnote-ref a:target,
+.hlx-root .hlx-footnote:target {
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--hlx-color-accent) 20%, transparent);
+}
+
+.hlx-root .hlx-footnotes {
+  margin-top: var(--hlx-flow-block);
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+}
+
+.hlx-root .hlx-footnotes-divider {
+  width: 30%;
+  margin: 0 0 1em;
+  border: 0;
+  border-top: 1px solid var(--hlx-color-border);
+}
+
+.hlx-root .hlx-footnotes-list {
+  margin: 0;
+  padding-inline-start: 1.5em;
+}
+
+.hlx-root .hlx-footnote {
+  margin: 0.25em 0;
+  overflow-wrap: anywhere;
+}
+
+.hlx-root .hlx-footnote-back {
+  color: var(--hlx-color-accent);
+  text-decoration: none;
+}
+
+.hlx-root .hlx-footnote-back-icon {
+  vertical-align: -0.125em;
+}
+
+/* Horizontal rule */
+
+.hlx-root .hlx-hr-block {
+  margin: 0;
+}
+
+.hlx-root .hlx-hr {
+  width: 60px;
+  height: 0;
+  margin: var(--hlx-space-lg) auto;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid var(--hlx-color-hr-border);
+}
+
+/* An article sets a rule well apart, and what follows starts right after that space. */
+.hlx-root[data-variant='article'] .hlx-hr {
+  margin: 3.5em auto;
+}
+
+.hlx-root[data-variant='article'] .hlx-hr-block + * {
+  margin-top: 0;
+}
+
+/* Code block */
+
+.hlx-root .hlx-code-block {
+  margin: var(--hlx-flow-block) 0;
+}
+
+.hlx-root .hlx-code-card {
+  overflow: hidden;
+  border: 1px solid var(--hlx-color-border-subtle);
+  border-radius: var(--hlx-radius-md);
+  background: var(--hlx-color-code-bg);
+  color: var(--hlx-color-text);
+}
+
+/* The header: the language's icon and name, and a quiet copy button. */
+.hlx-root .hlx-code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  box-sizing: border-box;
+  height: 36px;
+  padding: 0 6px 0 14px;
+  border-bottom: 1px solid var(--hlx-color-border-subtle);
+  background: var(--hlx-color-code-header-bg);
+  color: var(--hlx-color-text-tertiary);
+  font-family: var(--hlx-font-family-sans);
+  font-size: 12px;
+  line-height: 1;
+  user-select: none;
+}
+
+.hlx-root .hlx-code-lang {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.hlx-root .hlx-code-lang-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+}
+
+.hlx-root .hlx-code-lang-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.hlx-root .hlx-code-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hlx-root .hlx-code-copy,
+.hlx-root .hlx-code-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--hlx-color-text-tertiary);
+  font: inherit;
+  cursor: pointer;
+  transition: color 120ms ease-out, background-color 120ms ease-out;
+}
+
+.hlx-root .hlx-code-copy:hover,
+.hlx-root .hlx-code-toggle:hover {
+  background: var(--hlx-color-fill-secondary);
+  color: var(--hlx-color-text);
+}
+
+.hlx-root .hlx-code-body {
+  margin: 0;
+  padding: 12px 16px;
+  overflow-x: auto;
+  color: var(--hlx-color-text);
+  font-family: var(--hlx-font-mono);
+  font-size: var(--hlx-font-size-code);
+  line-height: var(--hlx-line-height-code);
+  tab-size: 2;
+  white-space: pre;
+}
+
+/* Numbered lines: the numbers stay at the left as the code scrolls across. */
+.hlx-root .hlx-code-lined {
+  counter-reset: hlx-code-line;
+}
+
+.hlx-root .hlx-code-lined .hlx-code-line {
+  counter-increment: hlx-code-line;
+}
+
+.hlx-root .hlx-code-lined .hlx-code-line::before {
+  content: counter(hlx-code-line);
+  position: sticky;
+  left: 0;
+  display: inline-block;
+  box-sizing: content-box;
+  min-width: calc(var(--hlx-line-digits, 2) * 1ch);
+  margin-right: 1.5ch;
+  padding-right: 0.5ch;
+  background: var(--hlx-color-code-bg);
+  color: var(--hlx-color-text-quaternary);
+  text-align: right;
+  user-select: none;
+}
+
+/* About 12 lines, well short of the shortest collapsed block. The rest stays reachable by
+   scrolling, even without JavaScript. */
+.hlx-root .hlx-code-card[data-collapsed] .hlx-code-body {
+  box-sizing: border-box;
+  max-height: calc(12 * 1.6em + 24px);
+  overflow-y: auto;
+}
+
+/* Scrollbars follow the theme, not the page. */
+.hlx-root[data-color-scheme='dark'] .hlx-code-body,
+[data-color-scheme='dark'] .hlx-root .hlx-code-body {
+  color-scheme: dark;
+}
+
+/* Shiki emits both palettes as CSS variables; pick one per color scheme. */
+.hlx-root .hlx-code-body [style*='--shiki-light'] {
+  color: var(--shiki-light);
+}
+
+.hlx-root[data-color-scheme='dark'] .hlx-code-body [style*='--shiki-dark'],
+[data-color-scheme='dark'] .hlx-root .hlx-code-body [style*='--shiki-dark'] {
+  color: var(--shiki-dark);
+}
+
+/* Callouts: alert, banner and details. Their colors are the alert tokens, light or dark. */
+.hlx-root .hlx-alert,
+.hlx-root .hlx-banner {
+  --hlx-callout-color: var(--hlx-color-alert-info);
+  margin: var(--hlx-flow-block) 0;
+}
+
+.hlx-root .hlx-alert[data-type='tip'],
+.hlx-root .hlx-banner[data-type='tip'] {
+  --hlx-callout-color: var(--hlx-color-alert-tip);
+}
+
+.hlx-root .hlx-alert[data-type='important'],
+.hlx-root .hlx-banner[data-type='important'] {
+  --hlx-callout-color: var(--hlx-color-alert-important);
+}
+
+.hlx-root .hlx-alert[data-type='warning'],
+.hlx-root .hlx-banner[data-type='warning'] {
+  --hlx-callout-color: var(--hlx-color-alert-warning);
+}
+
+.hlx-root .hlx-alert[data-type='caution'],
+.hlx-root .hlx-banner[data-type='caution'] {
+  --hlx-callout-color: var(--hlx-color-alert-caution);
+}
+
+/* An alert: a 2px bar of its type's color, headed by the type's icon and name. */
+.hlx-root .hlx-alert {
+  position: relative;
+  padding: 2px 0 2px 18px;
+}
+
+.hlx-root .hlx-alert::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--hlx-callout-color);
+}
+
+.hlx-root .hlx-callout-label {
+  color: var(--hlx-callout-color);
+  user-select: none;
+}
+
+.hlx-root .hlx-alert > .hlx-callout-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font-family: var(--hlx-font-family-sans);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.hlx-root .hlx-callout-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.hlx-root .hlx-callout-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.hlx-root .hlx-alert .hlx-callout-body > .hlx-paragraph,
+.hlx-root .hlx-banner .hlx-callout-body > .hlx-paragraph {
+  margin: 0 0 0.5em;
+}
+
+.hlx-root .hlx-callout-body > .hlx-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+/* In comments and chats a one-line alert stays one line: the heading runs into the text. */
+.hlx-root[data-variant='comment'] .hlx-alert,
+.hlx-root[data-variant='chat'] .hlx-alert {
+  padding-left: 12px;
+}
+
+.hlx-root[data-variant='comment'] .hlx-alert > .hlx-callout-label,
+.hlx-root[data-variant='chat'] .hlx-alert > .hlx-callout-label {
+  float: left;
+  margin-right: 6px;
+  margin-bottom: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* A banner: a card tinted with its type's color, the icon beside the text. */
+.hlx-root .hlx-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: var(--hlx-radius-md);
+  background: color-mix(in oklab, var(--hlx-callout-color) 6%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--hlx-callout-color) 18%, transparent);
+  color: var(--hlx-color-text);
+  line-height: var(--hlx-line-height);
+}
+
+.hlx-root .hlx-banner > .hlx-callout-label {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  align-self: flex-start;
+  height: 1lh;
+}
+
+.hlx-root .hlx-banner .hlx-callout-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.hlx-root .hlx-banner > .hlx-callout-body {
+  flex: 1;
+  min-width: 0;
+  min-height: 1em;
+}
+
+.hlx-root .hlx-callout-body > :last-child,
+.hlx-root .hlx-details-body > :last-child {
+  margin-bottom: 0;
+}
+
+/*
+ * A collapsible block: an arrow before the summary and a line after it; opened,
+ * the line draws back, the arrow turns down and a guide runs beside the content. Two registered
+ * numbers ease from 0 to 1: the line hands off to the guide, the content comes in at once.
+ */
+@property --hlx-details-progress {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --hlx-details-content-progress {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+.hlx-root .hlx-details {
+  --hlx-details-progress: 0;
+  --hlx-details-content-progress: 0;
+  /* The line goes in the first 42% of the way, the guide in the rest, each eased. */
+  --hlx-details-across: clamp(0, calc(var(--hlx-details-progress) / 0.42), 1);
+  --hlx-details-down: clamp(0, calc((var(--hlx-details-progress) - 0.42) / 0.58), 1);
+  --hlx-details-line: calc(var(--hlx-details-across) * var(--hlx-details-across) * (3 - 2 * var(--hlx-details-across)));
+  --hlx-details-guide: calc(var(--hlx-details-down) * var(--hlx-details-down) * (3 - 2 * var(--hlx-details-down)));
+  margin: var(--hlx-space-md) 0;
+  border: none;
+  background: transparent;
+  transition: --hlx-details-progress 640ms linear, --hlx-details-content-progress 370ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hlx-root .hlx-details[open] {
+  --hlx-details-progress: 1;
+  --hlx-details-content-progress: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hlx-root .hlx-details {
+    transition: none;
+  }
+}
+
+.hlx-root .hlx-details-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--hlx-space-sm);
+  padding: 0.75em 0;
+  outline: none;
+  color: var(--hlx-color-text);
+  font-size: 1em;
+  font-weight: 500;
+  line-height: var(--hlx-line-height);
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.hlx-root .hlx-details-summary:focus-visible {
+  box-shadow: inset 0 0 0 1px var(--hlx-color-accent), 0 0 0 3px var(--hlx-color-accent-light);
+}
+
+.hlx-root .hlx-details-summary::-webkit-details-marker {
+  display: none;
+}
+
+.hlx-root .hlx-details-summary::after {
+  content: '';
+  flex: 1 1 2.5rem;
+  align-self: center;
+  min-width: 1.5rem;
+  height: 1px;
+  margin-left: 0.75rem;
+  background: var(--hlx-color-border);
+  pointer-events: none;
+  transform: scaleX(calc(1 - var(--hlx-details-line)));
+  transform-origin: left center;
+}
+
+.hlx-root .hlx-details-summary-text {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.hlx-root .hlx-details-chevron {
+  position: relative;
+  top: 0.25rem;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--hlx-color-text-tertiary);
+  transform: rotate(calc(var(--hlx-details-content-progress) * 90deg));
+  transform-origin: center;
+  transition: color 0.2s ease;
+}
+
+.hlx-root .hlx-details-chevron svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.hlx-root .hlx-details-body {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  padding: calc(0.875em * var(--hlx-details-content-progress)) 0 calc(1.25em * var(--hlx-details-content-progress)) calc(1.25rem + var(--hlx-space-sm));
+  color: var(--hlx-color-text-secondary);
+}
+
+.hlx-root .hlx-details-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 1.25em;
+  left: calc(0.625rem - 0.5px);
+  width: 1px;
+  background: var(--hlx-color-border);
+  pointer-events: none;
+  transform: scaleY(var(--hlx-details-guide));
+  transform-origin: center top;
+}
+
+/* Tables */
+.hlx-root .hlx-table-wrap {
+  max-width: 100%;
+  margin: var(--hlx-flow-block) 0;
+  overflow-x: auto;
+}
+
+.hlx-root .hlx-table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375em;
+}
+
+.hlx-root .hlx-table-cell {
+  min-width: 4em;
+  padding: 8px 12px;
+  border: 1px solid var(--hlx-color-border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.hlx-root .hlx-table-cell-header {
+  background: var(--hlx-color-bg-subtle);
+  font-weight: 600;
+}
+
+.hlx-root .hlx-table-cell > .hlx-paragraph {
+  margin: 0;
+}
+
+.hlx-root .hlx-table-cell > .hlx-paragraph + .hlx-paragraph {
+  margin-top: 0.5em;
+}
+
+/* Math (KaTeX) */
+
+.hlx-root .hlx-math-block {
+  margin: var(--hlx-flow-block) 0;
+}
+
+.hlx-root .hlx-math[data-display='block'] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25em 0;
+  text-align: center;
+}
+
+.hlx-root .hlx-math-source {
+  color: var(--hlx-color-text-muted);
+  font-family: var(--hlx-font-mono);
+  font-size: 0.875em;
+  white-space: pre-wrap;
+}
+
+/* KaTeX prints invalid input in place, in this color. */
+.hlx-root .hlx-math .katex-error {
+  color: var(--hlx-color-alert-caution);
+}
+
+/* Mermaid diagrams (pele). Its colors are CSS variables, mapped to our tokens
+   so light / dark switch without re-rendering. */
+
+.hlx-root .hlx-mermaid-block {
+  margin: var(--hlx-flow-block) 0;
+}
+
+.hlx-root .hlx-mermaid {
+  /* Behind edge labels and pie labels, and between slices: the page's own background. */
+  --pele-bg: var(--hlx-color-bg);
+  --pele-fg: var(--hlx-color-text);
+  --pele-muted: var(--hlx-color-text-muted);
+  --pele-line: var(--hlx-color-text-muted);
+  --pele-border: var(--hlx-color-text-muted);
+  --pele-surface: var(--hlx-color-bg-subtle);
+  --pele-surface-alt: var(--hlx-color-border);
+  --pele-accent: var(--hlx-color-accent);
+  --pele-font: var(--hlx-font-sans);
+  --pele-font-mono: var(--hlx-font-mono);
+
+  margin: 0;
+}
+
+.hlx-root .hlx-mermaid-svg {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+
+.hlx-root .hlx-mermaid-svg svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.hlx-root .hlx-mermaid-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px dashed var(--hlx-color-border);
+  border-radius: 8px;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+}
+
+.hlx-root .hlx-mermaid-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--hlx-color-border);
+  border-top-color: var(--hlx-color-text-muted);
+  border-radius: 50%;
+  animation: hlx-spin 0.8s linear infinite;
+}
+
+@keyframes hlx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hlx-root .hlx-mermaid-spinner {
+    animation: none;
+  }
+}
+
+.hlx-root .hlx-mermaid-error {
+  padding: 12px 16px;
+  border: 1px solid color-mix(in srgb, var(--hlx-color-alert-caution) 40%, var(--hlx-color-border));
+  border-radius: 8px;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+}
+
+.hlx-root .hlx-mermaid-error p {
+  margin: 0 0 0.5em;
+  color: var(--hlx-color-alert-caution);
+}
+
+.hlx-root .hlx-mermaid-error pre {
+  margin: 0.5em 0 0;
+  overflow-x: auto;
+  font-family: var(--hlx-font-mono);
+}
+
+.hlx-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Images. The width / height attributes reserve the aspect ratio before loading. */
+
+.hlx-root .hlx-image-block {
+  margin: var(--hlx-flow-block) 0;
+}
+
+.hlx-root .hlx-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+  border-radius: 4px;
+}
+
+.hlx-root .hlx-image-figure {
+  margin: 0;
+}
+
+/* Images open when the site gave the renderer onImageClick. */
+.hlx-root .hlx-image-clickable {
+  cursor: zoom-in;
+}
+
+.hlx-root .hlx-image-clickable:focus-visible {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+/* Text wraps around these. The width is on the block, which the picture fills. */
+.hlx-root .hlx-image-block[data-layout='float-left'],
+.hlx-root .hlx-image-block[data-layout='float-right'] {
+  width: var(--hlx-image-width, 42%);
+}
+
+.hlx-root .hlx-image-block[data-layout='float-left'] {
+  float: left;
+  margin: 0.25em 1.5em 1em 0;
+}
+
+.hlx-root .hlx-image-block[data-layout='float-right'] {
+  float: right;
+  margin: 0.25em 0 1em 1.5em;
+}
+
+.hlx-root .hlx-image-block[data-layout] .hlx-image {
+  width: 100%;
+}
+
+.hlx-root .hlx-image-caption {
+  margin-top: 1em;
+  color: var(--hlx-color-text-tertiary);
+  font-size: var(--hlx-font-size-caption);
+  line-height: var(--hlx-line-height-compact);
+  text-align: center;
+}
+
+.hlx-root .hlx-image-invalid {
+  display: block;
+  padding: 12px 16px;
+  border: 1px dashed var(--hlx-color-border);
+  border-radius: 8px;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+  text-align: center;
+}
+
+/* Charts. */
+/* The chart palette: on the whole content, so dialogs that edit charts can show it too. */
+.hlx-root {
+  --hlx-chart-1: #4e79a7;
+  --hlx-chart-2: #f28e2b;
+  --hlx-chart-3: #59a14f;
+  --hlx-chart-4: #e15759;
+  --hlx-chart-5: #76b7b2;
+  --hlx-chart-6: #b07aa1;
+  --hlx-chart-muted: #cfd4da;
+}
+
+.hlx-root[data-color-scheme='dark'] {
+  --hlx-chart-1: #7ea6d8;
+  --hlx-chart-2: #ffad5c;
+  --hlx-chart-3: #86c779;
+  --hlx-chart-4: #ff8a8c;
+  --hlx-chart-5: #94d4cf;
+  --hlx-chart-6: #d1a3c4;
+  --hlx-chart-muted: #4b5260;
+}
+
+.hlx-root .hlx-chart {
+  margin: var(--hlx-flow-block) 0;
+}
+
+.hlx-root .hlx-chart-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125em;
+  margin-bottom: 0.75em;
+}
+
+.hlx-root .hlx-chart-title {
+  font-weight: 600;
+}
+
+.hlx-root .hlx-chart-subtitle,
+.hlx-root .hlx-chart-footer {
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+}
+
+.hlx-root .hlx-chart-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125em;
+  margin: 0.5em 0 0;
+}
+
+.hlx-root .hlx-chart {
+  /* The wide and the compact drawing: whichever fits the space shows. */
+  container-type: inline-size;
+}
+
+/* The button that shows the data instead: top right, beside the title or above the drawing. */
+.hlx-root .hlx-chart[data-toggle] {
+  position: relative;
+}
+
+.hlx-root .hlx-chart[data-toggle][data-captioned] .hlx-chart-caption {
+  padding-right: 6.5em;
+}
+
+.hlx-root .hlx-chart[data-toggle]:not([data-captioned]) {
+  padding-top: 2.25em;
+}
+
+.hlx-root .hlx-chart-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.25em 0.625em;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--hlx-color-text-muted);
+  font: inherit;
+  font-size: 0.8125em;
+  cursor: pointer;
+}
+
+.hlx-root .hlx-chart-toggle:hover,
+.hlx-root .hlx-chart-toggle[aria-pressed='true'] {
+  color: var(--hlx-color-text);
+  background: var(--hlx-color-bg-subtle);
+}
+
+.hlx-root .hlx-chart-toggle:focus-visible {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+.hlx-root .hlx-chart-table:not(.hlx-visually-hidden) {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875em;
+  font-variant-numeric: tabular-nums;
+}
+
+.hlx-root .hlx-chart-table:not(.hlx-visually-hidden) th,
+.hlx-root .hlx-chart-table:not(.hlx-visually-hidden) td {
+  padding: 0.375em 0.75em;
+  border-bottom: 1px solid var(--hlx-color-border);
+  text-align: right;
+}
+
+.hlx-root .hlx-chart-table:not(.hlx-visually-hidden) th:first-child,
+.hlx-root .hlx-chart-table:not(.hlx-visually-hidden) td:first-child {
+  text-align: left;
+}
+
+.hlx-root .hlx-chart-table:not(.hlx-visually-hidden) th {
+  color: var(--hlx-color-text-muted);
+  font-weight: 600;
+}
+
+.hlx-root .hlx-chart-empty {
+  margin: 0;
+  padding: 2.5em 1em;
+  border: 1px dashed var(--hlx-color-border);
+  border-radius: 8px;
+  color: var(--hlx-color-text-muted);
+  text-align: center;
+}
+
+
+.hlx-root .hlx-chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--hlx-font-sans);
+  font-size: 12px;
+}
+
+.hlx-root .hlx-chart-svg[data-size='compact'] {
+  display: none;
+}
+
+.hlx-root .hlx-chart-plot {
+  position: relative;
+  border-radius: 4px;
+}
+
+.hlx-root .hlx-chart-plot:focus-visible {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+.hlx-root .hlx-chart-hover-band {
+  fill: var(--hlx-color-text);
+  fill-opacity: 0.06;
+}
+
+.hlx-root .hlx-chart-hover-guide {
+  stroke: var(--hlx-color-text-muted);
+  stroke-dasharray: 3 3;
+}
+
+.hlx-root .hlx-chart-hover-point {
+  fill: var(--hlx-chart-color);
+  stroke: var(--hlx-color-bg);
+  stroke-width: 2;
+}
+
+.hlx-root .hlx-chart-svg [data-dimmed] {
+  opacity: 0.3;
+}
+
+.hlx-root .hlx-chart-center-label {
+  fill: var(--hlx-color-text-muted);
+  font-size: 13px;
+}
+
+.hlx-root .hlx-chart-center-value {
+  fill: var(--hlx-color-text);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Next to the category, on whichever side has room. */
+.hlx-root .hlx-chart-tooltip {
+  position: absolute;
+  z-index: 1;
+  top: 8px;
+  min-width: 8em;
+  padding: 0.5em 0.75em;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 6px;
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-shadow-menu);
+  font-size: 0.8125em;
+  pointer-events: none;
+  transform: translateX(12px);
+  white-space: nowrap;
+}
+
+.hlx-root .hlx-chart-tooltip[data-side='left'] {
+  transform: translateX(calc(-100% - 12px));
+}
+
+.hlx-root .hlx-chart-tooltip-title {
+  margin-bottom: 0.25em;
+  font-weight: 600;
+}
+
+.hlx-root .hlx-chart-tooltip-row {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+}
+
+.hlx-root .hlx-chart-tooltip-row[data-muted] {
+  color: var(--hlx-color-text-muted);
+}
+
+.hlx-root .hlx-chart-tooltip-label {
+  flex: 1;
+}
+
+.hlx-root .hlx-chart-tooltip-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.hlx-root .hlx-chart-tooltip-total {
+  margin-top: 0.25em;
+  padding-top: 0.25em;
+  border-top: 1px solid var(--hlx-color-border);
+}
+
+@container (max-width: 480px) {
+  .hlx-root .hlx-chart-svg[data-size='wide'] {
+    display: none;
+  }
+
+  .hlx-root .hlx-chart-svg[data-size='compact'] {
+    display: block;
+  }
+}
+
+.hlx-root .hlx-chart-c0 {
+  --hlx-chart-color: var(--hlx-chart-muted);
+}
+
+.hlx-root .hlx-chart-c1 {
+  --hlx-chart-color: var(--hlx-chart-1);
+}
+
+.hlx-root .hlx-chart-c2 {
+  --hlx-chart-color: var(--hlx-chart-2);
+}
+
+.hlx-root .hlx-chart-c3 {
+  --hlx-chart-color: var(--hlx-chart-3);
+}
+
+.hlx-root .hlx-chart-c4 {
+  --hlx-chart-color: var(--hlx-chart-4);
+}
+
+.hlx-root .hlx-chart-c5 {
+  --hlx-chart-color: var(--hlx-chart-5);
+}
+
+.hlx-root .hlx-chart-c6 {
+  --hlx-chart-color: var(--hlx-chart-6);
+}
+
+.hlx-root .hlx-chart-mark {
+  fill: var(--hlx-chart-color);
+}
+
+.hlx-root .hlx-chart-area {
+  fill: var(--hlx-chart-color);
+  fill-opacity: 0.35;
+}
+
+.hlx-root .hlx-chart-line {
+  fill: none;
+  stroke: var(--hlx-chart-color);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.hlx-root .hlx-chart-svg [data-muted],
+.hlx-root .hlx-chart-legend > li[data-muted] .hlx-chart-swatch {
+  --hlx-chart-color: var(--hlx-chart-muted);
+}
+
+.hlx-root .hlx-chart-grid {
+  stroke: var(--hlx-color-border);
+}
+
+.hlx-root .hlx-chart-zero,
+.hlx-root .hlx-chart-ref {
+  stroke: var(--hlx-color-text-muted);
+}
+
+.hlx-root .hlx-chart-ref {
+  stroke-dasharray: 4 3;
+}
+
+.hlx-root .hlx-chart-tick,
+.hlx-root .hlx-chart-category,
+.hlx-root .hlx-chart-ref-label {
+  fill: var(--hlx-color-text-muted);
+}
+
+.hlx-root .hlx-chart-slice-label {
+  fill: #fff;
+  font-weight: 600;
+}
+
+/* Text over the marks shouldn't take the pointer from them. */
+.hlx-root .hlx-chart-slice-label,
+.hlx-root .hlx-chart-center,
+.hlx-root .hlx-chart-ref-label {
+  pointer-events: none;
+}
+
+.hlx-root .hlx-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25em 1em;
+  margin: 0.5em 0 0;
+  padding: 0;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+  list-style: none;
+}
+
+.hlx-root .hlx-chart-legend > li {
+  display: inline-flex;
+  gap: 0.375em;
+  align-items: center;
+}
+
+.hlx-root .hlx-chart-swatch {
+  width: 0.75em;
+  height: 0.75em;
+  border-radius: 2px;
+  background: var(--hlx-chart-color);
+}
+
+.hlx-root .hlx-chart-error {
+  margin: var(--hlx-flow-block) 0;
+  padding: 0.75em 1em;
+  border: 1px dashed var(--hlx-color-border);
+  border-radius: 8px;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+}
+
+.hlx-root .hlx-chart-error-title {
+  margin: 0 0 0.5em;
+  color: var(--hlx-color-text);
+  font-weight: 600;
+}
+
+.hlx-root .hlx-chart-error ul {
+  margin: 0;
+  padding-left: 1.25em;
+}
+
+.hlx-root .hlx-chart-error-hint {
+  display: block;
+}
+
+/* Polls. Results draw a bar behind each option, as wide as its share. */
+.hlx-root .hlx-poll {
+  margin-block: var(--hlx-flow-block);
+  padding: 1em 1.25em;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 8px;
+}
+
+.hlx-root .hlx-poll-question {
+  margin: 0 0 0.75em;
+  font-weight: 600;
+}
+
+.hlx-root .hlx-poll-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hlx-root .hlx-poll-option {
+  position: relative;
+  overflow: hidden;
+  padding: 0.5em 0.75em;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 6px;
+}
+
+.hlx-root .hlx-poll-option > label {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  cursor: pointer;
+}
+
+.hlx-root .hlx-poll-bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--hlx-poll-share, 0%);
+  background: var(--hlx-color-bg-subtle);
+}
+
+.hlx-root .hlx-poll-option[data-chosen] .hlx-poll-bar {
+  background: color-mix(in srgb, var(--hlx-color-accent) 18%, transparent);
+}
+
+.hlx-root .hlx-poll-row {
+  position: relative;
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hlx-root .hlx-poll-count {
+  flex: none;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+  font-variant-numeric: tabular-nums;
+}
+
+.hlx-root .hlx-poll-meta,
+.hlx-root .hlx-poll-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  align-items: center;
+  margin: 0.75em 0 0;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+}
+
+.hlx-root .hlx-poll-footer button {
+  padding: 0.25em 1em;
+  border: 1px solid var(--hlx-color-accent);
+  border-radius: 6px;
+  background: var(--hlx-color-accent);
+  color: var(--hlx-color-bg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.hlx-root .hlx-poll-footer button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.hlx-root .hlx-poll-error {
+  color: var(--hlx-color-alert-caution);
+}
+
+/* Link cards: a picture or an icon, then the title and description. */
+.hlx-root .hlx-link-card {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  box-sizing: border-box;
+  gap: 0.75rem;
+  align-items: flex-start;
+  width: 32rem;
+  max-width: 100%;
+  margin-block: var(--hlx-flow-block);
+  margin-inline: auto;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 0.625rem;
+  background-color: color-mix(in srgb, var(--hlx-color-bg-secondary) 60%, transparent);
+  backdrop-filter: blur(12px) saturate(150%);
+  color: inherit;
+  font-family: var(--hlx-font-family-sans);
+  font-style: normal;
+  text-decoration: none;
+  text-indent: 0;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.hlx-root .hlx-link-card[data-centered] {
+  align-items: center;
+}
+
+.hlx-root a.hlx-link-card {
+  cursor: pointer;
+}
+
+.hlx-root a.hlx-link-card:hover {
+  border-color: color-mix(in srgb, var(--hlx-color-border), var(--hlx-color-text) 25%);
+  background-color: var(--hlx-color-fill-tertiary);
+  text-decoration: none;
+}
+
+.hlx-root .hlx-link-card-image {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--hlx-color-bg-tertiary);
+  object-fit: cover;
+  /* An inset ring, drawn over the picture. */
+  outline: 1px solid var(--hlx-color-ring);
+  outline-offset: -1px;
+}
+
+.hlx-root .hlx-link-card-icon {
+  z-index: 1;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--hlx-radius-md);
+  background-color: var(--hlx-color-bg-tertiary);
+  box-shadow: inset 0 0 0 1px var(--hlx-color-ring);
+  color: var(--hlx-color-text-tertiary);
+}
+
+.hlx-root .hlx-link-card-icon img,
+.hlx-root .hlx-link-card-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.hlx-root .hlx-link-card-icon img {
+  border-radius: 0.25rem;
+}
+
+.hlx-root .hlx-link-card-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+}
+
+.hlx-root .hlx-link-card-title {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  line-height: 1.25rem;
+}
+
+.hlx-root .hlx-link-card-title-text {
+  display: -webkit-box;
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+  font-size: var(--hlx-font-size-md);
+  font-weight: 500;
+  line-height: 1.25rem;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.hlx-root .hlx-link-card-description {
+  display: -webkit-box;
+  overflow: hidden;
+  min-width: 0;
+  margin-top: 0.375rem;
+  color: var(--hlx-color-text-tertiary);
+  font-size: var(--hlx-font-size-md);
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* A card's own color, from its source: a faint border and wash. */
+.hlx-root .hlx-link-card[data-tinted],
+.hlx-root a.hlx-link-card[data-tinted]:hover {
+  border-color: color-mix(in srgb, var(--hlx-link-card-color) 19%, transparent);
+}
+
+.hlx-root .hlx-link-card-tint {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background-color: var(--hlx-link-card-color);
+  opacity: 0.04;
+  pointer-events: none;
+}
+
+.hlx-root .hlx-link-card-title-text[data-plain] {
+  font-weight: 400;
+}
+
+.hlx-root .hlx-link-card-badge {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: 4px;
+  align-items: center;
+  font-family: var(--hlx-font-family-sans);
+  font-size: var(--hlx-font-size-md);
+  font-weight: 500;
+}
+
+.hlx-root .hlx-link-card-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+.hlx-root .hlx-link-card-badge[data-mono] {
+  font-family: var(--hlx-font-mono);
+  font-size: var(--hlx-font-size-xs);
+  font-weight: 400;
+}
+
+.hlx-root .hlx-link-card-badge[data-mono] svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* A description in pieces: a state, a change's lines, where it is. */
+.hlx-root .hlx-link-card-parts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  align-items: center;
+  font-family: var(--hlx-font-mono);
+}
+
+.hlx-root .hlx-link-card-part {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.hlx-root .hlx-link-card-part svg {
+  width: 13px;
+  height: 13px;
+}
+
+.hlx-root .hlx-link-card-group {
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.hlx-root .hlx-link-card-part[data-tone='faded'] {
+  opacity: 0.8;
+}
+
+.hlx-root .hlx-link-card-part[data-tone='tag'] {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--hlx-color-fill-secondary);
+  font-size: var(--hlx-font-size-xs);
+}
+
+.hlx-root .hlx-link-card-part[data-tone='tag'] svg {
+  width: 11px;
+  height: 11px;
+}
+
+/* The other shapes: wider, full width, and a poster's upright picture. */
+.hlx-root .hlx-link-card[data-shape='expanded'] {
+  width: 36rem;
+}
+
+.hlx-root .hlx-link-card[data-shape='expanded'] .hlx-link-card-description,
+.hlx-root .hlx-link-card[data-shape='poster'] .hlx-link-card-description {
+  -webkit-line-clamp: 3;
+}
+
+.hlx-root .hlx-link-card[data-shape='wide'] {
+  width: 100%;
+  max-width: 42rem;
+}
+
+.hlx-root .hlx-link-card[data-shape='wide'] .hlx-link-card-description {
+  -webkit-line-clamp: 4;
+}
+
+.hlx-root .hlx-link-card[data-shape='poster'] {
+  gap: 0;
+  align-items: stretch;
+  width: 100%;
+  max-width: 40rem;
+  padding: 0;
+}
+
+.hlx-root .hlx-link-card[data-shape='poster'] .hlx-link-card-image {
+  width: 6.75rem;
+  height: auto;
+  border-radius: 0;
+  outline: none;
+  align-self: stretch;
+  aspect-ratio: 2 / 3;
+}
+
+.hlx-root .hlx-link-card[data-shape='poster'] .hlx-link-card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem 1.125rem;
+}
+
+/* Holding a card's place while it fetches. */
+.hlx-root .hlx-link-card[data-loading] .hlx-link-card-title-text {
+  width: 8rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+  background-color: var(--hlx-color-bg-tertiary);
+}
+
+.hlx-root .hlx-link-card[data-loading] .hlx-link-card-description {
+  width: 100%;
+  height: 0.75rem;
+  margin-top: 0.5rem;
+  border-radius: 0.25rem;
+  background-color: var(--hlx-color-bg-tertiary);
+}
+
+.hlx-root .hlx-link-card[data-loading] .hlx-link-card-description + .hlx-link-card-description {
+  width: 75%;
+}
+
+.hlx-root .hlx-link-card[data-loading] .hlx-link-card-image {
+  display: block;
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--hlx-color-ring);
+}
+
+.hlx-root .hlx-link-card[data-loading] .hlx-link-card-title-text,
+.hlx-root .hlx-link-card[data-loading] .hlx-link-card-description,
+.hlx-root .hlx-link-card[data-loading] .hlx-link-card-image {
+  animation: hlx-link-card-pulse 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes hlx-link-card-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hlx-root .hlx-link-card[data-loading] .hlx-link-card-title-text,
+  .hlx-root .hlx-link-card[data-loading] .hlx-link-card-description,
+  .hlx-root .hlx-link-card[data-loading] .hlx-link-card-image {
+    animation: none;
+  }
+}
+
+/* A card that couldn't be fetched: still a link, in a dashed box. */
+.hlx-root .hlx-link-card[data-failed] {
+  align-items: center;
+  padding: 0.75rem 0.875rem;
+  border-style: dashed;
+  background-color: var(--hlx-color-bg);
+  backdrop-filter: none;
+  color: var(--hlx-color-text-tertiary);
+}
+
+.hlx-root a.hlx-link-card[data-failed]:hover {
+  background-color: var(--hlx-color-fill-quaternary);
+}
+
+.hlx-root .hlx-link-card[data-failed] .hlx-link-card-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background-color: var(--hlx-color-bg-secondary);
+  box-shadow: none;
+  color: var(--hlx-color-text-quaternary);
+}
+
+.hlx-root .hlx-link-card[data-failed] .hlx-link-card-icon svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.hlx-root .hlx-link-card-failed-url {
+  display: block;
+  overflow: hidden;
+  color: var(--hlx-color-text-secondary);
+  font-size: var(--hlx-font-size-md);
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hlx-root .hlx-link-card-failed-hint {
+  display: block;
+  margin-top: 0.125rem;
+  color: var(--hlx-color-text-quaternary);
+  font-size: var(--hlx-font-size-xs);
+}
+
+/* Embeds: each service has its own shape. */
+.hlx-root .hlx-embed {
+  margin-block: var(--hlx-flow-block);
+}
+
+/* A dynamic block: the site's own component, in a box that keeps its height until it loads. */
+.hlx-root .hlx-dynamic {
+  position: relative;
+  box-sizing: border-box;
+  margin-block: var(--hlx-flow-block);
+}
+
+.hlx-root .hlx-dynamic-host {
+  display: block;
+}
+
+.hlx-root .hlx-dynamic-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px;
+  border: 1px dashed var(--hlx-color-border);
+  border-radius: 8px;
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-text-muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.hlx-root .hlx-dynamic-url {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  font-family: var(--hlx-font-mono);
+  font-size: 12px;
+}
+
+.hlx-root .hlx-dynamic-hint {
+  font-size: 12px;
+}
+
+.hlx-root .hlx-dynamic-retry {
+  padding: 4px 12px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 6px;
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.hlx-root .hlx-embed-frame {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 8px;
+  background: var(--hlx-color-bg-subtle);
+}
+
+.hlx-root .hlx-embed[data-source='youtube'] .hlx-embed-frame,
+.hlx-root .hlx-embed[data-source='bilibili'] .hlx-embed-frame {
+  aspect-ratio: 16 / 9;
+}
+
+.hlx-root .hlx-embed[data-source='spotify'] .hlx-embed-frame {
+  height: 352px;
+}
+
+.hlx-root .hlx-embed[data-source='apple-music'] .hlx-embed-frame {
+  height: 450px;
+}
+
+.hlx-root .hlx-embed[data-source='codesandbox'] .hlx-embed-frame {
+  height: 500px;
+}
+
+.hlx-root .hlx-embed[data-source='github-gist'] .hlx-embed-frame {
+  height: 400px;
+}
+
+/* An X post: X's page, as wide as X draws a post, and as tall as it reports. */
+.hlx-root .hlx-embed[data-tweet] {
+  position: relative;
+}
+
+.hlx-root .hlx-embed-tweet-frame {
+  display: block;
+  width: 100%;
+  max-width: 550px;
+  margin-inline: auto;
+  border: 0;
+  color-scheme: normal;
+}
+
+/* Loading unseen behind the link, or behind the post in the other theme, until it is ready. */
+.hlx-root .hlx-embed-tweet-frame[data-pending] {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hlx-root .hlx-embed-source {
+  display: inline-block;
+  margin-block-start: 0.25em;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+}
+
+.hlx-root .hlx-embed--link {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  padding: 0.625em 0.875em;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 8px;
+}
+
+.hlx-root .hlx-embed-label {
+  flex: none;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+}
+
+.hlx-root .hlx-embed-url {
+  overflow: hidden;
+  min-width: 0;
+  color: var(--hlx-color-text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hlx-root a.hlx-embed-url {
+  color: var(--hlx-color-accent);
+}
+
+/* Steps: a numbered line down the side, with each step's content next to it. */
+.hlx-root .hlx-steps {
+  margin-block: var(--hlx-flow-block);
+  padding: 0;
+  list-style: none;
+}
+
+.hlx-root .hlx-step {
+  position: relative;
+  padding-block-end: 1em;
+  padding-inline-start: 2.5em;
+}
+
+.hlx-root .hlx-step:not(:last-child)::before {
+  position: absolute;
+  inset-block: 2em 0.25em;
+  inset-inline-start: 0.875em;
+  width: 1px;
+  background: var(--hlx-color-border);
+  content: '';
+}
+
+.hlx-root .hlx-step-number {
+  position: absolute;
+  inset-block-start: 0.125em;
+  inset-inline-start: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75em;
+  height: 1.75em;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 50%;
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+  line-height: 1;
+}
+
+.hlx-root .hlx-step-title {
+  margin-block-end: 0.25em;
+  font-weight: 600;
+}
+
+.hlx-root .hlx-step-content > :first-child {
+  margin-block-start: 0;
+}
+
+.hlx-root .hlx-step-content > :last-child {
+  margin-block-end: 0;
+}
+
+/* Code snippets: a code card with file names in the header. */
+.hlx-root .hlx-snippet-block {
+  margin: var(--hlx-flow-block) 0;
+}
+
+.hlx-root .hlx-snippet [hidden] {
+  display: none;
+}
+
+.hlx-root .hlx-snippet-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--hlx-color-text);
+  font-family: var(--hlx-font-mono);
+  white-space: nowrap;
+}
+
+.hlx-root .hlx-snippet-title > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Tabs: pills, the chosen one raised in the page's color. */
+.hlx-root .hlx-snippet-tabs {
+  display: flex;
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
+  padding: 4px 0;
+  overflow-x: auto;
+  margin-inline-start: -6px;
+}
+
+.hlx-root .hlx-snippet-tab {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-item);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-family: var(--hlx-font-mono);
+  cursor: pointer;
+}
+
+.hlx-root .hlx-snippet-tab:hover {
+  background: var(--hlx-chrome-fill);
+  color: var(--hlx-color-text);
+}
+
+.hlx-root .hlx-snippet-tab[aria-selected='true'] {
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-control);
+  color: var(--hlx-color-text);
+}
+
+.hlx-root .hlx-snippet-tab:focus-visible {
+  outline: none;
+  box-shadow: var(--hlx-chrome-ring-inset);
+}
+
+/* A code file's icon: Material Icon Theme's, in its own colors. */
+.hlx-root .hlx-code-file-icon {
+  flex: none;
+}
+
+/*
+ * One line per row. The code is at least as wide as the box and as its longest line, so a
+ * marked line is shaded across the whole width, scrolled or not.
+ */
+.hlx-root .hlx-snippet .hlx-code-body > code {
+  display: inline-block;
+  min-width: 100%;
+}
+
+.hlx-root .hlx-snippet .hlx-code-line {
+  display: block;
+  /* Each line reaches across the box's side padding, so a mark runs edge to edge. */
+  margin: 0 -16px;
+  padding: 0 16px;
+}
+
+.hlx-root .hlx-code-line[data-highlight] {
+  /* A marked line: shaded, with a bar of the accent color down its edge, left of its number. */
+  background: color-mix(in srgb, var(--hlx-color-accent) 14%, transparent);
+  box-shadow: inset 2px 0 0 var(--hlx-color-accent);
+}
+
+/* The number keeps the line's shade, as it covers code scrolled under it. */
+.hlx-root .hlx-code-lined .hlx-code-line[data-highlight]::before {
+  background: color-mix(in srgb, var(--hlx-color-accent) 14%, var(--hlx-color-code-bg));
+}
+
+/* Galleries */
+.hlx-root .hlx-gallery-block {
+  margin: var(--hlx-flow-block) 0;
+}
+
+.hlx-root .hlx-gallery-item {
+  overflow: hidden;
+  margin: 0;
+  border-radius: 8px;
+  background: var(--hlx-color-bg-subtle);
+}
+
+.hlx-root .hlx-gallery-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hlx-root .hlx-gallery-item[style*='aspect-ratio'] img {
+  height: 100%;
+}
+
+.hlx-root .hlx-gallery[data-layout='grid'] .hlx-gallery-track {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: 8px;
+}
+
+.hlx-root .hlx-gallery[data-layout='masonry'] .hlx-gallery-track {
+  column-gap: 8px;
+  column-width: 200px;
+}
+
+.hlx-root .hlx-gallery[data-layout='masonry'] .hlx-gallery-item {
+  margin-block-end: 8px;
+  break-inside: avoid;
+}
+
+.hlx-root .hlx-gallery[data-layout='carousel'] .hlx-gallery-track {
+  display: flex;
+  overflow-x: auto;
+  gap: 0;
+  scroll-snap-type: x mandatory;
+}
+
+.hlx-root .hlx-gallery[data-layout='carousel'] .hlx-gallery-item {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+}
+
+/* Showing more than one at a time (perView): a part of the next one shows past the edge. */
+.hlx-root .hlx-gallery[data-per-view] .hlx-gallery-track {
+  gap: 12px;
+}
+
+.hlx-root .hlx-gallery[data-per-view] .hlx-gallery-item {
+  flex-basis: calc((100% - 12px * (var(--hlx-gallery-per-view) - 1)) / var(--hlx-gallery-per-view));
+}
+
+/* A mouse drags the carousel; touch scrolls it natively. */
+.hlx-root .hlx-gallery[data-layout='carousel'] .hlx-gallery-track {
+  cursor: grab;
+}
+
+/* Snapping is off while dragging and while gliding to the nearest image after. The selectors
+   repeat the carousel's own, which turns snapping on, so that these win. */
+.hlx-root .hlx-gallery[data-layout='carousel'] .hlx-gallery-track[data-dragging],
+.hlx-root .hlx-gallery[data-layout='carousel'] .hlx-gallery-track[data-settling] {
+  scroll-snap-type: none;
+}
+
+.hlx-root .hlx-gallery[data-layout='carousel'] .hlx-gallery-track[data-dragging] {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.hlx-root .hlx-gallery[data-layout='carousel'] .hlx-gallery-track[data-dragging] img {
+  cursor: grabbing;
+}
+
+.hlx-root .hlx-gallery-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-block-start: 6px;
+  color: var(--hlx-color-text-muted);
+  font-family: var(--hlx-font-sans);
+  font-size: 12px;
+}
+
+.hlx-root .hlx-gallery-controls > button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 50%;
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  cursor: pointer;
+}
+
+.hlx-root .hlx-gallery-controls > button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Chats */
+.hlx-root .hlx-chat-block {
+  margin: var(--hlx-flow-block) 0;
+}
+
+.hlx-root .hlx-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hlx-root .hlx-chat-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.hlx-root .hlx-chat-row[data-side='right'] {
+  flex-direction: row-reverse;
+}
+
+.hlx-root .hlx-chat-avatar {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-text-muted);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+}
+
+.hlx-root .hlx-chat-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hlx-root .hlx-chat-message {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 80%;
+}
+
+.hlx-root .hlx-chat-row[data-side='right'] .hlx-chat-message {
+  align-items: flex-end;
+}
+
+.hlx-root .hlx-chat-author {
+  margin-block-end: 2px;
+  color: var(--hlx-color-text-muted);
+  font-family: var(--hlx-font-sans);
+  font-size: 12px;
+}
+
+.hlx-root .hlx-chat-bubble {
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--hlx-color-bg-subtle);
+  overflow-wrap: anywhere;
+}
+
+.hlx-root .hlx-chat-article {
+  overflow-wrap: anywhere;
+}
+
+/* The editor keeps whitespace as typed, and Markdown's output has line breaks between tags. */
+.hlx-root .hlx-chat-markdown {
+  white-space: normal;
+}
+
+.hlx-root .hlx-chat-markdown pre {
+  white-space: pre;
+}
+
+.hlx-root .hlx-chat-markdown > :first-child {
+  margin-block-start: 0;
+}
+
+.hlx-root .hlx-chat-markdown > :last-child {
+  margin-block-end: 0;
+}
+
+.hlx-root .hlx-chat-markdown p,
+.hlx-root .hlx-chat-markdown ul,
+.hlx-root .hlx-chat-markdown ol,
+.hlx-root .hlx-chat-markdown table,
+.hlx-root .hlx-chat-markdown pre,
+.hlx-root .hlx-chat-markdown blockquote {
+  margin-block: 0.5em;
+}
+
+.hlx-root .hlx-chat-markdown ul,
+.hlx-root .hlx-chat-markdown ol {
+  padding-inline-start: 1.5em;
+}
+
+.hlx-root .hlx-chat-markdown a {
+  color: var(--hlx-color-accent);
+}
+
+.hlx-root .hlx-chat-markdown img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.hlx-root .hlx-chat-markdown pre {
+  overflow-x: auto;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--hlx-color-bg);
+  font-family: var(--hlx-font-mono);
+  font-size: 0.875em;
+}
+
+.hlx-root .hlx-chat-markdown code {
+  font-family: var(--hlx-font-mono);
+  font-size: 0.875em;
+}
+
+.hlx-root .hlx-chat-markdown table {
+  border-collapse: collapse;
+}
+
+.hlx-root .hlx-chat-markdown th,
+.hlx-root .hlx-chat-markdown td {
+  padding: 2px 8px;
+  border: 1px solid var(--hlx-color-border);
+}
+
+.hlx-root .hlx-chat-markdown blockquote {
+  padding-inline-start: 0.75em;
+  border-inline-start: 3px solid var(--hlx-color-border);
+  color: var(--hlx-color-text-muted);
+}
+
+/*
+ * Nested documents: a card. Long ones
+ * start out cut at 300px with the foot fading into the background; all of it is in the HTML.
+ */
+.hlx-root .hlx-nested-doc {
+  margin: var(--hlx-space-md) 0;
+  overflow: clip;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: var(--hlx-radius-md);
+}
+
+.hlx-root .hlx-nested-doc-body {
+  position: relative;
+  padding-block: var(--hlx-space-md);
+  padding-inline: var(--hlx-space-xl);
+}
+
+.hlx-root .hlx-nested-doc[data-collapsed] .hlx-nested-doc-body {
+  box-sizing: border-box;
+  max-height: 300px;
+  overflow: clip;
+}
+
+.hlx-root .hlx-nested-doc-fade {
+  position: absolute;
+  inset: auto 0 0;
+  height: 4rem;
+  background: linear-gradient(to bottom, transparent, var(--hlx-color-bg));
+  pointer-events: none;
+}
+
+.hlx-root .hlx-nested-doc-body > :first-child {
+  margin-block-start: 0;
+}
+
+.hlx-root .hlx-nested-doc-body > :last-child {
+  margin-block-end: 0;
+}
+
+.hlx-root .hlx-nested-doc-toggle {
+  display: block;
+  width: 100%;
+  padding: var(--hlx-space-sm) var(--hlx-space-xl);
+  border: 0;
+  border-top: 1px solid var(--hlx-color-border);
+  background: transparent;
+  color: var(--hlx-color-text-tertiary);
+  font-family: var(--hlx-font-sans);
+  font-size: var(--hlx-font-size-sm);
+  text-align: start;
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.hlx-root .hlx-nested-doc-toggle:hover {
+  background: var(--hlx-color-fill-secondary);
+  color: var(--hlx-color-text);
+}
+
+/* Grids: the columns come from the document, and narrow screens get one. */
+.hlx-root .hlx-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--hlx-grid-cols, 2), minmax(0, 1fr));
+  margin-block: var(--hlx-flow-block);
+}
+
+@media (max-width: 640px) {
+  .hlx-root .hlx-image-block[data-layout='float-left'],
+  .hlx-root .hlx-image-block[data-layout='float-right'] {
+    float: none;
+    width: auto;
+    margin: 0 0 1em;
+  }
+
+  .hlx-root .hlx-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.hlx-root .hlx-grid-cell {
+  min-width: 0;
+}
+
+.hlx-root .hlx-grid-cell > :first-child {
+  margin-block-start: 0;
+}
+
+.hlx-root .hlx-grid-cell > :last-child {
+  margin-block-end: 0;
+}

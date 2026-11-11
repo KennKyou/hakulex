@@ -1,0 +1,35 @@
+{
+  "name": "@hakulex/demo",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@hakulex/diff": "workspace:*",
+    "@hakulex/diff-core": "workspace:*",
+    "@hakulex/editor": "workspace:*",
+    "@hakulex/headless": "workspace:*",
+    "@hakulex/litexml": "workspace:*",
+    "@hakulex/plugin-block-handle": "workspace:*",
+    "@hakulex/plugin-floating-toolbar": "workspace:*",
+    "@hakulex/plugin-image-editor": "workspace:*",
+    "@hakulex/plugin-link-edit": "workspace:*",
+    "@hakulex/plugin-litexml-paste": "workspace:*",
+    "@hakulex/plugin-mention": "workspace:*",
+    "@hakulex/plugin-slash-menu": "workspace:*",
+    "@hakulex/plugin-table": "workspace:*",
+    "@hakulex/plugin-toolbar": "workspace:*",
+    "@hakulex/renderer": "workspace:*",
+    "@hakulex/style-token": "workspace:*",
+    "@hakulex/vue-lexical": "workspace:*",
+    "@lexical/headless": "^0.53.0",
+    "@vue/server-renderer": "^3.5.44",
+    "lexical": "^0.53.0",
+    "vue": "^3.5.44",
+    "vue-router": "^4.6.4"
+  }
+}

@@ -1,0 +1,207 @@
+/*
+ * The tokens, by group, named
+ * --hlx-*. Scope: any element with .hlx-root. Colors and fonts read --hlx-host-* first, so a site
+ * can set its own on :root or any ancestor. Made from tokens.ts; keep the two in step.
+ */
+.hlx-root {
+  --hlx-color-text: var(--hlx-host-color-text, #171717);
+  --hlx-color-text-secondary: var(--hlx-host-color-text-secondary, #404040);
+  --hlx-color-text-tertiary: var(--hlx-host-color-text-tertiary, #737373);
+  --hlx-color-text-quaternary: var(--hlx-host-color-text-quaternary, #a3a3a3);
+  --hlx-color-bg: var(--hlx-host-color-bg, #ffffff);
+  --hlx-color-bg-secondary: var(--hlx-host-color-bg-secondary, #fafafa);
+  --hlx-color-bg-tertiary: var(--hlx-host-color-bg-tertiary, #f5f5f5);
+  --hlx-color-bg-elevated: var(--hlx-host-color-bg-elevated, #ffffff);
+  --hlx-color-fill: var(--hlx-host-color-fill, rgb(0 0 0 / 0.07));
+  --hlx-color-fill-secondary: var(--hlx-host-color-fill-secondary, rgb(0 0 0 / 0.045));
+  --hlx-color-fill-tertiary: var(--hlx-host-color-fill-tertiary, rgb(0 0 0 / 0.03));
+  --hlx-color-fill-quaternary: var(--hlx-host-color-fill-quaternary, rgb(0 0 0 / 0.02));
+  --hlx-color-border: var(--hlx-host-color-border, #e5e5e5);
+  --hlx-color-border-subtle: var(--hlx-host-color-border-subtle, #f0f0f0);
+  --hlx-color-ring: var(--hlx-host-color-ring, rgb(0 0 0 / 0.08));
+  --hlx-color-scrim: var(--hlx-host-color-scrim, rgb(0 0 0 / 0.32));
+  --hlx-color-accent: var(--hlx-host-color-accent, #2563eb);
+  --hlx-color-accent-light: var(--hlx-host-color-accent-light, color-mix(in oklab, var(--hlx-color-accent) 10%, transparent));
+  --hlx-color-link: var(--hlx-host-color-link, #2563eb);
+  --hlx-color-code-text: var(--hlx-host-color-code-text, #171717);
+  --hlx-color-code-bg: var(--hlx-host-color-code-bg, #f5f5f5);
+  --hlx-color-code-header-bg: var(--hlx-host-color-code-header-bg, #f5f5f5);
+  --hlx-color-hr-border: var(--hlx-host-color-hr-border, #e5e5e5);
+  --hlx-color-quote-border: var(--hlx-host-color-quote-border, #e5e5e5);
+  --hlx-color-quote-bg: var(--hlx-host-color-quote-bg, #f5f5f5);
+  --hlx-color-alert-info: var(--hlx-host-color-alert-info, #2563eb);
+  --hlx-color-alert-warning: var(--hlx-host-color-alert-warning, #b45309);
+  --hlx-color-alert-tip: var(--hlx-host-color-alert-tip, #15803d);
+  --hlx-color-alert-caution: var(--hlx-host-color-alert-caution, #dc2626);
+  --hlx-color-alert-important: var(--hlx-host-color-alert-important, #7c3aed);
+  --hlx-space-xs: 4px;
+  --hlx-space-sm: 8px;
+  --hlx-space-md: 16px;
+  --hlx-space-lg: 24px;
+  --hlx-space-xl: 32px;
+  --hlx-flow-paragraph: 1.25em;
+  --hlx-flow-list: 0.375em;
+  --hlx-flow-block: 2em;
+  --hlx-flow-heading: 2em;
+  --hlx-font-family: var(--hlx-host-font-family, var(--hlx-font-family-sans));
+  --hlx-font-family-sans: var(--hlx-host-font-family-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "PingFang SC", "Hiragino Sans GB", "Microsoft JhengHei", "Microsoft YaHei", "Noto Sans TC", "Noto Sans SC", Roboto, Helvetica, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji");
+  --hlx-font-family-serif: var(--hlx-host-font-family-serif, "Noto Serif CJK TC", "Noto Serif TC", "Source Han Serif TC", "Noto Serif CJK SC", "Source Han Serif SC", "Source Han Serif", "source-han-serif-sc", "Songti TC", "Songti SC", STSong, "华文宋体", serif);
+  --hlx-font-family-kai: var(--hlx-host-font-family-kai, "楷體", "楷体", KaiTi, STKaiti, "Kaiti TC", "Kaiti SC", "LXGW WenKai TC", "LXGW WenKai", "霞鹜文楷", "Noto Serif CJK TC", "Noto Serif CJK SC", serif);
+  --hlx-font-mono: var(--hlx-host-font-mono, "SF Mono", SFMono-Regular, ui-monospace, "DejaVu Sans Mono", Menlo, Consolas, "PingFang TC", "PingFang SC", "Noto Sans TC", "Noto Sans SC", monospace);
+  --hlx-font-size-2xs: 0.625em;
+  --hlx-font-size-xs: 0.75em;
+  --hlx-font-size-sm: 0.8125em;
+  --hlx-font-size-md: 0.875em;
+  --hlx-font-size-lg: 1.25em;
+  --hlx-font-size-base: 16px;
+  --hlx-font-size-small: 14px;
+  --hlx-font-size-code: 0.8125em;
+  --hlx-font-size-caption: 0.8125em;
+  --hlx-line-height: 1.75;
+  --hlx-line-height-tight: 1.35;
+  --hlx-line-height-compact: 1.6;
+  --hlx-line-height-code: 1.7;
+  --hlx-radius-sm: 4px;
+  --hlx-radius-md: 8px;
+  --hlx-radius-lg: 12px;
+  --hlx-max-width: 700px;
+  --hlx-shadow-xs: 0 0 0 1px var(--hlx-color-ring), 0 1px 2px rgb(0 0 0 / 0.05);
+  --hlx-shadow-top-bar: 0 0 0 1px var(--hlx-color-ring), 0 4px 12px rgb(0 0 0 / 0.06), 0 12px 32px -8px rgb(0 0 0 / 0.12);
+  --hlx-shadow-modal: 0 0 0 1px rgb(0 0 0 / 0.06), 0 16px 48px -12px rgb(0 0 0 / 0.25);
+  --hlx-shadow-menu: 0 0 0 1px var(--hlx-color-ring), 0 4px 12px rgb(0 0 0 / 0.06), 0 12px 32px -8px rgb(0 0 0 / 0.12);
+
+  /* Names from before these tokens, kept for what already uses them. */
+  --hlx-color-text-muted: var(--hlx-color-text-tertiary);
+  --hlx-color-bg-subtle: var(--hlx-color-bg-tertiary);
+  --hlx-font-sans: var(--hlx-font-family-sans);
+  --hlx-font-serif: var(--hlx-font-family-serif);
+  --hlx-font-size: var(--hlx-font-size-base);
+
+  /* Syntax colors for the editor's CodeMirror (GitHub palette). */
+  --hlx-syntax-keyword: #cf222e;
+  --hlx-syntax-string: #0a3069;
+  --hlx-syntax-comment: #6e7781;
+  --hlx-syntax-constant: #0550ae;
+  --hlx-syntax-function: #8250df;
+  --hlx-syntax-type: #953800;
+  --hlx-syntax-tag: #116329;
+  --hlx-syntax-attribute: #0550ae;
+
+  /*
+   * The editor's interface: dialogs, panels, menus, toolbars and their controls. Sized for
+   * compact chrome, and made of the theme tokens, so dark mode and a site's colors follow.
+   */
+  --hlx-chrome-fill: var(--hlx-color-fill);
+  --hlx-chrome-fill-strong: color-mix(in srgb, var(--hlx-color-text) 10%, transparent);
+  --hlx-chrome-border-subtle: var(--hlx-color-border-subtle);
+  --hlx-chrome-text-faint: var(--hlx-color-text-quaternary);
+  --hlx-chrome-head: var(--hlx-color-bg-secondary);
+  --hlx-chrome-shadow-control: var(--hlx-shadow-xs);
+  --hlx-chrome-shadow-popup: var(--hlx-shadow-menu);
+  /* The focus ring. */
+  --hlx-chrome-ring: 0 0 0 1px var(--hlx-color-accent), 0 0 0 3px var(--hlx-color-accent-light);
+  /* For a control that can't have its ring outside it, such as a cell in a grid or a tab in a strip that scrolls. */
+  --hlx-chrome-ring-inset: inset 0 0 0 2px var(--hlx-color-accent);
+  /* How far a ring reaches out: what a box that scrolls must leave round its controls. */
+  --hlx-chrome-ring-room: 3px;
+  --hlx-chrome-caution: #c2410c;
+  --hlx-chrome-radius-sm: 4px;
+  --hlx-chrome-radius-item: 6px;
+  --hlx-chrome-radius-md: 8px;
+  --hlx-chrome-radius-lg: 12px;
+  --hlx-chrome-height-sm: 24px;
+  --hlx-chrome-height-md: 28px;
+}
+
+/* Each variant's layout: only what differs from article. */
+.hlx-root[data-variant='note'] {
+  --hlx-flow-paragraph: 0.5em;
+  --hlx-font-family: var(--hlx-host-font-family, var(--hlx-font-family-serif));
+  --hlx-line-height: 1.85;
+}
+
+.hlx-root[data-variant='comment'] {
+  --hlx-space-xs: 2px;
+  --hlx-space-sm: 4px;
+  --hlx-space-md: 10px;
+  --hlx-space-lg: 16px;
+  --hlx-space-xl: 20px;
+  --hlx-flow-paragraph: 0.6em;
+  --hlx-flow-list: 0.25em;
+  --hlx-flow-block: 1em;
+  --hlx-flow-heading: 1em;
+  --hlx-font-size-base: 14px;
+  --hlx-font-size-small: 12px;
+  --hlx-font-size-code: 0.9286em;
+  --hlx-font-size-caption: 0.9286em;
+  --hlx-line-height: 1.6;
+  --hlx-line-height-tight: 1.3;
+  --hlx-radius-sm: 3px;
+  --hlx-radius-md: 6px;
+  --hlx-max-width: none;
+  --hlx-color-quote-bg: var(--hlx-host-color-quote-bg, #fafafa);
+}
+
+.hlx-root[data-variant='chat'] {
+  --hlx-flow-paragraph: 0.75em;
+  --hlx-flow-list: 0.25em;
+  --hlx-flow-block: 1em;
+  --hlx-flow-heading: 1em;
+  --hlx-font-size-base: 15px;
+  --hlx-font-size-small: 13px;
+  --hlx-font-size-code: 0.8667em;
+  --hlx-font-size-caption: 0.8667em;
+  --hlx-line-height: 1.65;
+  --hlx-line-height-tight: 1.3;
+  --hlx-max-width: none;
+  --hlx-color-quote-bg: var(--hlx-host-color-quote-bg, #fafafa);
+}
+
+/* Colors and shadows only, and last, so they win over a variant's own colors. */
+.hlx-root[data-color-scheme='dark'] {
+  --hlx-color-text: var(--hlx-host-color-text, #ededed);
+  --hlx-color-text-secondary: var(--hlx-host-color-text-secondary, #c4c4c4);
+  --hlx-color-text-tertiary: var(--hlx-host-color-text-tertiary, #8f8f8f);
+  --hlx-color-text-quaternary: var(--hlx-host-color-text-quaternary, #5c5c5c);
+  --hlx-color-bg: var(--hlx-host-color-bg, #0a0a0a);
+  --hlx-color-bg-secondary: var(--hlx-host-color-bg-secondary, #121212);
+  --hlx-color-bg-tertiary: var(--hlx-host-color-bg-tertiary, #1a1a1a);
+  --hlx-color-bg-elevated: var(--hlx-host-color-bg-elevated, #171717);
+  --hlx-color-fill: var(--hlx-host-color-fill, rgb(255 255 255 / 0.09));
+  --hlx-color-fill-secondary: var(--hlx-host-color-fill-secondary, rgb(255 255 255 / 0.06));
+  --hlx-color-fill-tertiary: var(--hlx-host-color-fill-tertiary, rgb(255 255 255 / 0.04));
+  --hlx-color-fill-quaternary: var(--hlx-host-color-fill-quaternary, rgb(255 255 255 / 0.025));
+  --hlx-color-border: var(--hlx-host-color-border, #262626);
+  --hlx-color-border-subtle: var(--hlx-host-color-border-subtle, #1c1c1c);
+  --hlx-color-ring: var(--hlx-host-color-ring, rgb(255 255 255 / 0.12));
+  --hlx-color-scrim: var(--hlx-host-color-scrim, rgb(0 0 0 / 0.56));
+  --hlx-color-accent: var(--hlx-host-color-accent, #60a5fa);
+  --hlx-color-accent-light: var(--hlx-host-color-accent-light, color-mix(in oklab, var(--hlx-color-accent) 16%, transparent));
+  --hlx-color-link: var(--hlx-host-color-link, #60a5fa);
+  --hlx-color-code-text: var(--hlx-host-color-code-text, #ededed);
+  --hlx-color-code-bg: var(--hlx-host-color-code-bg, #1a1a1a);
+  --hlx-color-code-header-bg: var(--hlx-host-color-code-header-bg, #1a1a1a);
+  --hlx-color-hr-border: var(--hlx-host-color-hr-border, #262626);
+  --hlx-color-quote-border: var(--hlx-host-color-quote-border, #262626);
+  --hlx-color-quote-bg: var(--hlx-host-color-quote-bg, #1a1a1a);
+  --hlx-color-alert-info: var(--hlx-host-color-alert-info, #60a5fa);
+  --hlx-color-alert-warning: var(--hlx-host-color-alert-warning, #fbbf24);
+  --hlx-color-alert-tip: var(--hlx-host-color-alert-tip, #4ade80);
+  --hlx-color-alert-caution: var(--hlx-host-color-alert-caution, #f87171);
+  --hlx-color-alert-important: var(--hlx-host-color-alert-important, #a78bfa);
+  --hlx-shadow-xs: 0 0 0 1px var(--hlx-color-ring), 0 1px 2px rgb(0 0 0 / 0.4);
+  --hlx-shadow-top-bar: 0 0 0 1px var(--hlx-color-ring), 0 8px 24px rgb(0 0 0 / 0.5), 0 16px 40px -8px rgb(0 0 0 / 0.6);
+  --hlx-shadow-modal: 0 0 0 1px rgb(255 255 255 / 0.08), 0 16px 48px -12px rgb(0 0 0 / 0.7);
+  --hlx-shadow-menu: 0 0 0 1px var(--hlx-color-ring), 0 8px 24px rgb(0 0 0 / 0.5), 0 16px 40px -8px rgb(0 0 0 / 0.6);
+
+  --hlx-chrome-caution: #fb923c;
+
+  --hlx-syntax-keyword: #ff7b72;
+  --hlx-syntax-string: #a5d6ff;
+  --hlx-syntax-comment: #8b949e;
+  --hlx-syntax-constant: #79c0ff;
+  --hlx-syntax-function: #d2a8ff;
+  --hlx-syntax-type: #ffa657;
+  --hlx-syntax-tag: #7ee787;
+  --hlx-syntax-attribute: #79c0ff;
+}

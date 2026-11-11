@@ -1,0 +1,7 @@
+import './styles.css'
+
+export { builtinSlashItems } from './builtinItems'
+export { filterItems } from './filter'
+export { default as SlashMenuPlugin } from './SlashMenuPlugin.vue'
+export { matchTrigger } from './trigger'
+export type { SlashMenuItem } from './types'

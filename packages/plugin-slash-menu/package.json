@@ -1,0 +1,64 @@
+{
+  "name": "@hakulex/plugin-slash-menu",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Slash command menu plugin for hakulex",
+  "license": "MIT",
+  "keywords": [
+    "hakulex",
+    "vue",
+    "vue3",
+    "lexical",
+    "rich-text-editor",
+    "wysiwyg",
+    "editor",
+    "plugin",
+    "slash-menu",
+    "slash-command"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./style.css": "./src/styles.css"
+  },
+  "main": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev:build": "vite build --watch"
+  },
+  "peerDependencies": {
+    "lexical": "^0.53.0",
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@floating-ui/vue": "^2.0.1",
+    "@hakulex/editor": "workspace:*",
+    "@hakulex/vue-lexical": "workspace:*",
+    "@lexical/list": "^0.53.0",
+    "@lexical/rich-text": "^0.53.0",
+    "@lexical/selection": "^0.53.0",
+    "@lexical/table": "^0.53.0",
+    "@lexical/utils": "^0.53.0",
+    "@lucide/vue": "^1.66.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs"
+      },
+      "./style.css": "./dist/style.css"
+    },
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
+  "devDependencies": {
+    "lexical": "^0.53.0"
+  }
+}

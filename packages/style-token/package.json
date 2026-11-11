@@ -1,0 +1,48 @@
+{
+  "name": "@hakulex/style-token",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Design tokens, CSS variables and variant presets for hakulex",
+  "license": "MIT",
+  "keywords": [
+    "hakulex",
+    "vue",
+    "vue3",
+    "lexical",
+    "rich-text-editor",
+    "wysiwyg",
+    "editor",
+    "design-tokens",
+    "css",
+    "theme"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./style.css": "./src/style.css"
+  },
+  "main": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev:build": "vite build --watch"
+  },
+  "peerDependencies": {},
+  "dependencies": {},
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs"
+      },
+      "./style.css": "./dist/style.css"
+    },
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  }
+}

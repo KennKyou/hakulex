@@ -1,0 +1,59 @@
+{
+  "name": "@hakulex/plugin-mention",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Mention menu plugin for hakulex",
+  "license": "MIT",
+  "keywords": [
+    "hakulex",
+    "vue",
+    "vue3",
+    "lexical",
+    "rich-text-editor",
+    "wysiwyg",
+    "editor",
+    "plugin",
+    "mention"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./style.css": "./src/styles.css"
+  },
+  "main": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev:build": "vite build --watch"
+  },
+  "peerDependencies": {
+    "lexical": "^0.53.0",
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@floating-ui/vue": "^2.0.1",
+    "@hakulex/editor": "workspace:*",
+    "@hakulex/renderer": "workspace:*",
+    "@hakulex/vue-lexical": "workspace:*",
+    "@lexical/utils": "^0.53.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs"
+      },
+      "./style.css": "./dist/style.css"
+    },
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
+  "devDependencies": {
+    "lexical": "^0.53.0"
+  }
+}

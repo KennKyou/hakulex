@@ -1,0 +1,58 @@
+{
+  "name": "@hakulex/plugin-image-editor",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "Image editor plugin for hakulex: crop, annotate, pixelate and resize images before they are uploaded",
+  "license": "MIT",
+  "keywords": [
+    "hakulex",
+    "vue",
+    "vue3",
+    "lexical",
+    "rich-text-editor",
+    "wysiwyg",
+    "editor",
+    "plugin",
+    "image",
+    "image-editor"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./style.css": "./src/styles.css"
+  },
+  "main": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev:build": "vite build --watch"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@hakulex/editor": "workspace:*",
+    "@lucide/vue": "^1.66.0",
+    "@markerjs/markerjs3": "3.10.0",
+    "reka-ui": "^2.11.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs"
+      },
+      "./style.css": "./dist/style.css"
+    },
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
+  "devDependencies": {
+    "lexical": "^0.53.0"
+  }
+}

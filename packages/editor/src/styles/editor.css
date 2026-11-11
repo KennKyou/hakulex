@@ -1,0 +1,2987 @@
+/* Editor-only styles. Content styles live in @hakulex/style-token (content.css). */
+.hlx-editor {
+  position: relative;
+}
+
+.hlx-editor .hlx-content {
+  min-height: 1.75em;
+  outline: none;
+  overflow-wrap: break-word;
+}
+
+/* The click target below a trailing image or code block. Read-only documents match the renderer. */
+.hlx-editor .hlx-content[contenteditable='true'] {
+  padding-bottom: 2em;
+}
+
+.hlx-editor [data-lexical-placeholder] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--hlx-color-text-muted);
+  pointer-events: none;
+  user-select: none;
+}
+
+.hlx-editor .hlx-listitem-checked::before,
+.hlx-editor .hlx-listitem-unchecked::before {
+  cursor: pointer;
+}
+
+.hlx-editor .hlx-hr {
+  cursor: pointer;
+}
+
+.hlx-root .hlx-hr[data-selected] {
+  border-radius: 4px;
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+/* Code block (CodeMirror inside the shared code card) */
+
+.hlx-code-editor .hlx-code-cm {
+  min-height: 1.6em;
+}
+
+.hlx-code-editor[data-selected] .hlx-code-card,
+.hlx-code-editor:focus-within .hlx-code-card {
+  border-color: color-mix(in srgb, var(--hlx-color-accent) 60%, var(--hlx-color-border));
+}
+
+.hlx-lang-anchor {
+  display: inline-flex;
+  align-items: center;
+  margin-left: -6px;
+  border-radius: var(--hlx-chrome-radius-sm);
+}
+
+.hlx-lang-anchor:hover,
+.hlx-lang-anchor:focus-within {
+  background: var(--hlx-color-border);
+}
+
+.hlx-lang-input {
+  width: 9em;
+  padding: 4px 0 4px 6px;
+  border: 0;
+  background: transparent;
+  color: var(--hlx-color-text-muted);
+  font: inherit;
+  outline: none;
+}
+
+.hlx-lang-input:focus {
+  color: var(--hlx-color-text);
+}
+
+.hlx-lang-trigger {
+  display: inline-flex;
+  padding: 4px 6px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Over everything it may open from, dialogs (60, 61) included. */
+.hlx-lang-content {
+  z-index: 70;
+  min-width: 180px;
+  max-height: min(280px, var(--reka-combobox-content-available-height, 280px));
+  overflow: hidden;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-popup);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+}
+
+.hlx-lang-viewport {
+  max-height: inherit;
+  padding: 4px;
+  overflow-y: auto;
+}
+
+.hlx-lang-item {
+  padding: 6px 8px;
+  border-radius: var(--hlx-chrome-radius-item);
+  color: var(--hlx-color-text);
+  cursor: pointer;
+  outline: none;
+}
+
+.hlx-lang-item[data-highlighted] {
+  background: var(--hlx-color-bg-subtle);
+}
+
+.hlx-lang-item[data-state='checked'] {
+  color: var(--hlx-color-accent);
+}
+
+.hlx-lang-empty {
+  padding: 8px;
+  color: var(--hlx-color-text-muted);
+}
+
+/* Math (KaTeX) */
+
+.hlx-editor .hlx-math-editor {
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.hlx-editor .hlx-math-editor[data-display='block'] {
+  display: block;
+  min-height: 2em;
+}
+
+.hlx-editor .hlx-math-editor:hover {
+  background: var(--hlx-color-bg-subtle);
+}
+
+.hlx-editor .hlx-math-editor[data-selected] {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 1px;
+}
+
+.hlx-root .hlx-math-placeholder {
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+}
+
+.hlx-editor .hlx-math-editor[data-display='block'] .hlx-math-placeholder {
+  display: block;
+  padding: 0.5em;
+  text-align: center;
+}
+
+.hlx-math-popover {
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(420px, calc(100vw - 16px));
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: var(--hlx-chrome-radius-lg);
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-popup);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+}
+
+.hlx-math-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  font-family: var(--hlx-font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  resize: vertical;
+  box-shadow: var(--hlx-chrome-shadow-control);
+}
+
+.hlx-math-input:focus {
+  outline: none;
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+.hlx-math-preview {
+  /* Room for a typeset line, so the buttons below don't move when the preview comes in. */
+  min-height: 4.25em;
+  overflow-x: auto;
+  padding: 4px 0;
+  font-size: 16px;
+  text-align: center;
+}
+
+.hlx-math-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hlx-math-hint {
+  margin-right: auto;
+  color: var(--hlx-color-text-muted);
+  font-size: 12px;
+}
+
+.hlx-math-button {
+  padding: 4px 10px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: var(--hlx-chrome-radius-md);
+  background: transparent;
+  color: var(--hlx-color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.hlx-math-button[data-primary] {
+  border-color: var(--hlx-color-text);
+  background: var(--hlx-color-text);
+  color: var(--hlx-color-bg);
+}
+
+/* Mermaid diagrams */
+
+.hlx-editor .hlx-mermaid-editor {
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.hlx-editor .hlx-mermaid-editor:hover {
+  background: var(--hlx-color-bg-subtle);
+}
+
+.hlx-editor .hlx-mermaid-editor[data-selected] {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+.hlx-editor .hlx-mermaid-empty {
+  padding: 24px;
+  border: 1px dashed var(--hlx-color-border);
+  border-radius: 8px;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+  text-align: center;
+}
+
+.hlx-dialog-overlay {
+  position: fixed;
+  z-index: 60;
+  inset: 0;
+  background: var(--hlx-color-scrim);
+}
+
+.hlx-mermaid-dialog {
+  position: fixed;
+  z-index: 61;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  width: min(1040px, calc(100vw - 32px));
+  height: min(640px, calc(100vh - 32px));
+  box-sizing: border-box;
+  border-radius: var(--hlx-chrome-radius-lg);
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-popup);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+  transform: translate(-50%, -50%);
+}
+
+.hlx-mermaid-dialog-header,
+.hlx-mermaid-dialog-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+}
+
+.hlx-mermaid-dialog-header {
+  border-bottom: 1px solid var(--hlx-color-border);
+}
+
+.hlx-mermaid-dialog-footer {
+  border-top: 1px solid var(--hlx-color-border);
+}
+
+.hlx-mermaid-dialog-title {
+  margin: 0 auto 0 0;
+  color: var(--hlx-color-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.hlx-mermaid-templates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.hlx-mermaid-chip {
+  padding: 3px 10px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: var(--hlx-chrome-radius-md);
+  background: transparent;
+  color: var(--hlx-color-text-muted);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.hlx-mermaid-chip:hover {
+  color: var(--hlx-color-text);
+  border-color: var(--hlx-color-text-muted);
+}
+
+.hlx-mermaid-dialog-body {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  min-height: 0;
+}
+
+.hlx-mermaid-source {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 12px 16px;
+  border: 0;
+  border-right: 1px solid var(--hlx-color-border);
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-text);
+  font-family: var(--hlx-font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  resize: none;
+  tab-size: 2;
+}
+
+.hlx-mermaid-source:focus {
+  outline: none;
+}
+
+.hlx-mermaid-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  overflow: auto;
+  padding: 16px;
+}
+
+.hlx-mermaid-preview > .hlx-mermaid {
+  width: 100%;
+}
+
+.hlx-mermaid-preview-empty {
+  color: var(--hlx-color-text-muted);
+}
+
+.hlx-mermaid-hint {
+  margin-right: auto;
+  color: var(--hlx-color-text-muted);
+  font-size: 12px;
+}
+
+/* Narrow screens: source above preview. */
+@media (max-width: 640px) {
+  .hlx-mermaid-dialog-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  .hlx-mermaid-source {
+    border-right: 0;
+    border-bottom: 1px solid var(--hlx-color-border);
+  }
+}
+
+/* Images */
+
+.hlx-editor .hlx-image-editor {
+  position: relative;
+  border-radius: 4px;
+}
+
+.hlx-content[contenteditable='true'] .hlx-image-editor {
+  cursor: pointer;
+}
+
+.hlx-editor .hlx-image-editor[data-selected] {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+
+/* Sit on the image itself, which may be narrower than its block. */
+.hlx-editor .hlx-image-resize {
+  position: absolute;
+  width: 12px;
+  border-radius: 4px;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.hlx-editor .hlx-image-resize::after {
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  width: 4px;
+  height: 40px;
+  max-height: 80%;
+  border-radius: 2px;
+  background: var(--hlx-color-accent);
+  box-shadow: 0 0 0 2px var(--hlx-color-bg);
+  content: '';
+  transform: translateY(-50%);
+}
+
+.hlx-editor .hlx-content[data-image-drop],
+.hlx-editor .hlx-content[data-media-drop] {
+  border-radius: 4px;
+  outline: 2px dashed var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+.hlx-editor .hlx-image-upload,
+.hlx-editor .hlx-media-upload {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-text-muted);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+}
+
+.hlx-editor .hlx-image-upload button,
+.hlx-editor .hlx-media-upload button {
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.hlx-callout-bar {
+  position: fixed;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  border-radius: var(--hlx-chrome-radius-lg);
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-popup);
+  color: var(--hlx-color-text);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+  transform: translate(-100%, calc(-100% - 4px));
+}
+
+.hlx-quote-bar {
+  transform: translate(-100%, 4px);
+}
+
+.hlx-callout-bar select,
+.hlx-callout-bar input {
+  padding: 2px 4px;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.hlx-callout-bar select option {
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+}
+
+.hlx-callout-bar input {
+  width: 180px;
+}
+
+.hlx-callout-bar select:focus-visible,
+.hlx-callout-bar input:focus-visible,
+.hlx-callout-bar button:focus-visible {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: -2px;
+}
+
+.hlx-callout-bar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-sm);
+  background: transparent;
+  color: var(--hlx-color-text-muted);
+  cursor: pointer;
+}
+
+.hlx-callout-bar button:hover {
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-text);
+}
+
+.hlx-image-dialog {
+  position: fixed;
+  z-index: 61;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: var(--hlx-chrome-radius-lg);
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-popup);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+  transform: translate(-50%, -50%);
+}
+
+.hlx-image-dialog-title {
+  margin: 0;
+  color: var(--hlx-color-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.hlx-image-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hlx-image-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--hlx-color-text-muted);
+}
+
+.hlx-image-field input,
+.hlx-image-field select {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  font: inherit;
+  box-shadow: var(--hlx-chrome-shadow-control);
+}
+
+.hlx-image-field input:focus {
+  border-color: var(--hlx-color-accent);
+  outline: none;
+}
+
+.hlx-image-error {
+  margin: 0;
+  color: var(--hlx-color-alert-caution);
+}
+
+.hlx-image-status {
+  margin: 0;
+  color: var(--hlx-color-text-muted);
+}
+
+.hlx-image-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+/*
+ * The list of images to insert: where they come from, then a row for
+ * each, checked before anything is uploaded.
+ */
+.hlx-image-dialog.hlx-image-list-dialog {
+  width: min(520px, calc(100vw - 32px));
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+}
+
+.hlx-image-dialog.hlx-image-list-dialog > .hlx-dialog-head {
+  margin: 0;
+  padding: 0 12px 0 20px;
+}
+
+.hlx-image-list-dialog .hlx-image-dialog-title {
+  flex: 1;
+}
+
+.hlx-image-list-dialog button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: var(--hlx-chrome-height-md);
+  box-sizing: border-box;
+  padding: 0 10px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: var(--hlx-chrome-radius-md);
+  background: transparent;
+  color: var(--hlx-color-text);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.hlx-image-list-dialog button:hover:not(:disabled) {
+  background: var(--hlx-chrome-fill);
+}
+
+.hlx-image-list-dialog button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.hlx-image-list-dialog button[data-primary] {
+  border-color: var(--hlx-color-text);
+  background: var(--hlx-color-text);
+  color: var(--hlx-color-bg);
+}
+
+.hlx-image-list-dialog button[data-primary]:hover:not(:disabled) {
+  background: var(--hlx-color-text);
+  opacity: 0.88;
+}
+
+.hlx-image-list-dialog button[data-danger] {
+  border-color: var(--hlx-color-alert-caution);
+  color: var(--hlx-color-alert-caution);
+}
+
+.hlx-image-list-dialog svg {
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hlx-image-list-dialog kbd {
+  font-family: inherit;
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.hlx-image-dialog-close,
+.hlx-image-row-remove {
+  width: var(--hlx-chrome-height-md);
+  padding: 0 !important;
+  border-color: transparent !important;
+  color: var(--hlx-color-text-tertiary) !important;
+}
+
+.hlx-image-dialog-file {
+  display: none;
+}
+
+.hlx-image-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: min(60vh, 520px);
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+
+.hlx-image-list-dialog > .hlx-image-dialog-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 12px 20px 16px;
+}
+
+.hlx-image-dialog-hint {
+  flex: 1;
+  min-width: 0;
+  color: var(--hlx-color-text-tertiary);
+  font-size: 12px;
+}
+
+.hlx-image-dialog-error {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  color: var(--hlx-color-alert-caution);
+  font-size: 12px;
+}
+
+.hlx-image-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 180px;
+  padding: 16px;
+  box-sizing: border-box;
+  border: 1.5px dashed var(--hlx-color-border);
+  border-radius: var(--hlx-chrome-radius-lg);
+  background: var(--hlx-color-bg-secondary);
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.hlx-image-dropzone:focus-visible {
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+.hlx-image-dropzone[data-drag-active] {
+  border-color: var(--hlx-color-accent);
+  background: var(--hlx-color-accent-light);
+}
+
+.hlx-image-dropzone .hlx-image-dialog-hint {
+  flex: none;
+}
+
+.hlx-image-dropzone-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--hlx-chrome-radius-lg);
+  background: var(--hlx-color-bg-elevated);
+  box-shadow: var(--hlx-shadow-xs);
+  color: var(--hlx-color-text-secondary);
+}
+
+.hlx-image-dropzone-title {
+  color: var(--hlx-color-text);
+  font-weight: 500;
+}
+
+.hlx-image-dialog-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--hlx-color-text-tertiary);
+  font-size: 12px;
+}
+
+.hlx-image-dialog-divider::before,
+.hlx-image-dialog-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--hlx-chrome-border-subtle);
+}
+
+.hlx-image-url-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--hlx-color-text-muted);
+}
+
+.hlx-image-url-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hlx-image-url-row input {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  font: inherit;
+  box-shadow: var(--hlx-chrome-shadow-control);
+}
+
+.hlx-image-url-row input:focus {
+  outline: none;
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+.hlx-image-url-thumb {
+  flex: none;
+  width: 40px;
+  height: 28px;
+  border-radius: var(--hlx-chrome-radius-sm);
+  background: var(--hlx-color-fill-tertiary);
+  object-fit: cover;
+}
+
+.hlx-image-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hlx-image-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: var(--hlx-chrome-radius-md);
+  box-shadow: 0 0 0 1px var(--hlx-color-border);
+}
+
+.hlx-image-row[data-failed] {
+  box-shadow: 0 0 0 1px var(--hlx-color-alert-caution);
+}
+
+.hlx-image-row-thumb {
+  flex: none;
+  width: 64px;
+  height: 40px;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-fill-tertiary);
+  object-fit: cover;
+}
+
+.hlx-image-row-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hlx-image-row-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.hlx-image-row-name {
+  overflow: hidden;
+  color: var(--hlx-color-text);
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hlx-image-row-edited {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: var(--hlx-chrome-radius-sm);
+  background: var(--hlx-color-accent-light);
+  color: var(--hlx-color-accent);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.hlx-image-row-meta {
+  overflow: hidden;
+  color: var(--hlx-color-text-tertiary);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hlx-image-row-edit {
+  height: var(--hlx-chrome-height-sm) !important;
+  font-size: 12px;
+}
+
+.hlx-image-add-more {
+  align-self: flex-start;
+  border-color: transparent !important;
+}
+
+.hlx-image-check {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 6px;
+  margin-top: 4px;
+  color: var(--hlx-color-text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.hlx-image-check input {
+  margin: 0;
+  accent-color: var(--hlx-color-accent);
+}
+
+.hlx-math-button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* Authors see what they are writing; only readers get it hidden. */
+.hlx-root .hlx-content .hlx-ruby[data-reading]::after {
+  content: attr(data-reading);
+  display: ruby-text;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.6em;
+  font-weight: 400;
+}
+
+/* Footnotes while editing */
+.hlx-root .hlx-content[contenteditable='true'] .hlx-footnote-click {
+  cursor: pointer;
+}
+
+.hlx-root .hlx-footnotes--editing .hlx-footnote {
+  display: list-item;
+}
+
+.hlx-root .hlx-footnote-input {
+  width: calc(100% - 2.5em);
+  box-sizing: border-box;
+  padding: 2px 6px;
+  border: 1px solid transparent;
+  border-radius: var(--hlx-chrome-radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.hlx-root .hlx-footnote-input:hover {
+  border-color: var(--hlx-color-border);
+}
+
+.hlx-root .hlx-footnote-input:focus {
+  border-color: var(--hlx-color-accent);
+  outline: none;
+  background: var(--hlx-color-bg-subtle);
+}
+
+.hlx-root .hlx-footnote--orphan .hlx-footnote-input {
+  width: calc(100% - 7em);
+}
+
+.hlx-root .hlx-footnote--orphan {
+  list-style: '–  ';
+}
+
+.hlx-root .hlx-footnote-orphan {
+  margin-inline-start: 0.5em;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+.hlx-root .hlx-footnote-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-inline-start: 0.25em;
+  padding: 0;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-sm);
+  background: transparent;
+  color: var(--hlx-color-text-muted);
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.hlx-root .hlx-footnote-remove:hover {
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-text);
+}
+
+/* Video and files while editing */
+.hlx-editor .hlx-media-editor {
+  position: relative;
+  display: block;
+  border-radius: 8px;
+}
+
+.hlx-editor .hlx-media-editor--inline {
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.hlx-content[contenteditable='true'] .hlx-media-editor {
+  cursor: pointer;
+}
+
+.hlx-editor .hlx-media-editor[data-selected] {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+
+
+
+
+/* The edit button sits at the end of a card, where its size would be. */
+.hlx-editor .hlx-media-editor[data-selected]:not(.hlx-media-editor--inline) .hlx-file {
+  padding-inline-end: 72px;
+}
+
+/* Placeholders for nodes this editor doesn't have. */
+.hlx-editor .hlx-unknown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  padding: 8px 12px;
+  border: 1px dashed var(--hlx-color-border);
+  border-radius: 6px;
+  color: var(--hlx-color-text-muted);
+  font-size: 0.875em;
+  cursor: default;
+  user-select: none;
+}
+
+.hlx-editor .hlx-unknown--inline {
+  display: inline-block;
+  max-width: 100%;
+  margin: 0 2px;
+  padding: 0 6px;
+  overflow: hidden;
+  border-radius: 4px;
+  font-size: 0.9em;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+
+.hlx-editor .hlx-unknown-label {
+  flex: none;
+}
+
+.hlx-editor .hlx-unknown-type {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hlx-editor .hlx-unknown[data-selected] {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+/*
+ * Heading levels, marked on the left while the content can be edited
+ * (rich-editor/src/styles/shared.css.ts: headingLevelBadge). A pseudo-element, so it is never
+ * part of the text, a selection or a copy.
+ */
+.hlx-editor [contenteditable='true'] .hlx-h1,
+.hlx-editor [contenteditable='true'] .hlx-h2,
+.hlx-editor [contenteditable='true'] .hlx-h3,
+.hlx-editor [contenteditable='true'] .hlx-h4,
+.hlx-editor [contenteditable='true'] .hlx-h5,
+.hlx-editor [contenteditable='true'] .hlx-h6 {
+  position: relative;
+}
+
+.hlx-editor [contenteditable='true'] .hlx-h1::before,
+.hlx-editor [contenteditable='true'] .hlx-h2::before,
+.hlx-editor [contenteditable='true'] .hlx-h3::before,
+.hlx-editor [contenteditable='true'] .hlx-h4::before,
+.hlx-editor [contenteditable='true'] .hlx-h5::before,
+.hlx-editor [contenteditable='true'] .hlx-h6::before {
+  position: absolute;
+  bottom: 0.5rem;
+  left: -1.5rem;
+  display: flex;
+  color: var(--hlx-color-text-secondary);
+  font-family: var(--hlx-font-mono);
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  opacity: 0.6;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 0.15s ease;
+}
+
+.hlx-editor [contenteditable='true'] .hlx-h1::before {
+  content: 'H1';
+}
+
+.hlx-editor [contenteditable='true'] .hlx-h2::before {
+  content: 'H2';
+}
+
+.hlx-editor [contenteditable='true'] .hlx-h3::before {
+  content: 'H3';
+}
+
+.hlx-editor [contenteditable='true'] .hlx-h4::before {
+  content: 'H4';
+}
+
+.hlx-editor [contenteditable='true'] .hlx-h5::before {
+  content: 'H5';
+}
+
+.hlx-editor [contenteditable='true'] .hlx-h6::before {
+  content: 'H6';
+}
+
+/* The block handle sits in the same place: the badge of the heading it is beside gives way. */
+.hlx-editor [contenteditable='true'] .hlx-h1[data-hlx-handle]::before,
+.hlx-editor [contenteditable='true'] .hlx-h2[data-hlx-handle]::before,
+.hlx-editor [contenteditable='true'] .hlx-h3[data-hlx-handle]::before,
+.hlx-editor [contenteditable='true'] .hlx-h4[data-hlx-handle]::before,
+.hlx-editor [contenteditable='true'] .hlx-h5[data-hlx-handle]::before,
+.hlx-editor [contenteditable='true'] .hlx-h6[data-hlx-handle]::before {
+  opacity: 0;
+}
+
+@media (max-width: 640px) {
+  .hlx-editor [contenteditable='true'] .hlx-h1::before,
+  .hlx-editor [contenteditable='true'] .hlx-h2::before,
+  .hlx-editor [contenteditable='true'] .hlx-h3::before,
+  .hlx-editor [contenteditable='true'] .hlx-h4::before,
+  .hlx-editor [contenteditable='true'] .hlx-h5::before,
+  .hlx-editor [contenteditable='true'] .hlx-h6::before {
+    display: none;
+  }
+}
+
+/* An HTML comment: shown only here, as readers never see it. */
+.hlx-editor .hlx-comment {
+  padding: 1px 4px;
+  border: 1px dashed var(--hlx-color-border);
+  border-radius: 4px;
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-text-muted);
+  font-family: var(--hlx-font-mono);
+  font-size: 0.875em;
+}
+
+/* A read-only editor is what readers see. */
+.hlx-editor [contenteditable='false'] .hlx-comment {
+  display: none;
+}
+
+.hlx-editor .hlx-comment::before {
+  content: '<!-- ';
+  opacity: 0.7;
+}
+
+.hlx-editor .hlx-comment::after {
+  content: ' -->';
+  opacity: 0.7;
+}
+
+/* Not selectable, or a press beside it puts the caret where Lexical can't follow. */
+.hlx-editor .hlx-quote-attribution {
+  user-select: none;
+}
+
+.hlx-editor .hlx-quote-attribution:empty {
+  display: none;
+}
+
+/* Mentions while editing */
+.hlx-content[contenteditable='true'] .hlx-mention-editor {
+  cursor: pointer;
+}
+
+.hlx-editor .hlx-mention-editor[data-open] {
+  border-radius: 4px;
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 1px;
+}
+
+.hlx-mention-panel {
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(280px, calc(100vw - 16px));
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: var(--hlx-chrome-radius-lg);
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-popup);
+  color: var(--hlx-color-text);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+}
+
+.hlx-mention-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hlx-mention-field > span {
+  flex: none;
+  width: 4.5em;
+  color: var(--hlx-color-text-muted);
+}
+
+.hlx-mention-field > input,
+.hlx-mention-field > select {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  font: inherit;
+  box-shadow: var(--hlx-chrome-shadow-control);
+}
+
+.hlx-mention-field > input:focus,
+.hlx-mention-field > select:focus {
+  border-color: var(--hlx-color-accent);
+  outline: none;
+}
+
+.hlx-mention-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.hlx-mention-actions > button {
+  padding: 4px 10px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: var(--hlx-chrome-radius-md);
+  background: transparent;
+  color: var(--hlx-color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.hlx-mention-actions > button:hover {
+  background: var(--hlx-color-bg-subtle);
+}
+
+/* Embeds while editing: a row with the URL, never the third-party page itself. */
+.hlx-editor .hlx-embed-editor {
+  margin-block: 1em;
+  padding: 8px 10px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 8px;
+  background: var(--hlx-color-bg-subtle);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+}
+
+.hlx-editor .hlx-embed-editor[data-selected] {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+.hlx-editor .hlx-embed-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hlx-editor .hlx-embed-input {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  font: inherit;
+  box-shadow: var(--hlx-chrome-shadow-control);
+}
+
+.hlx-editor .hlx-embed-input:focus {
+  border-color: var(--hlx-color-accent);
+  outline: none;
+}
+
+.hlx-editor .hlx-embed-input[readonly] {
+  border-color: transparent;
+  background: transparent;
+}
+
+.hlx-editor .hlx-embed-input[aria-invalid] {
+  border-color: var(--hlx-color-alert-caution);
+}
+
+.hlx-editor .hlx-embed-button {
+  flex: none;
+  padding: 4px 10px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.hlx-editor .hlx-embed-button:hover {
+  background: var(--hlx-color-bg-subtle);
+}
+
+.hlx-editor .hlx-embed-error {
+  margin: 6px 0 0;
+  color: var(--hlx-color-alert-caution);
+}
+
+/* Steps while editing */
+.hlx-editor .hlx-steps-editor {
+  border-radius: 8px;
+}
+
+.hlx-editor .hlx-steps-editor[data-selected] {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+.hlx-editor .hlx-step-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-block-end: 0.25em;
+}
+
+.hlx-editor .hlx-step-title-input {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  /* Lines the text up with the content below, keeping room for the border. */
+  margin-inline-start: -5px;
+  padding: 0 4px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--hlx-color-text);
+  font: inherit;
+  font-weight: 600;
+}
+
+.hlx-editor .hlx-step-title-input:not([readonly]):hover {
+  border-color: var(--hlx-color-border);
+}
+
+.hlx-editor .hlx-step-title-input:focus {
+  border-color: var(--hlx-color-accent);
+  outline: none;
+}
+
+.hlx-editor .hlx-step-title-input::placeholder {
+  color: var(--hlx-color-text-muted);
+  font-weight: 400;
+}
+
+.hlx-editor .hlx-step-actions {
+  display: flex;
+  flex: none;
+  gap: 2px;
+  opacity: 0;
+}
+
+.hlx-editor .hlx-step:hover > .hlx-step-header > .hlx-step-actions,
+.hlx-editor .hlx-step-header:focus-within > .hlx-step-actions {
+  opacity: 1;
+}
+
+.hlx-editor .hlx-step-actions > button {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-sm);
+  background: transparent;
+  color: var(--hlx-color-text-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.hlx-editor .hlx-step-actions > button:hover:not(:disabled) {
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-text);
+}
+
+.hlx-editor .hlx-step-actions > button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.hlx-editor .hlx-step-content > .hlx-content {
+  min-height: 1.5em;
+  padding: 0;
+  outline: none;
+}
+
+/* Blocks edited in a dialog: on the page they show what readers see. */
+.hlx-editor .hlx-block-editor {
+  position: relative;
+  border-radius: 8px;
+}
+
+.hlx-content[contenteditable='true'] .hlx-block-editor {
+  cursor: pointer;
+}
+
+.hlx-editor .hlx-block-editor[data-selected] {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+.hlx-editor .hlx-block-empty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px dashed var(--hlx-color-border);
+  border-radius: 8px;
+  color: var(--hlx-color-text-muted);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+}
+
+.hlx-editor .hlx-block-empty > button,
+.hlx-editor .hlx-media-pick {
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  font: inherit;
+  font-family: var(--hlx-font-sans);
+  font-size: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  height: var(--hlx-chrome-height-sm);
+  box-sizing: border-box;
+  box-shadow: var(--hlx-chrome-shadow-popup);
+  font-weight: 500;
+  line-height: 16px;
+}
+
+/* Only when it matters: it would cover what's underneath. */
+
+.hlx-block-dialog {
+  position: fixed;
+  z-index: 60;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(760px, calc(100vw - 32px));
+  max-height: calc(100vh - 48px);
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: var(--hlx-chrome-radius-lg);
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-popup);
+  color: var(--hlx-color-text);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+  transform: translate(-50%, -50%);
+}
+
+.hlx-block-dialog-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.hlx-block-dialog-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  /* It scrolls, so it would cut off the rings of controls on its edges: room for them, same place. */
+  margin: calc(-1 * var(--hlx-chrome-ring-room));
+  padding: var(--hlx-chrome-ring-room);
+  overflow-y: auto;
+}
+
+.hlx-block-dialog-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hlx-block-dialog-status {
+  flex: 1;
+  color: var(--hlx-color-text-muted);
+}
+
+.hlx-block-dialog button {
+  padding: 0 10px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: var(--hlx-chrome-radius-md);
+  background: transparent;
+  color: var(--hlx-color-text);
+  font: inherit;
+  cursor: pointer;
+  height: var(--hlx-chrome-height-md);
+  font-weight: 500;
+}
+
+.hlx-block-dialog button:hover:not(:disabled) {
+  background: var(--hlx-color-bg-subtle);
+}
+
+.hlx-block-dialog button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.hlx-block-dialog button[data-primary] {
+  border-color: var(--hlx-color-text);
+  background: var(--hlx-color-text);
+  color: var(--hlx-color-bg);
+}
+
+.hlx-block-dialog button[data-danger] {
+  border-color: var(--hlx-color-alert-caution);
+  color: var(--hlx-color-alert-caution);
+}
+
+.hlx-block-dialog input,
+.hlx-block-dialog select,
+.hlx-block-dialog textarea {
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  font: inherit;
+  box-shadow: var(--hlx-chrome-shadow-control);
+}
+
+.hlx-block-dialog input:focus,
+.hlx-block-dialog select:focus,
+.hlx-block-dialog textarea:focus {
+  outline: none;
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+.hlx-block-dialog [aria-invalid='true'] {
+  box-shadow: 0 0 0 1px var(--hlx-chrome-caution), 0 0 0 3px color-mix(in srgb, var(--hlx-chrome-caution) 16%, transparent);
+}
+
+.hlx-block-dialog-error {
+  margin: 0;
+  color: var(--hlx-color-alert-caution);
+}
+
+.hlx-snippet-dialog-code {
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.hlx-snippet-dialog-code .cm-editor {
+  height: 100%;
+}
+
+/* A poll's options, in its panel. */
+.hlx-poll-option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.hlx-poll-option-list > legend {
+  margin-bottom: 4px;
+  padding: 0;
+  color: var(--hlx-color-text-muted);
+}
+
+.hlx-poll-option-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.hlx-poll-option-row > input {
+  flex: 1;
+  min-width: 0;
+}
+
+.hlx-link-card-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hlx-link-card-fields > label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--hlx-color-text-muted);
+}
+
+.hlx-gallery-settings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.hlx-gallery-settings > label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--hlx-color-text-muted);
+}
+
+.hlx-gallery-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hlx-gallery-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hlx-block-dialog .hlx-gallery-row > input {
+  flex: 1 1 0;
+}
+
+.hlx-block-dialog .hlx-gallery-row > input[data-field='src'] {
+  flex-grow: 2;
+}
+
+.hlx-gallery-add {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hlx-gallery-upload {
+  position: relative;
+  padding: 5px 12px;
+  overflow: hidden;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: var(--hlx-chrome-radius-md);
+  cursor: pointer;
+}
+
+.hlx-block-dialog .hlx-gallery-upload > input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.hlx-chat-edit-variant {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--hlx-color-text-muted);
+}
+
+.hlx-chat-edit-people {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+}
+
+.hlx-chat-edit-person {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: var(--hlx-chrome-radius-md);
+}
+
+.hlx-chat-edit-kind {
+  color: var(--hlx-color-text-muted);
+  font-size: 12px;
+}
+
+.hlx-chat-edit-message {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hlx-chat-edit-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hlx-block-dialog .hlx-chat-edit-head > select {
+  flex: 1;
+}
+
+.hlx-block-dialog .hlx-chat-edit-message > textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+/* Nested documents while editing */
+.hlx-editor .hlx-nested-doc-editor {
+  border-radius: 8px;
+}
+
+.hlx-editor .hlx-nested-doc-editor[data-selected] {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+.hlx-editor .hlx-nested-doc-body > .hlx-content {
+  min-height: 1.5em;
+  padding: 0;
+  outline: none;
+}
+
+/* Grids while editing */
+.hlx-editor .hlx-grid-editor {
+  position: relative;
+  margin-block-end: 1em;
+  border-radius: 8px;
+}
+
+.hlx-editor .hlx-grid-editor[data-selected] {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
+}
+
+.hlx-editor .hlx-grid-editor .hlx-grid {
+  margin-block: 0;
+}
+
+.hlx-editor .hlx-grid-cell > .hlx-content {
+  min-height: 2.5em;
+  padding: 6px 8px;
+  border: 1px dashed var(--hlx-color-border);
+  border-radius: 6px;
+  outline: none;
+}
+
+.hlx-editor .hlx-grid-cell > .hlx-content:focus {
+  border-color: var(--hlx-color-accent);
+}
+
+.hlx-editor .hlx-grid-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-block-end: 4px;
+  opacity: 0;
+  font-family: var(--hlx-font-sans);
+  font-size: 12px;
+}
+
+.hlx-editor .hlx-grid-editor:hover > .hlx-grid-toolbar,
+.hlx-editor .hlx-grid-editor:focus-within > .hlx-grid-toolbar,
+.hlx-editor .hlx-grid-editor[data-selected] > .hlx-grid-toolbar {
+  opacity: 1;
+}
+
+.hlx-editor .hlx-grid-toolbar > button {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-sm);
+  background: transparent;
+  color: var(--hlx-color-text-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.hlx-editor .hlx-grid-toolbar > button:hover:not(:disabled) {
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-text);
+}
+
+.hlx-editor .hlx-grid-toolbar > button[aria-pressed='true'] {
+  background: var(--hlx-color-bg-subtle);
+  color: var(--hlx-color-text);
+  font-weight: 600;
+}
+
+.hlx-editor .hlx-grid-toolbar > button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.hlx-editor .hlx-grid-toolbar-divider {
+  width: 1px;
+  height: 14px;
+  margin-inline: 4px;
+  background: var(--hlx-color-border);
+}
+
+/* A block's toolbar above it while it is picked, and the chart's panel beside it.
+   Their look: quiet chrome, pill tabs, borderless fields with a light shadow. */
+
+.hlx-block-toolbar,
+.hlx-chart-popover {
+  position: fixed;
+  z-index: 40;
+  box-sizing: border-box;
+  border: 0;
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-popup);
+  color: var(--hlx-color-text);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.hlx-block-toolbar svg,
+.hlx-chart-popover svg {
+  flex-shrink: 0;
+}
+
+.hlx-block-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border-radius: var(--hlx-chrome-radius-lg);
+  transform: translate(-100%, calc(-100% - 8px));
+}
+
+.hlx-block-toolbar > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--hlx-chrome-height-md);
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.hlx-block-toolbar > button > svg {
+  color: var(--hlx-color-text-muted);
+}
+
+.hlx-block-toolbar > button:hover {
+  background: var(--hlx-chrome-fill);
+}
+
+.hlx-block-toolbar > button[aria-expanded='true'],
+.hlx-block-toolbar > button[aria-pressed='true'] {
+  background: var(--hlx-chrome-fill-strong);
+}
+
+.hlx-chart-popover {
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  border-radius: var(--hlx-chrome-radius-lg);
+}
+
+.hlx-chart-panel,
+.hlx-chart-raw {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+/* The head: an icon, the name, and for the raw data its copy button. */
+.hlx-chart-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  padding: 0 6px 0 12px;
+  border-bottom: 1px solid var(--hlx-chrome-border-subtle);
+}
+
+.hlx-chart-panel-head > svg {
+  width: 16px;
+  height: 16px;
+  color: var(--hlx-chrome-text-faint);
+}
+
+.hlx-chart-panel-title {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hlx-chart-panel-body {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  overflow-y: auto;
+  /* Scrolling to a focused control leaves room for its ring. */
+  scroll-padding-block: var(--hlx-chrome-ring-room);
+}
+
+/* What is in it keeps its height, so a short panel scrolls rather than squeezing it to the edge. */
+.hlx-chart-panel-body > * {
+  flex-shrink: 0;
+}
+
+/* A block's panel: the chart's look, with a foot saying edits apply as they are made. */
+.hlx-block-panel-foot {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-top: 1px solid var(--hlx-chrome-border-subtle);
+  color: var(--hlx-chrome-text-faint);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.hlx-block-panel-file {
+  position: relative;
+  align-self: flex-start;
+}
+
+.hlx-block-panel-file:has(input:focus-visible) {
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+.hlx-block-panel-file[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.hlx-block-panel-error {
+  margin: 0;
+  color: var(--hlx-chrome-caution);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.hlx-block-panel-status {
+  margin: 0;
+  color: var(--hlx-color-text-muted);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+/* Tabs: a gray track the width of the panel, the chosen one raised in white. */
+.hlx-chart-tabs {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0;
+  margin: 8px 12px 0;
+  padding: 2px;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-chrome-fill);
+}
+
+.hlx-chart-tabs > button {
+  height: 24px;
+  flex: 1;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-item);
+  background: transparent;
+  color: var(--hlx-color-text-muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.hlx-chart-tabs > button:hover:not(:disabled) {
+  color: var(--hlx-color-text);
+}
+
+.hlx-chart-tabs > button[aria-selected='true'] {
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-control);
+  color: var(--hlx-color-text);
+}
+
+.hlx-chart-tabs > button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.hlx-chart-tab-panel {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+}
+
+/* Fields: a small label over a borderless input with a light shadow. */
+.hlx-chart-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hlx-chart-form label,
+.hlx-chart-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hlx-chart-label,
+.hlx-chart-form label > span:first-child:not(.hlx-chart-swatch-auto),
+.hlx-chart-form-pair > label > span:first-child {
+  color: var(--hlx-color-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.hlx-chart-form-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.hlx-chart-popover input[type='text'],
+.hlx-chart-popover input[type='datetime-local'],
+.hlx-chart-popover select,
+.hlx-chart-popover textarea {
+  width: 100%;
+  min-width: 0;
+  height: 28px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  outline: none;
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-control);
+  color: var(--hlx-color-text);
+  font: inherit;
+}
+
+.hlx-chart-popover select {
+  padding-right: 4px;
+  cursor: pointer;
+}
+
+.hlx-chart-popover select option {
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+}
+
+.hlx-chart-popover input::placeholder,
+.hlx-chart-popover textarea::placeholder {
+  color: var(--hlx-chrome-text-faint);
+}
+
+.hlx-chart-popover input[type='text']:focus,
+.hlx-chart-popover input[type='datetime-local']:focus,
+.hlx-chart-popover select:focus,
+.hlx-chart-popover textarea:focus {
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+.hlx-chart-popover input[aria-invalid='true'],
+.hlx-chart-popover textarea[aria-invalid='true'] {
+  box-shadow: 0 0 0 1px var(--hlx-chrome-caution), 0 0 0 3px color-mix(in srgb, var(--hlx-chrome-caution) 16%, transparent);
+}
+
+.hlx-chart-form .hlx-chart-form-check {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.hlx-chart-form-check > input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--hlx-color-text);
+}
+
+.hlx-chart-form-check > span {
+  color: var(--hlx-color-text);
+  font-size: 13px;
+}
+
+/* Buttons: outlined and wide under a list, quiet squares for an icon. */
+.hlx-chart-popover button {
+  font: inherit;
+}
+
+.hlx-chart-wide-button,
+.hlx-chart-data-actions > button,
+.hlx-chart-raw-actions > button,
+.hlx-chart-head-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.hlx-chart-head-button {
+  border-color: transparent;
+  background: transparent;
+}
+
+.hlx-chart-wide-button:hover:not(:disabled),
+.hlx-chart-data-actions > button:hover:not(:disabled),
+.hlx-chart-head-button:hover {
+  background: var(--hlx-chrome-fill);
+}
+
+.hlx-chart-raw-actions > button[data-primary] {
+  border-color: var(--hlx-color-text);
+  background: var(--hlx-color-text);
+  color: var(--hlx-color-bg);
+}
+
+.hlx-chart-raw-actions > button[data-primary]:hover:not(:disabled) {
+  opacity: 0.86;
+}
+
+.hlx-chart-popover button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.hlx-chart-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: transparent;
+  color: var(--hlx-color-text-muted);
+  cursor: pointer;
+}
+
+.hlx-chart-icon-button:hover:not(:disabled) {
+  background: var(--hlx-chrome-fill);
+  color: var(--hlx-color-text);
+}
+
+.hlx-chart-popover button:focus-visible,
+.hlx-block-toolbar button:focus-visible,
+.hlx-chart-segmented > label:has(input:focus-visible) {
+  outline: none;
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+/* The type: radios drawn as a segmented switch. */
+.hlx-chart-segmented {
+  display: flex;
+  height: 28px;
+  box-sizing: border-box;
+  padding: 2px;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-chrome-fill);
+}
+
+.hlx-chart-form .hlx-chart-segmented > label {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--hlx-chrome-radius-item);
+  color: var(--hlx-color-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.hlx-chart-form .hlx-chart-segmented > label > span:first-of-type {
+  color: inherit;
+  font-size: inherit;
+}
+
+.hlx-chart-segmented > label:hover {
+  color: var(--hlx-color-text);
+}
+
+.hlx-chart-segmented > label[data-checked] {
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-control);
+  color: var(--hlx-color-text);
+}
+
+.hlx-chart-segmented > label > input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Series: a swatch that opens the palette, the name, remove. */
+.hlx-chart-series {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.hlx-chart-series > legend {
+  margin-bottom: 4px;
+  padding: 0;
+}
+
+.hlx-chart-series-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hlx-chart-series-row + .hlx-chart-series-row,
+.hlx-chart-swatches + .hlx-chart-series-row {
+  margin-top: 6px;
+}
+
+.hlx-chart-series > .hlx-chart-wide-button {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.hlx-chart-swatch-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: transparent;
+  cursor: pointer;
+}
+
+.hlx-chart-swatch-button:hover,
+.hlx-chart-swatch-button[aria-expanded='true'] {
+  background: var(--hlx-chrome-fill);
+}
+
+.hlx-chart-swatch-button > .hlx-chart-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: var(--hlx-chart-color);
+}
+
+.hlx-chart-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding-left: 34px;
+}
+
+.hlx-chart-form .hlx-chart-swatch-choice {
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  cursor: pointer;
+}
+
+/* The radio is the control; what shows is the color it picks. */
+.hlx-chart-swatch-choice > input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.hlx-chart-swatch-choice > .hlx-chart-swatch,
+.hlx-chart-swatch-choice > .hlx-chart-swatch-auto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  box-sizing: border-box;
+  border: 2px solid transparent;
+  border-radius: var(--hlx-chrome-radius-md);
+}
+
+.hlx-chart-swatch-choice > .hlx-chart-swatch {
+  width: 28px;
+  background: linear-gradient(var(--hlx-chart-color), var(--hlx-chart-color)) center / 12px 12px no-repeat;
+}
+
+.hlx-chart-swatch-choice > .hlx-chart-swatch-auto {
+  padding: 0 8px;
+  color: var(--hlx-color-text-muted);
+  font-size: 12px;
+}
+
+.hlx-chart-swatch-choice > input:checked + span {
+  border-color: var(--hlx-color-text);
+}
+
+.hlx-chart-swatch-choice > input:focus-visible + span {
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+/* Data: one framed grid of borderless cells, the header shaded. */
+.hlx-chart-data {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hlx-chart-data-frame {
+  max-height: 300px;
+  overflow: auto;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: var(--hlx-chrome-radius-md);
+}
+
+.hlx-chart-data table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.hlx-chart-data th,
+.hlx-chart-data td {
+  padding: 0;
+  border-right: 1px solid var(--hlx-color-border);
+  border-bottom: 1px solid var(--hlx-color-border);
+}
+
+.hlx-chart-data th {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  background: var(--hlx-chrome-head);
+}
+
+.hlx-chart-data tr > :last-child {
+  width: 32px;
+  border-right: 0;
+}
+
+.hlx-chart-data tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.hlx-chart-popover .hlx-chart-data input[type='text'] {
+  height: 30px;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.hlx-chart-popover .hlx-chart-data input[type='text']:focus,
+.hlx-chart-data .hlx-chart-icon-button:focus-visible {
+  box-shadow: var(--hlx-chrome-ring-inset);
+}
+
+.hlx-chart-popover .hlx-chart-data input[aria-invalid='true'] {
+  box-shadow: inset 0 0 0 2px var(--hlx-chrome-caution);
+}
+
+.hlx-chart-data td:not([data-category]) input {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.hlx-chart-popover .hlx-chart-data th input[type='text'] {
+  color: var(--hlx-color-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.hlx-chart-data th:not([data-category]) input {
+  text-align: right;
+}
+
+/* The category's header names itself, in the cell before its name. */
+.hlx-chart-data th[data-category] {
+  display: flex;
+  align-items: center;
+}
+
+.hlx-chart-category-mark {
+  flex-shrink: 0;
+  margin-left: 8px;
+  padding: 0 5px;
+  border-radius: var(--hlx-chrome-radius-sm);
+  background: var(--hlx-chrome-fill-strong);
+  color: var(--hlx-color-text-muted);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.hlx-chart-data td[data-category] {
+  background: color-mix(in srgb, var(--hlx-color-text) 2%, transparent);
+}
+
+.hlx-chart-data .hlx-chart-icon-button {
+  width: 31px;
+  height: 30px;
+  border-radius: 0;
+}
+
+.hlx-chart-data-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.hlx-chart-data-actions > button:only-child {
+  grid-column: 1 / -1;
+}
+
+/* Hints and problems. */
+.hlx-chart-form-hint,
+.hlx-chart-form-off {
+  margin: 0;
+  color: var(--hlx-chrome-text-faint);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.hlx-chart-form-error {
+  margin: 0;
+  color: var(--hlx-chrome-caution);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.hlx-chart-popover textarea.hlx-chart-source {
+  height: clamp(140px, 36vh, 360px);
+  padding: 8px;
+  font-family: var(--hlx-font-mono);
+  font-size: 12px;
+  line-height: 18px;
+  resize: vertical;
+}
+
+.hlx-chart-problems {
+  margin: 0;
+  padding-left: 1.25em;
+  color: var(--hlx-color-text-muted);
+  font-size: 12px;
+}
+
+.hlx-chart-raw-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+/*
+ * Every dialog shares one frame: a head row with the title over a divider, the
+ * body, and a foot with the actions over another. Dialogs padded all round reach the head and
+ * foot out to their edges.
+ */
+.hlx-dialog {
+  color: var(--hlx-color-text);
+}
+
+.hlx-dialog-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--hlx-chrome-border-subtle);
+}
+
+.hlx-dialog-head :is(.hlx-block-dialog-title, .hlx-image-dialog-title, .hlx-mermaid-dialog-title) {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.hlx-dialog-foot {
+  border-top: 1px solid var(--hlx-chrome-border-subtle);
+}
+
+:is(.hlx-block-dialog, .hlx-image-dialog) > .hlx-dialog-head {
+  margin: -16px -16px 0;
+  padding: 0 16px;
+}
+
+:is(.hlx-block-dialog, .hlx-image-form) > .hlx-dialog-foot {
+  margin: 0 -16px -16px;
+  padding: 10px 16px;
+}
+
+.hlx-mermaid-dialog > .hlx-dialog-head {
+  padding: 6px 12px 6px 16px;
+  border-bottom-color: var(--hlx-chrome-border-subtle);
+}
+
+.hlx-mermaid-dialog > .hlx-dialog-foot {
+  padding: 10px 16px;
+}
+
+/* The buttons of the image, media and Mermaid dialogs and the math panel: the dialog's own. */
+.hlx-math-button {
+  height: var(--hlx-chrome-height-md);
+  box-sizing: border-box;
+  padding: 0 10px;
+  font-weight: 500;
+}
+
+.hlx-math-button:hover:not(:disabled) {
+  background: var(--hlx-chrome-fill);
+}
+
+.hlx-math-button[data-primary]:hover:not(:disabled),
+.hlx-block-dialog button[data-primary]:hover:not(:disabled) {
+  opacity: 0.86;
+  background: var(--hlx-color-text);
+}
+
+:is(.hlx-dialog, .hlx-math-popover, .hlx-mention-panel) :is(button, input, select, textarea):focus-visible {
+  outline: none;
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+.hlx-image-field input:focus,
+.hlx-image-field select:focus,
+.hlx-mention-field > input:focus,
+.hlx-mention-field > select:focus,
+.hlx-editor .hlx-embed-input:focus {
+  border-color: transparent;
+  outline: none;
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+.hlx-block-dialog button:hover:not(:disabled),
+.hlx-mention-actions > button:hover,
+.hlx-editor .hlx-embed-button:hover,
+.hlx-editor .hlx-block-empty > button:hover,
+.hlx-editor .hlx-media-pick:hover {
+  background: color-mix(in srgb, var(--hlx-color-text) 6%, var(--hlx-color-bg));
+}
+
+/* One height for every one-line field and list in a dialog or panel, as in the chart panel. */
+:is(.hlx-dialog, .hlx-math-popover, .hlx-mention-panel) :is(input:not([type='checkbox'], [type='radio'], [type='file'], [type='range'], [type='color']), select) {
+  height: var(--hlx-chrome-height-md);
+  box-sizing: border-box;
+  padding-block: 0;
+}
+
+/*
+ * The language picker in a dialog is one field like the others there: the box is the anchor's,
+ * and the input and arrow inside it are plain, which the dialog's styles for inputs and buttons
+ * would otherwise each give a box of their own.
+ */
+.hlx-block-dialog .hlx-lang-anchor {
+  height: var(--hlx-chrome-height-md);
+  box-sizing: border-box;
+  margin-left: 0;
+  border-radius: var(--hlx-chrome-radius-md);
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-shadow-control);
+}
+
+.hlx-block-dialog .hlx-lang-anchor:hover {
+  background: var(--hlx-color-bg);
+}
+
+.hlx-block-dialog .hlx-lang-anchor:focus-within {
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+.hlx-block-dialog .hlx-lang-anchor > .hlx-lang-input,
+.hlx-block-dialog .hlx-lang-anchor > .hlx-lang-trigger {
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.hlx-block-dialog .hlx-lang-anchor > .hlx-lang-input {
+  padding: 0 0 0 8px;
+  color: var(--hlx-color-text);
+}
+
+.hlx-block-dialog .hlx-lang-anchor > .hlx-lang-trigger {
+  align-items: center;
+  padding: 0 8px;
+  color: var(--hlx-color-text-muted);
+}
+
+/*
+ * The code snippet dialog: wider, the files listed on the left, the file
+ * on show on the right with its name, language and numbered lines.
+ */
+.hlx-block-dialog:has(.hlx-snippet-dialog) {
+  width: min(960px, calc(100vw - 32px));
+  height: min(640px, calc(100vh - 48px));
+}
+
+.hlx-block-dialog:has(.hlx-snippet-dialog) .hlx-block-dialog-body {
+  flex: 1;
+}
+
+.hlx-snippet-dialog {
+  display: grid;
+  min-height: 0;
+  flex: 1;
+  grid-template-columns: 200px minmax(0, 1fr);
+  overflow: hidden;
+  border-radius: var(--hlx-chrome-radius-md);
+  box-shadow: var(--hlx-chrome-shadow-control);
+}
+
+.hlx-snippet-files {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  border-right: 1px solid var(--hlx-chrome-border-subtle);
+  background: var(--hlx-chrome-head);
+}
+
+.hlx-snippet-files-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
+  padding: 0 6px 0 12px;
+  color: var(--hlx-chrome-text-faint);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.hlx-block-dialog .hlx-snippet-icon-button,
+.hlx-block-dialog .hlx-snippet-file-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--hlx-chrome-height-sm);
+  height: var(--hlx-chrome-height-sm);
+  padding: 0;
+  border: 0;
+  border-radius: var(--hlx-chrome-radius-item);
+  background: transparent;
+  color: var(--hlx-color-text-muted);
+}
+
+.hlx-block-dialog .hlx-snippet-icon-button:hover:not(:disabled),
+.hlx-block-dialog .hlx-snippet-file-remove:hover:not(:disabled) {
+  background: var(--hlx-chrome-fill-strong);
+  color: var(--hlx-color-text);
+}
+
+.hlx-snippet-file-list {
+  min-height: 0;
+  flex: 1;
+  margin: 0;
+  /* It scrolls: room above for the first file's rings. */
+  padding: var(--hlx-chrome-ring-room) 6px 6px;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.hlx-snippet-file {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 2px 0 4px;
+  border-radius: var(--hlx-chrome-radius-item);
+  color: var(--hlx-color-text-muted);
+  font-family: var(--hlx-font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.hlx-snippet-file:hover {
+  background: var(--hlx-chrome-fill);
+}
+
+.hlx-snippet-file[aria-selected='true'] {
+  background: var(--hlx-chrome-fill-strong);
+  color: var(--hlx-color-text);
+}
+
+.hlx-snippet-file:focus-visible {
+  outline: none;
+  box-shadow: var(--hlx-chrome-ring-inset);
+}
+
+.hlx-snippet-file[data-dragging] {
+  opacity: 0.5;
+}
+
+/* Where a dragged file would go: a line on that side of the file under the pointer. */
+.hlx-snippet-file[data-drop]::after {
+  position: absolute;
+  right: 4px;
+  left: 4px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--hlx-color-accent);
+  content: '';
+}
+
+.hlx-snippet-file[data-drop='before']::after {
+  top: -1px;
+}
+
+.hlx-snippet-file[data-drop='after']::after {
+  bottom: -1px;
+}
+
+.hlx-snippet-file-grip {
+  display: inline-flex;
+  color: var(--hlx-chrome-text-faint);
+  cursor: grab;
+  opacity: 0;
+  touch-action: none;
+}
+
+.hlx-snippet-file:hover > .hlx-snippet-file-grip,
+.hlx-snippet-file[data-dragging] > .hlx-snippet-file-grip {
+  opacity: 1;
+}
+
+.hlx-snippet-file-name {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Remove shows only for the file pointed at or chosen. */
+.hlx-block-dialog .hlx-snippet-file-remove {
+  margin-left: auto;
+  opacity: 0;
+}
+
+.hlx-snippet-file:hover > .hlx-snippet-file-remove,
+.hlx-snippet-file[aria-selected='true'] > .hlx-snippet-file-remove {
+  opacity: 1;
+}
+
+.hlx-block-dialog .hlx-snippet-file-remove:disabled {
+  opacity: 0;
+}
+
+.hlx-block-dialog .hlx-snippet-rename {
+  min-width: 0;
+  height: 22px;
+  flex: 1;
+  padding: 0 4px;
+  font-family: var(--hlx-font-mono);
+  font-size: 12px;
+}
+
+.hlx-snippet-files > .hlx-block-dialog-error {
+  margin: 0;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.hlx-snippet-current {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+}
+
+.hlx-snippet-current-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 6px 0 12px;
+  border-bottom: 1px solid var(--hlx-chrome-border-subtle);
+}
+
+.hlx-snippet-current-name {
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--hlx-font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The language: quiet beside the name until pointed at. */
+.hlx-block-dialog .hlx-snippet-current-head .hlx-lang-anchor {
+  height: var(--hlx-chrome-height-sm);
+  margin-left: 2px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.hlx-block-dialog .hlx-snippet-current-head .hlx-lang-anchor:hover {
+  background: var(--hlx-chrome-fill);
+}
+
+.hlx-block-dialog .hlx-snippet-current-head .hlx-lang-anchor:focus-within {
+  background: var(--hlx-color-bg);
+  box-shadow: var(--hlx-chrome-ring);
+}
+
+.hlx-block-dialog .hlx-snippet-current-head .hlx-lang-input {
+  width: 8em;
+  color: var(--hlx-color-text-muted);
+  font-size: 12px;
+}
+
+.hlx-snippet-dialog-code .cm-gutters {
+  border-right: 0;
+  background: transparent;
+  color: var(--hlx-chrome-text-faint);
+}
+
+/* The edit button over a snippet's code: in the middle, not the header. */
+
+
+/*
+ * Marked lines in the snippet dialog, drawn as readers see them: a shade and a bar of the accent
+ * color. Content, not the dialog's chrome, so not from the chrome tokens.
+ */
+.hlx-snippet-current .cm-line.hlx-snippet-mark {
+  background: color-mix(in srgb, var(--hlx-color-accent) 14%, transparent);
+  box-shadow: inset 2px 0 0 var(--hlx-color-accent);
+}
+
+/* A line number marks or unmarks its line. */
+.hlx-snippet-dialog-code .cm-lineNumbers .cm-gutterElement {
+  cursor: pointer;
+}
+
+.hlx-snippet-dialog-code .cm-lineNumbers .cm-gutterElement:hover {
+  color: var(--hlx-color-accent);
+}
+
+.hlx-snippet-mark-hint {
+  margin-left: auto;
+  color: var(--hlx-chrome-text-faint);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/*
+ * A video's pick button: Firefox's player keeps clicks to itself, so this picks the video for
+ * its toolbar. Out of the way until the video is pointed at.
+ */
+.hlx-editor .hlx-media-pick {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: 8px;
+  inset-inline-end: 8px;
+}
+
+.hlx-editor .hlx-media-editor:not(:hover) > .hlx-media-pick:not(:focus-visible) {
+  opacity: 0;
+}
+
+
+/*
+ * A dynamic block while editing: the component runs and keeps its clicks, so a 選取 button
+ * picks the block, out of the way until it is pointed at.
+ */
+.hlx-editor .hlx-dynamic-editor {
+  position: relative;
+}
+
+.hlx-editor .hlx-dynamic-editor:not(:hover) > .hlx-dynamic-pick:not(:focus-visible) {
+  opacity: 0;
+}
+
+.hlx-chart-popover textarea.hlx-dynamic-props {
+  height: auto;
+  min-height: 96px;
+  padding: 6px 8px;
+  font-family: var(--hlx-font-mono);
+  font-size: 12px;
+  line-height: 18px;
+  resize: vertical;
+}
+
+/* A code block's line numbers while editing: as the renderer draws them. */
+.hlx-editor .hlx-code-card .cm-gutters {
+  border: none;
+  background: var(--hlx-color-code-bg);
+  color: var(--hlx-color-text-quaternary);
+}
+
+.hlx-editor .hlx-code-card .cm-lineNumbers .cm-gutterElement {
+  padding: 0 1.5ch 0 0.5ch;
+}
+
+/* A link's site icon before its text, while editing. */
+.hlx-root .hlx-link[data-favicon='loaded']::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.2em;
+  border-radius: 2px;
+  background-image: var(--hlx-link-favicon);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  vertical-align: -0.125em;
+}

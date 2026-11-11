@@ -1,0 +1,30 @@
+{
+  "repos/facebook/lexical": {
+    "name": "lexical",
+    "description": "Lexical is an extensible text editor framework that provides excellent reliability, accessibility and performance.",
+    "stargazers_count": 24000,
+    "language": "TypeScript",
+    "owner": { "avatar_url": "https://avatars.example/a.png" }
+  },
+  "repos/KennKyou/hakulex": {
+    "name": "hakulex",
+    "description": "A rich text editor.",
+    "stargazers_count": 42,
+    "language": "TypeScript",
+    "owner": { "avatar_url": "https://avatars.example/a.png" }
+  },
+  "repos/facebook/lexical/pulls/7000": {
+    "title": "Documentation: Fix typo",
+    "state": "closed",
+    "merged": true,
+    "additions": 1,
+    "deletions": 1,
+    "user": { "avatar_url": "https://avatars.example/a.png" }
+  },
+  "repos/facebook/lexical/issues/1000": {
+    "title": "gen-flow-files",
+    "state": "closed",
+    "user": { "avatar_url": "https://avatars.example/a.png" }
+  },
+  "arxiv": "<?xml version=\"1.0\"?><feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><title>Attention Is All You Need</title><author><name>Ashish Vaswani</name></author><author><name>Noam Shazeer</name></author></entry></feed>"
+}

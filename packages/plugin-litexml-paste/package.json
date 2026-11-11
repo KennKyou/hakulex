@@ -1,0 +1,50 @@
+{
+  "name": "@hakulex/plugin-litexml-paste",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "LiteXML paste plugin for hakulex: pasted LiteXML text becomes the blocks it describes",
+  "license": "MIT",
+  "keywords": [
+    "hakulex",
+    "vue",
+    "vue3",
+    "lexical",
+    "rich-text-editor",
+    "wysiwyg",
+    "editor",
+    "plugin",
+    "paste",
+    "xml"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "main": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev:build": "vite build --watch"
+  },
+  "peerDependencies": {
+    "lexical": "^0.53.0",
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@hakulex/editor": "workspace:*",
+    "@hakulex/litexml": "workspace:*",
+    "@hakulex/vue-lexical": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs"
+      }
+    },
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  }
+}
