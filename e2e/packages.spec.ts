@@ -80,7 +80,7 @@ test.describe('a page', () => {
   test('has the install command, and the source of the demo that runs', async ({ page }) => {
     await page.goto('/plugins/slash-menu')
     await expect(install(page)).toContainText('pnpm add @hakulex/plugin-slash-menu')
-    await expect(install(page)).toContainText('尚未發布到 npm')
+    await expect(install(page)).not.toContainText('尚未發布')
     await expect(usage(page)).toContainText('import { SlashMenuPlugin } from \'@hakulex/plugin-slash-menu\'')
     await expect(usage(page)).toContainText('<SlashMenuPlugin />')
     await expect(usage(page).getByRole('button', { name: /複製/ })).toBeVisible()

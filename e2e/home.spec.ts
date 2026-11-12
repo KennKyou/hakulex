@@ -86,10 +86,10 @@ test('counts the nodes and plugins, and goes to them without reloading', async (
   expect(await page.evaluate(() => (window as unknown as { marker?: string }).marker)).toBe('same page')
 })
 
-test('shows how to install it, and that it isn\'t published yet', async ({ page }) => {
+test('shows how to install it', async ({ page }) => {
   const install = home(page).locator('.home-hero .home-install')
   await expect(install).toContainText('pnpm add @hakulex/editor')
-  await expect(install).toContainText('尚未發布到 npm')
+  await expect(install).not.toContainText('尚未發布')
 })
 
 test('follows the dark theme', async ({ page }) => {

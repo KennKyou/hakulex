@@ -11,9 +11,6 @@ A rich text editor for Vue 3, built on Lexical. One JSON document, from editing 
 
 ![hakulex 的首頁：左邊是說明和安裝指令，右邊是可以直接打字的編輯器](./docs/assets/home.png)
 
-> [!NOTE]
-> 專案還在開發中，套件**尚未發布到 npm**。下面的安裝指令要等發布後才能使用；現在想試用，請照「[開發](#開發)」把專案抓下來執行。
-
 ## 特色
 
 - **為 Vue 而寫**：不是把別的框架的元件包一層。用 `v-model` 綁定文件，用插槽放進工具列和外掛。

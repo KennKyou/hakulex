@@ -88,11 +88,8 @@ const tryText = entry.tryText
         安裝
       </h2>
       <RichRenderer :value="install" :color-scheme="siteScheme" />
-      <p class="doc-note">
-        <code>@hakulex/*</code> 尚未發布到 npm，這個指令要等發布後才能使用。
-        <template v-if="kind === 'plugin'">
-          外掛要放在 <code>@hakulex/editor</code> 的 <code>RichEditor</code> 裡。
-        </template>
+      <p v-if="kind === 'plugin'" class="doc-note">
+        外掛要放在 <code>@hakulex/editor</code> 的 <code>RichEditor</code> 裡。
       </p>
     </section>
 
