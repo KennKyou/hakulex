@@ -19,6 +19,8 @@ export interface PackageEntry {
   description: string
   /** How to try the demo. */
   hint?: string
+  /** Somewhere on the site that shows more of it. */
+  more?: { text: string, label: string, to: string }
   /** Text for the reader to copy into the demo. */
   tryText?: string
   /** Plugins only; an empty list is a plugin with nothing to set. */
@@ -44,6 +46,8 @@ const LITEXML_SAMPLE = `<doc>
     <li>補上圖片說明</li>
   </ul>
 </doc>`
+
+const aiDemo = { text: '想看它和整個編輯器一起運作的樣子：', label: 'AI 協作的完整示範', to: '/ai' }
 
 function plugin(entry: Omit<PackageEntry, 'kind' | 'packageName'>): PackageEntry {
   return {
@@ -142,6 +146,7 @@ export const packages: PackageEntry[] = [
   }),
   plugin({
     id: 'agent',
+    more: aiDemo,
     label: 'AI 審查',
     description: '把 AI 提議的修改顯示在它要改的區塊旁邊，逐項接受或拒絕。這裡的 AI 是照劇本回應的，沒有連到任何服務。',
     hint: '按「讓 AI 修改」，文件裡會出現四項提議：劃掉的是要拿掉的字，標綠的是新加的。按 ✓ 接受、✕ 拒絕；接受的會寫進文件，按復原可以退回。有提議的段落要先回答才能再編輯。',
@@ -193,10 +198,12 @@ litexml post.json --input-format json --format html --theme dark -o post.html`,
   }),
   pack({
     id: 'agent-core',
+    more: aiDemo,
     description: 'AI 協作的核心，不含畫面：模型怎麼看到文件、怎麼提出修改、修改怎麼逐項接受或拒絕。這裡用照劇本回應的模型跑一輪，印出得到的待審項目，沒有連到任何服務。',
   }),
   pack({
     id: 'agent-chat',
+    more: aiDemo,
     description: '和 AI 討論文件的聊天面板：對話、AI 正在做的事和輸入框。這裡的 AI 是照劇本回應的，沒有連到任何服務。',
     hint: '按面板裡一句建議的問法，回覆會逐段出現，提議的修改顯示在編輯器裡，按 ✓ 接受、✕ 拒絕。自己打別的話，會得到一則說明這是示範的回覆。在編輯器裡選取文字，它會出現在輸入框上方，跟著下一則訊息送出。',
     props: [

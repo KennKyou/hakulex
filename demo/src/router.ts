@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import AiPage from './pages/AiPage.vue'
 import ChartKindPage from './pages/charts/ChartKindPage.vue'
 import ChartsOverview from './pages/charts/ChartsOverview.vue'
 import HomePage from './pages/HomePage.vue'
@@ -21,6 +22,7 @@ export const router = createRouter({
   routes: [
     { path: '/', component: HomePage },
     { path: '/editor', component: PlaygroundPage },
+    { path: '/ai', component: AiPage },
     { path: '/nodes', component: NodesOverview },
     {
       path: '/nodes/:type',

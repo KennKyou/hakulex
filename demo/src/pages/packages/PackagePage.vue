@@ -86,6 +86,11 @@ const tryText = entry.tryText
       <p v-if="entry.hint" class="doc-note pkg-hint">
         {{ entry.hint }}
       </p>
+      <p v-if="entry.more" class="doc-note pkg-more">
+        {{ entry.more.text }}<RouterLink :to="entry.more.to">
+          {{ entry.more.label }}
+        </RouterLink>
+      </p>
       <div v-if="tryText" class="pkg-try">
         <RichRenderer :value="tryText" :color-scheme="siteScheme" />
       </div>

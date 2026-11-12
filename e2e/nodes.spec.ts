@@ -196,6 +196,7 @@ test.describe('the navigation', () => {
       await page.goto('/nodes')
       await expect(nav(page).getByRole('link')).toHaveText([
         '編輯器',
+        'AI 協作',
         '範例文件',
         '節點',
         '外掛',
@@ -213,6 +214,7 @@ test.describe('the navigation', () => {
       await expect(samples(page)).toHaveCount(1)
       await expect(nav(page).getByRole('link')).toHaveText([
         '編輯器',
+        'AI 協作',
         '範例文件',
         '節點',
         '外掛',

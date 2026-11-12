@@ -197,10 +197,11 @@ test.describe('the navigation', () => {
       viewport: { width: 375, height: 812 },
     })
 
-    test('has four ways in and no sideways scrolling, with wide code scrolling by itself', async ({ page }) => {
+    test('has the ways in and no sideways scrolling, with wide code scrolling by itself', async ({ page }) => {
       await page.goto('/plugins/slash-menu')
       await expect(nav(page).getByRole('link')).toHaveText([
         '編輯器',
+        'AI 協作',
         '範例文件',
         '節點',
         '外掛',

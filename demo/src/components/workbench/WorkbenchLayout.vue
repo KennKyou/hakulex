@@ -58,7 +58,8 @@ h1 {
 .wb-panel {
   position: sticky;
   top: 0;
-  flex: 0 0 300px;
+  /* A page may ask for more room with this. */
+  flex: 0 0 var(--wb-panel-width, 300px);
   align-self: flex-start;
   box-sizing: border-box;
   height: 100vh;

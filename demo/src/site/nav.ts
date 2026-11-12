@@ -69,6 +69,10 @@ export const navGroups: NavGroup[] = [
         path: '/editor',
       },
       {
+        label: 'AI 協作',
+        path: '/ai',
+      },
+      {
         label: '範例文件',
         path: '/presets',
         count: presets.length,

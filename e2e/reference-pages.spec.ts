@@ -237,10 +237,11 @@ test.describe('the navigation', () => {
     })
 
     for (const path of ['/charts/bar', '/tokens', '/presets/tech-article']) {
-      test(`${path} has the seven ways in and no sideways scrolling`, async ({ page }) => {
+      test(`${path} has the eight ways in and no sideways scrolling`, async ({ page }) => {
         await page.goto(path)
         await expect(nav(page).getByRole('link')).toHaveText([
           '編輯器',
+          'AI 協作',
           '範例文件',
           '節點',
           '外掛',

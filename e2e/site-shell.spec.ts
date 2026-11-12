@@ -80,10 +80,11 @@ test.describe('the side navigation', () => {
       viewport: { width: 375, height: 812 },
     })
 
-    test('has only the seven ways in, without counts or pages', async ({ page }) => {
+    test('has only the eight ways in, without counts or pages', async ({ page }) => {
       await page.goto('/nodes/poll')
       await expect(nav(page).getByRole('link')).toHaveText([
         '編輯器',
+        'AI 協作',
         '範例文件',
         '節點',
         '外掛',
