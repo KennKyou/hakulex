@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/vue-lexical",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vue 3 bindings for Lexical",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

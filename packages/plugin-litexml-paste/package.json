@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/plugin-litexml-paste",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "LiteXML paste plugin for hakulex: pasted LiteXML text becomes the blocks it describes",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/plugin-toolbar",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Fixed toolbar plugin for hakulex",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

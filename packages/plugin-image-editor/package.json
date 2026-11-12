@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/plugin-image-editor",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Image editor plugin for hakulex: crop, annotate, pixelate and resize images before they are uploaded",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

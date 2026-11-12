@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/litexml-cli",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The litexml command: turn LiteXML or document JSON into HTML, JSON or Markdown",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

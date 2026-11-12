@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/headless",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Read hakulex documents on a server and turn them into Markdown, without a browser or Vue",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

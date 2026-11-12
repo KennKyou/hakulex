@@ -163,6 +163,10 @@ pnpm lint            # ESLint（@antfu/eslint-config）
 3. 把節點註冊到 `builtinNodes`；有 Markdown 寫法或斜線選單項目的話一併加上。
 4. 擴充一致性測試的文件（`packages/editor/tests/parity.test.ts`）。
 
+## 更新紀錄
+
+每個版本改了什麼，見 [CHANGELOG.md](./CHANGELOG.md)。18 個套件一起發布，用同一個版本號。
+
 ## 致謝
 
 hakulex 沿用了 [haklex](https://github.com/Innei/haklex) 的文件格式、行為和視覺設計。haklex 是建立在 Lexical 上的 React 富文本編輯器，以 MIT 授權釋出。

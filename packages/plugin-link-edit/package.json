@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/plugin-link-edit",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Link panel plugin for hakulex: view, open, copy, edit and remove the link under the caret",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

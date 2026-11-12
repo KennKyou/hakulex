@@ -1,17 +1,18 @@
 /**
  * Checks the packages as someone installing them from npm would meet them. It builds and packs
  * every package, installs the packed files into a new project outside this repository, and then
- * looks at four things: the styles in a production build, rendering on a server in plain Node,
- * the types, and what publint says about each package.
+ * looks at the styles in a production build, rendering on a server in plain Node, the types,
+ * and what publint says about each package. It also checks that no packed file carries a source
+ * map to a file that isn't in the package, and that CHANGELOG.md has a section for this version.
  *
  *   pnpm release:check
  *
  * It publishes nothing and needs no npm login. `--keep` leaves the project it made for a look.
  */
 import { execFileSync } from 'node:child_process'
-import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { dirname, join } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
@@ -91,6 +92,17 @@ step('no built file imports a stylesheet outright', () => {
   for (const name of packages)
     walk(join(root, 'packages', name, 'dist'))
   must(offenders.length === 0, `these import CSS: ${offenders.join(', ')}`)
+})
+
+step('CHANGELOG.md has a section for this version', () => {
+  const versions = new Set(packages.map(name => JSON.parse(readFileSync(join(root, 'packages', name, 'package.json'), 'utf8')).version))
+  must(versions.size === 1, `the packages are at different versions: ${[...versions].join(', ')}`)
+  const [version] = versions
+  const file = join(root, 'CHANGELOG.md')
+  must(existsSync(file), 'there is no CHANGELOG.md')
+  const heading = new RegExp(`^## \\[?${version.replaceAll('.', '\\.')}\\]?(?:\\s|$)`, 'm')
+  must(heading.test(readFileSync(file, 'utf8')), `CHANGELOG.md has no "## ${version}" section`)
+  return version
 })
 
 const lexical = JSON.parse(readFileSync(join(root, 'packages/editor/package.json'), 'utf8')).peerDependencies.lexical
@@ -235,6 +247,34 @@ if (installed) {
       '-p',
       'tsconfig.json',
     ], app)
+  })
+
+  step('no packed file has a source map to a file that isn\'t in the package', () => {
+    const broken = []
+    let maps = 0
+    const walk = (dir, name) => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const path = join(dir, entry.name)
+        if (entry.isDirectory()) {
+          if (entry.name !== 'node_modules')
+            walk(path, name)
+          continue
+        }
+        if (!entry.name.endsWith('.map'))
+          continue
+        maps++
+        const { sources = [], sourceRoot = '' } = JSON.parse(readFileSync(path, 'utf8'))
+        const missing = sources.filter(source => !existsSync(resolve(dirname(path), sourceRoot, source)))
+        if (missing.length)
+          broken.push(`@hakulex/${name}: ${path.split(`${name}/`).pop()} → ${missing[0]}`)
+      }
+    }
+    for (const name of packages)
+      walk(join(app, 'node_modules', '@hakulex', name), name)
+    must(broken.length === 0, `${broken.length} source maps point at files that were not published, such as:\n${broken.slice(0, 5).join('\n')}`)
+    return maps
+      ? `${maps} maps, all with their sources`
+      : 'no maps'
   })
 
   step('publint on each installed package', () => {

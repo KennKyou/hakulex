@@ -79,6 +79,8 @@ export function createLibraryConfig(options: LibraryOptions = {}): UserConfig {
         outDir: 'dist',
         tsconfigPath: './tsconfig.json',
         processor: 'vue',
+        // Maps from the types back to src would be published pointing at files that are not.
+        compilerOptions: { declarationMap: false },
       }),
       packageStyles(cwd, styles),
     ],
