@@ -489,6 +489,18 @@ describe('the built-in prompt', () => {
       expect(systemPrompt).toContain(sample)
     expect(checkXml('<p><b>bold</b> <a href="url">text</a><br /></p><h2>heading</h2><ul><li><p>item</p></li></ul><hr />', registry)).toEqual([])
   })
+
+  it('keeps what goes into the document apart from what is said to the author', () => {
+    const section = (title: string) => systemPrompt.split(/^## /m).find(part => part.startsWith(title)) ?? ''
+    // The ban on Markdown is about the xml handed to a tool, and says so.
+    const markdown = section('How to write LiteXML').split('\n').find(line => line.includes('Never use Markdown')) ?? ''
+    expect(markdown).toMatch(/in (the )?xml/i)
+    // The reply is chat text: no tags there, and Markdown is welcome.
+    const answer = section('How to answer')
+    expect(answer).toMatch(/chat/i)
+    expect(answer).toMatch(/no (XML or HTML )?tags|without tags|not write (XML or HTML )?tags/i)
+    expect(answer).toMatch(/Markdown/)
+  })
 })
 
 describe('models', () => {

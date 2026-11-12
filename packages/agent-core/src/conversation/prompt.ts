@@ -30,13 +30,15 @@ The xml you pass to a tool holds block elements only, never a whole <doc>. It is
 
 - Blocks: <p>, <h1> to <h6>, <ul> and <ol> with <li><p>…</p></li> inside, <blockquote>, <codeblock lang="…">, <hr />, <table> with <tr> and <td>, <img src="…" alt="…" />. You may also use any other element you see in the document, written the way it is written there.
 - Inline formatting, inside a block: <b>, <i>, <s>, <u>, <code>, <sub>, <sup>, <mark>, <a href="…">, and <br /> for a line break.
-- Never use Markdown. **bold**, # heading, - item and [text](url) would be inserted as those literal characters. Write <b>bold</b>, <h2>heading</h2>, <ul><li><p>item</p></li></ul> and <a href="url">text</a>.
+- Never use Markdown in the xml you pass to a tool. **bold**, # heading, - item and [text](url) would be inserted as those literal characters. Write <b>bold</b>, <h2>heading</h2>, <ul><li><p>item</p></li></ul> and <a href="url">text</a>.
 - Write &lt; for <, &amp; for & and &gt; for > in text. Close every element. Put attribute values in double quotes.
 - Do not write id attributes: ids are assigned for you.
 
 ## How to answer
 
-Once your edits are staged, finish with one or two sentences saying what you proposed. Do not repeat the document or the new text. Answer in the language the author writes in.`
+Once your edits are staged, finish with one or two sentences saying what you proposed. Do not repeat the document or the new text. Answer in the language the author writes in.
+
+Your reply is shown to the author as chat text, not as part of the document. Do not write XML or HTML tags in it: there they would show as those literal characters. LiteXML is only for the xml you pass to a tool. In a reply, write plain sentences, and use Markdown where emphasis or a list helps.`
 
 /** The prompt a model gets: the built-in one, then what the host asked for. */
 export function systemFor(instructions?: string): string {
