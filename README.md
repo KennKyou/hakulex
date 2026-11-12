@@ -3,6 +3,8 @@
   hakulex
 </h1>
 
+[![CI](https://github.com/KennKyou/hakulex/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/KennKyou/hakulex/actions/workflows/ci.yml)
+
 A rich text editor for Vue 3, built on Lexical. One JSON document, from editing to reading.
 
 **一份文件，從編輯到呈現。** hakulex 是給 Vue 3 的富文本編輯器，建立在 [Lexical](https://lexical.dev) 上。編輯和閱讀共用同一份 JSON 文件，需要哪些功能就裝哪些外掛。
@@ -153,6 +155,8 @@ pnpm lint            # ESLint（@antfu/eslint-config）
 ```
 
 展示網站有每個節點、外掛和套件的說明與可操作的範例，也是開發時用來試功能的地方。
+
+push 到 `main` 和每個 PR 都會在 GitHub 上自動執行 `pnpm lint`、`pnpm typecheck`、`pnpm test`，並建置套件和展示網站。端對端測試不在其中，要在本機執行。
 
 開發時，套件的 `exports` 指向 `src/`，所以展示網站會直接熱更新套件的原始碼，不用先建置；發布時 `publishConfig.exports` 會換成 `dist/`。
 
