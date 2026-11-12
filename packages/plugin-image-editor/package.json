@@ -1,9 +1,19 @@
 {
   "name": "@hakulex/plugin-image-editor",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Image editor plugin for hakulex: crop, annotate, pixelate and resize images before they are uploaded",
+  "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",
+  "homepage": "https://hakulex.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennKyou/hakulex.git",
+    "directory": "packages/plugin-image-editor"
+  },
+  "bugs": {
+    "url": "https://github.com/KennKyou/hakulex/issues"
+  },
   "keywords": [
     "hakulex",
     "vue",
@@ -17,8 +27,7 @@
     "image-editor"
   ],
   "sideEffects": [
-    "**/*.css",
-    "./src/index.ts"
+    "**/*.css"
   ],
   "exports": {
     ".": "./src/index.ts",
@@ -26,6 +35,7 @@
   },
   "main": "./src/index.ts",
   "files": [
+    "NOTICE",
     "dist"
   ],
   "scripts": {

@@ -1,9 +1,19 @@
 {
   "name": "@hakulex/diff-core",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Compare two hakulex documents: aligned blocks, character marks and change counts",
+  "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",
+  "homepage": "https://hakulex.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennKyou/hakulex.git",
+    "directory": "packages/diff-core"
+  },
+  "bugs": {
+    "url": "https://github.com/KennKyou/hakulex/issues"
+  },
   "keywords": [
     "hakulex",
     "vue",
@@ -20,6 +30,7 @@
   },
   "main": "./src/index.ts",
   "files": [
+    "NOTICE",
     "dist"
   ],
   "scripts": {

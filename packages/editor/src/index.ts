@@ -1,6 +1,3 @@
-import '@hakulex/style-token'
-import './styles/editor.css'
-
 export type { BlockType } from './blocks/operations'
 export {
   $canMoveBlock,

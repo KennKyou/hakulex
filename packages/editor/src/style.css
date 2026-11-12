@@ -1,0 +1,6 @@
+/*
+ * Everything the editor needs in one stylesheet: the design tokens and the content's styles
+ * from @hakulex/style-token, then the editor's own. The build writes it out as dist/style.css.
+ */
+@import '@hakulex/style-token/style.css';
+@import './styles/editor.css';

@@ -1,5 +1,3 @@
-import './styles.css'
-
 export { builtinSlashItems } from './builtinItems'
 export { filterItems } from './filter'
 export { default as SlashMenuPlugin } from './SlashMenuPlugin.vue'

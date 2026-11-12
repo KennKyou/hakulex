@@ -1,9 +1,19 @@
 {
   "name": "@hakulex/plugin-block-handle",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Block handle plugin for hakulex: drag, move, duplicate and turn blocks",
+  "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",
+  "homepage": "https://hakulex.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennKyou/hakulex.git",
+    "directory": "packages/plugin-block-handle"
+  },
+  "bugs": {
+    "url": "https://github.com/KennKyou/hakulex/issues"
+  },
   "keywords": [
     "hakulex",
     "vue",
@@ -17,8 +27,7 @@
     "block-handle"
   ],
   "sideEffects": [
-    "**/*.css",
-    "./src/index.ts"
+    "**/*.css"
   ],
   "exports": {
     ".": "./src/index.ts",

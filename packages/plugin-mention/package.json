@@ -1,9 +1,19 @@
 {
   "name": "@hakulex/plugin-mention",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Mention menu plugin for hakulex",
+  "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",
+  "homepage": "https://hakulex.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennKyou/hakulex.git",
+    "directory": "packages/plugin-mention"
+  },
+  "bugs": {
+    "url": "https://github.com/KennKyou/hakulex/issues"
+  },
   "keywords": [
     "hakulex",
     "vue",
@@ -16,8 +26,7 @@
     "mention"
   ],
   "sideEffects": [
-    "**/*.css",
-    "./src/index.ts"
+    "**/*.css"
   ],
   "exports": {
     ".": "./src/index.ts",

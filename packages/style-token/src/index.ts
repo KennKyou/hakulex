@@ -1,6 +1,3 @@
-import './tokens.css'
-import './content.css'
-
 export { contentTheme } from './content-theme'
 
 export type EditorVariant = 'article' | 'note' | 'comment' | 'chat'

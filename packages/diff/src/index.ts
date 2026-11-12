@@ -1,5 +1,3 @@
-import './styles.css'
-
 export type { InlineSegment } from './inline-segments'
 export { buildInlineSegments } from './inline-segments'
 export { default as RichDiff } from './RichDiff.vue'

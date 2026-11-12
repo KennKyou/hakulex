@@ -1,9 +1,19 @@
 {
   "name": "@hakulex/litexml",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Convert hakulex documents to and from LiteXML, a compact XML format for documents",
+  "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",
+  "homepage": "https://hakulex.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennKyou/hakulex.git",
+    "directory": "packages/litexml"
+  },
+  "bugs": {
+    "url": "https://github.com/KennKyou/hakulex/issues"
+  },
   "keywords": [
     "hakulex",
     "vue",
@@ -31,6 +41,7 @@
   },
   "main": "./src/index-node.ts",
   "files": [
+    "NOTICE",
     "dist"
   ],
   "scripts": {

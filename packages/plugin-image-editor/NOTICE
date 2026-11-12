@@ -1,0 +1,41 @@
+hakulex
+Copyright (c) 2026 Ken
+
+hakulex is a rich text editor for Vue 3, built on Lexical. It follows haklex
+(https://github.com/Innei/haklex), a React rich text editor built on Lexical:
+its document format, its behavior and its visual design are haklex's.
+
+The editor, the renderer, the plugins' interfaces and the Vue bindings were
+written anew for Vue. Parts that do not depend on a framework were adapted
+from haklex's source code, in particular:
+
+  - packages/litexml and packages/litexml-cli: reading and writing LiteXML
+  - packages/headless: turning a document into Markdown
+  - packages/diff-core and packages/diff: comparing two documents
+  - packages/plugin-image-editor: cropping, mosaic and annotation helpers
+
+together with tests for them, and smaller pieces elsewhere.
+
+haklex is released under the MIT License:
+
+  MIT License
+
+  Copyright (c) 2026 Innei
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.

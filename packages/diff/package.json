@@ -1,9 +1,19 @@
 {
   "name": "@hakulex/diff",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Show what changed between two hakulex documents, side by side or in one column",
+  "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",
+  "homepage": "https://hakulex.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennKyou/hakulex.git",
+    "directory": "packages/diff"
+  },
+  "bugs": {
+    "url": "https://github.com/KennKyou/hakulex/issues"
+  },
   "keywords": [
     "hakulex",
     "vue",
@@ -16,8 +26,7 @@
     "compare"
   ],
   "sideEffects": [
-    "**/*.css",
-    "./src/index.ts"
+    "**/*.css"
   ],
   "exports": {
     ".": "./src/index.ts",
@@ -25,6 +34,7 @@
   },
   "main": "./src/index.ts",
   "files": [
+    "NOTICE",
     "dist"
   ],
   "scripts": {

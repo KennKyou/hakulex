@@ -1,9 +1,19 @@
 {
   "name": "@hakulex/editor",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Core hakulex rich text editor for Vue 3",
+  "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",
+  "homepage": "https://hakulex.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennKyou/hakulex.git",
+    "directory": "packages/editor"
+  },
+  "bugs": {
+    "url": "https://github.com/KennKyou/hakulex/issues"
+  },
   "keywords": [
     "hakulex",
     "vue",
@@ -16,12 +26,11 @@
     "composition-api"
   ],
   "sideEffects": [
-    "**/*.css",
-    "./src/index.ts"
+    "**/*.css"
   ],
   "exports": {
     ".": "./src/index.ts",
-    "./style.css": "./src/styles/editor.css"
+    "./style.css": "./src/style.css"
   },
   "main": "./src/index.ts",
   "files": [
@@ -76,7 +85,7 @@
         "types": "./dist/index.d.ts",
         "import": "./dist/index.mjs"
       },
-      "./style.css": "./src/styles/editor.css"
+      "./style.css": "./dist/style.css"
     },
     "main": "./dist/index.mjs",
     "types": "./dist/index.d.ts"

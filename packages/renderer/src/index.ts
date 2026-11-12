@@ -1,5 +1,3 @@
-import '@hakulex/style-token'
-
 export { normalizeAttribution, safeCommentText, tagHue } from './annotations'
 export { builtinRenderers, normalizeRubyReading } from './builtin'
 export type { CalloutType } from './callout'

@@ -32,13 +32,14 @@ pnpm add @hakulex/editor lexical vue
 
 ### 編輯
 
-文件用 `v-model` 綁定，一開始可以是 `null`。樣式會跟著套件一起載入，不用另外引入 CSS。
+文件用 `v-model` 綁定，一開始可以是 `null`。樣式要自己引入一次，通常放在應用程式的進入點：`@hakulex/editor/style.css` 一個檔案就包含設計 token、內容排版和編輯器本身的樣式。
 
 ```vue
 <script setup lang="ts">
 import type { SerializedEditorState } from 'lexical'
 import { RichEditor } from '@hakulex/editor'
 import { shallowRef } from 'vue'
+import '@hakulex/editor/style.css'
 
 const doc = shallowRef<SerializedEditorState | null>(null)
 </script>
@@ -52,7 +53,7 @@ const doc = shallowRef<SerializedEditorState | null>(null)
 
 ### 加上外掛
 
-外掛是放在 `RichEditor` 裡面的元件，要用哪個就裝哪個：
+外掛是放在 `RichEditor` 裡面的元件，要用哪個就裝哪個。有畫面的外掛各有自己的 `style.css`，用到的才引入：
 
 ```bash
 pnpm add @hakulex/plugin-toolbar @hakulex/plugin-slash-menu
@@ -65,6 +66,9 @@ import { RichEditor } from '@hakulex/editor'
 import { SlashMenuPlugin } from '@hakulex/plugin-slash-menu'
 import { ToolbarPlugin } from '@hakulex/plugin-toolbar'
 import { shallowRef } from 'vue'
+import '@hakulex/editor/style.css'
+import '@hakulex/plugin-toolbar/style.css'
+import '@hakulex/plugin-slash-menu/style.css'
 
 const doc = shallowRef<SerializedEditorState | null>(null)
 </script>
@@ -81,16 +85,17 @@ const doc = shallowRef<SerializedEditorState | null>(null)
 
 ### 呈現
 
-閱讀頁只需要 `@hakulex/renderer`，不必載入編輯器和 Lexical，也可以在伺服器端輸出：
+閱讀頁只需要 `@hakulex/renderer`，不必載入編輯器和 Lexical，也可以在伺服器端輸出。它的樣式在 `@hakulex/style-token`：
 
 ```bash
-pnpm add @hakulex/renderer vue
+pnpm add @hakulex/renderer @hakulex/style-token vue
 ```
 
 ```vue
 <script setup lang="ts">
 import type { SerializedEditorState } from 'lexical'
 import { RichRenderer } from '@hakulex/renderer'
+import '@hakulex/style-token/style.css'
 
 defineProps<{ doc: SerializedEditorState }>()
 </script>
