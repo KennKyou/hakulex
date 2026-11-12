@@ -175,7 +175,7 @@ test.describe('a page', () => {
 test.describe('the navigation', () => {
   test('reaches each overview and page from inside its section, and marks the current one', async ({ page }) => {
     for (const [kind, path, last] of [
-      ['plugin', '/plugins/table', '/plugins/litexml-paste'],
+      ['plugin', '/plugins/table', '/plugins/block-id'],
       ['package', '/packages/vue-lexical', '/packages/vue-lexical'],
     ] as const) {
       await page.goto(path)
@@ -297,6 +297,40 @@ test.describe('each plugin at work', () => {
     await expect(editor(page).locator('.hlx-alert')).toContainText('還沒有人審過')
     await expect(editor(page)).not.toContainText('<doc>')
   })
+
+  test('block-id shows each block its ID, and a new block gets one of its own', async ({ page }) => {
+    await page.goto('/plugins/block-id')
+    const blocks = editor(page).locator('> [data-block-id]')
+    // What the page shows beside each block, read off the block itself.
+    const shown = () => blocks.evaluateAll(elements => elements.map((element) => {
+      const label = getComputedStyle(element, '::after').content
+      return {
+        id: element.getAttribute('data-block-id'),
+        label,
+      }
+    }))
+
+    await expect(blocks).not.toHaveCount(0)
+    const before = await shown()
+    for (const { id, label } of before) {
+      expect(id).toMatch(/^[\w-]{8}$/)
+      expect(label).toBe(`"${id}"`)
+    }
+
+    await blocks.first().click()
+    await page.keyboard.press('End')
+    await page.keyboard.press('Enter')
+    await expect(blocks).toHaveCount(before.length + 1)
+
+    const after = await shown()
+    const ids = after.map(({ id }) => id)
+    expect(new Set(ids).size).toBe(ids.length)
+    const added = after.filter(({ id }) => !before.some(old => old.id === id))
+    expect(added).toHaveLength(1)
+    expect(added[0].label).toBe(`"${added[0].id}"`)
+    for (const old of before)
+      expect(ids).toContain(old.id)
+  })
 })
 
 test.describe('every page', () => {
@@ -310,6 +344,7 @@ test.describe('every page', () => {
     'table',
     'image-editor',
     'litexml-paste',
+    'block-id',
     'editor',
     'renderer',
     'diff',

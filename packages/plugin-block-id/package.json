@@ -1,0 +1,64 @@
+{
+  "name": "@hakulex/plugin-block-id",
+  "type": "module",
+  "version": "0.1.1",
+  "description": "Block ID plugin for hakulex: every top-level block gets an ID that stays with it",
+  "author": "Ken (https://github.com/KennKyou)",
+  "license": "MIT",
+  "homepage": "https://hakulex.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennKyou/hakulex.git",
+    "directory": "packages/plugin-block-id"
+  },
+  "bugs": {
+    "url": "https://github.com/KennKyou/hakulex/issues"
+  },
+  "keywords": [
+    "hakulex",
+    "vue",
+    "vue3",
+    "lexical",
+    "rich-text-editor",
+    "wysiwyg",
+    "editor",
+    "plugin",
+    "block-id"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "main": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev:build": "vite build --watch"
+  },
+  "peerDependencies": {
+    "lexical": "^0.53.0",
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@hakulex/vue-lexical": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs"
+      }
+    },
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
+  "devDependencies": {
+    "@hakulex/editor": "workspace:*",
+    "@hakulex/litexml": "workspace:*",
+    "@lexical/rich-text": "^0.53.0",
+    "@lexical/selection": "^0.53.0",
+    "@lexical/utils": "^0.53.0"
+  }
+}

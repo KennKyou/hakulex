@@ -133,6 +133,13 @@ export const packages: PackageEntry[] = [
     tryText: LITEXML_SAMPLE,
     props: [],
   }),
+  plugin({
+    id: 'block-id',
+    label: '區塊編號',
+    description: '替每個最上層區塊加上不會變的編號，存在文件裡，給需要指出「哪一個區塊」的功能使用。',
+    hint: '每個區塊右邊是它的編號。按 Enter 新增一段會出現新的編號；修改文字或改成標題，編號不變。',
+    props: [],
+  }),
 
   pack({
     id: 'editor',

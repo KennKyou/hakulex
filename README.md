@@ -128,6 +128,7 @@ defineProps<{ doc: SerializedEditorState }>()
 | `@hakulex/plugin-table` | 表格的列和欄把手：增減、移動、對齊和調整欄寬。 |
 | `@hakulex/plugin-image-editor` | 插入圖片前裁切、標註、打馬賽克和調整大小。標註使用 [marker.js](https://markerjs.com)，它的授權要求畫面上保留連回官網的連結（外掛已內建），否則需要購買商業授權。 |
 | `@hakulex/plugin-litexml-paste` | 貼上 LiteXML 文字時變成對應的區塊，適合貼上 AI 產生的內容。 |
+| `@hakulex/plugin-block-id` | 替每個最上層區塊加上不會變的編號，存在文件裡，給需要指出「哪一個區塊」的功能使用。 |
 
 ### 工具
 
@@ -169,7 +170,7 @@ push 到 `main` 和每個 PR 都會在 GitHub 上自動執行 `pnpm lint`、`pnp
 
 ## 更新紀錄
 
-每個版本改了什麼，見 [CHANGELOG.md](./CHANGELOG.md)。18 個套件一起發布，用同一個版本號。
+每個版本改了什麼，見 [CHANGELOG.md](./CHANGELOG.md)。所有套件一起發布，用同一個版本號。
 
 ## 致謝
 

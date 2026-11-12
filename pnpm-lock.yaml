@@ -229,6 +229,9 @@ importers:
       '@hakulex/plugin-block-handle':
         specifier: workspace:*
         version: link:../packages/plugin-block-handle
+      '@hakulex/plugin-block-id':
+        specifier: workspace:*
+        version: link:../packages/plugin-block-id
       '@hakulex/plugin-floating-toolbar':
         specifier: workspace:*
         version: link:../packages/plugin-floating-toolbar
@@ -545,6 +548,34 @@ importers:
         version: 3.5.44(typescript@6.0.3)
     devDependencies:
       lexical:
+        specifier: ^0.53.0
+        version: 0.53.0(typescript@6.0.3)
+
+  packages/plugin-block-id:
+    dependencies:
+      '@hakulex/vue-lexical':
+        specifier: workspace:*
+        version: link:../vue-lexical
+      lexical:
+        specifier: ^0.53.0
+        version: 0.53.0(typescript@6.0.3)
+      vue:
+        specifier: ^3.5.0
+        version: 3.5.44(typescript@6.0.3)
+    devDependencies:
+      '@hakulex/editor':
+        specifier: workspace:*
+        version: link:../editor
+      '@hakulex/litexml':
+        specifier: workspace:*
+        version: link:../litexml
+      '@lexical/rich-text':
+        specifier: ^0.53.0
+        version: 0.53.0(typescript@6.0.3)
+      '@lexical/selection':
+        specifier: ^0.53.0
+        version: 0.53.0(typescript@6.0.3)
+      '@lexical/utils':
         specifier: ^0.53.0
         version: 0.53.0(typescript@6.0.3)
 
