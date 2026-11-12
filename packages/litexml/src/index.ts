@@ -1,3 +1,5 @@
+export type { CheckXmlOptions, XmlProblem } from './check'
+export { checkXml } from './check'
 export { createDefaultRegistry } from './default-registry'
 export { deserializeFromXml, deserializeNodesFromXml } from './deserializer'
 export { registerBuiltinReaders } from './readers/builtin'

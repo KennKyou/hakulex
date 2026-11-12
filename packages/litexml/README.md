@@ -27,6 +27,19 @@ const xml = serializeToXml(article, createDefaultRegistry())
 </template>
 ```
 
+## 檢查
+
+`deserializeFromXml` 和 `deserializeNodesFromXml` 讀取時很寬鬆：格式有錯會盡量讀，不認得的標籤會略過，不會報錯。要知道一段 LiteXML 哪裡寫錯（例如檢查程式或模型產生的內容），用 `checkXml`：
+
+```ts
+import { checkXml, createDefaultRegistry } from '@hakulex/litexml'
+
+const problems = checkXml('<p>沒有關<b>粗體</p>', createDefaultRegistry())
+// [{ kind: 'malformed', tag: 'b', message: '<b> is never closed. Add </b>.', index: 7 }]
+```
+
+回傳空陣列表示沒有找到問題。`kind` 有三種：`malformed`（標籤沒有成對、屬性的引號沒有關、文字裡有沒跳脫的 `<`）、`unknown-tag`（不是 LiteXML 的標籤）、`empty`（沒有內容）。自己註冊的讀取函式如果會處理內層的標籤，用第三個參數 `{ knownTags: ['…'] }` 告訴它。
+
 ## 授權
 
 [MIT](./LICENSE)。部分程式碼改寫自 [haklex](https://github.com/Innei/haklex)，詳見 [NOTICE](./NOTICE)。

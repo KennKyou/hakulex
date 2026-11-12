@@ -352,6 +352,7 @@ test.describe('every page', () => {
     'litexml',
     'litexml-cli',
     'headless',
+    'agent-core',
     'style-token',
     'vue-lexical',
   ]
@@ -374,7 +375,7 @@ test.describe('every page', () => {
     })
   }
 
-  test('headless, litexml and diff-core show a result worked out in the page', async ({ page }) => {
+  test('headless, litexml, diff-core and agent-core show a result worked out in the page', async ({ page }) => {
     await page.goto('/packages/headless')
     await expect(demo(page).locator('pre')).toContainText('# ')
     await codeReady(page)
@@ -383,5 +384,9 @@ test.describe('every page', () => {
     await codeReady(page)
     await page.goto('/packages/diff-core')
     await expect(demo(page).locator('pre')).not.toBeEmpty()
+    await codeReady(page)
+    await page.goto('/packages/agent-core')
+    await expect(demo(page).locator('pre')).toContainText('replace')
+    await expect(demo(page).locator('pre')).toContainText('insert')
   })
 })

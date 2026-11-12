@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hakulex/agent-core": "workspace:*",
     "@hakulex/diff": "workspace:*",
     "@hakulex/diff-core": "workspace:*",
     "@hakulex/editor": "workspace:*",

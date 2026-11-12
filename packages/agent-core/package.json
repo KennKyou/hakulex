@@ -1,0 +1,60 @@
+{
+  "name": "@hakulex/agent-core",
+  "type": "module",
+  "version": "0.1.1",
+  "description": "AI agent core for hakulex: how a model sees a document, proposes edits to it and has them reviewed, without any UI",
+  "author": "Ken (https://github.com/KennKyou)",
+  "license": "MIT",
+  "homepage": "https://hakulex.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennKyou/hakulex.git",
+    "directory": "packages/agent-core"
+  },
+  "bugs": {
+    "url": "https://github.com/KennKyou/hakulex/issues"
+  },
+  "keywords": [
+    "hakulex",
+    "lexical",
+    "rich-text-editor",
+    "editor",
+    "ai",
+    "agent",
+    "llm",
+    "litexml"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "main": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev:build": "vite build --watch"
+  },
+  "peerDependencies": {
+    "lexical": "^0.53.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs"
+      }
+    },
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
+  "dependencies": {
+    "@hakulex/litexml": "workspace:*"
+  },
+  "devDependencies": {
+    "@hakulex/headless": "workspace:*",
+    "@lexical/headless": "^0.53.0",
+    "lexical": "^0.53.0"
+  }
+}

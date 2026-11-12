@@ -14,7 +14,7 @@ import { escapeXml, isInlineTag } from './xml-utils'
  * end of document) is found. We expand those into explicit `<tag …></tag>`
  * before handing the string to linkedom / DOMParser.
  */
-const HTML_VOID_ELEMENTS = new Set([
+export const HTML_VOID_ELEMENTS = new Set([
   'area',
   'base',
   'br',

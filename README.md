@@ -139,6 +139,7 @@ defineProps<{ doc: SerializedEditorState }>()
 | `@hakulex/litexml` | 在文件 JSON 和 LiteXML 之間轉換；LiteXML 是給 AI 讀寫的精簡 XML 格式。 |
 | `@hakulex/litexml-cli` | `litexml` 指令：在終端機把 LiteXML 或文件 JSON 轉成 HTML、JSON 或 Markdown。 |
 | `@hakulex/headless` | 不需要瀏覽器就能讀取文件並轉成 Markdown，主要用在伺服器。 |
+| `@hakulex/agent-core` | AI 協作的核心，不含畫面：模型怎麼看到文件、怎麼提出修改、修改怎麼逐項接受或拒絕，以及對話迴圈。不依賴 Vue。 |
 
 ## 開發
 

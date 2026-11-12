@@ -182,6 +182,10 @@ litexml post.json --input-format json --format html --theme dark -o post.html`,
     description: '不需要瀏覽器畫面就能讀取文件並轉成 Markdown，主要用在伺服器。這裡直接在頁面上執行。',
   }),
   pack({
+    id: 'agent-core',
+    description: 'AI 協作的核心，不含畫面：模型怎麼看到文件、怎麼提出修改、修改怎麼逐項接受或拒絕。這裡用照劇本回應的模型跑一輪，印出得到的待審項目，沒有連到任何服務。',
+  }),
+  pack({
     id: 'style-token',
     description: '設計 token、CSS 變數和各種排版的預設值，可以用 ThemeTokens 覆寫。',
   }),
