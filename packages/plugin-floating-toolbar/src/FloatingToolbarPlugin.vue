@@ -13,7 +13,7 @@ import {
   $setSelection,
   COMMAND_PRIORITY_NORMAL,
   FORMAT_TEXT_COMMAND,
-  KEY_MODIFIER_COMMAND,
+  KEY_DOWN_COMMAND,
 } from 'lexical'
 import { computed, nextTick, onBeforeUnmount, shallowRef, useTemplateRef, watch } from 'vue'
 import { $clearFormatting, normalizeUrl } from './selection-state'
@@ -238,8 +238,10 @@ function setRuby(reading: string) {
   closeForm(true)
 }
 
-// ⌘K / Ctrl+K opens the link editor for the current selection.
-useLexicalRegister(editor => editor.registerCommand(KEY_MODIFIER_COMMAND, (event) => {
+// ⌘K / Ctrl+K opens the link editor for the current selection. On the key itself, not on
+// KEY_MODIFIER_COMMAND: Lexical sends that one after it has run its own shortcuts, and after an
+// undo or a redo that is after the state was committed, which it then warns about.
+useLexicalRegister(editor => editor.registerCommand(KEY_DOWN_COMMAND, (event) => {
   const isLinkShortcut = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k'
   if (!isLinkShortcut || !visible.value)
     return false

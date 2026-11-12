@@ -22,7 +22,7 @@ import {
   COMMAND_PRIORITY_LOW,
   COMMAND_PRIORITY_NORMAL,
   HISTORY_PUSH_TAG,
-  KEY_MODIFIER_COMMAND,
+  KEY_DOWN_COMMAND,
   SELECTION_CHANGE_COMMAND,
   SKIP_DOM_SELECTION_TAG,
 } from 'lexical'
@@ -128,7 +128,10 @@ useLexicalRegister(editor => mergeRegister(
   }),
   registerModClick(editor),
   // ⌘K (Ctrl+K) with the caret in a link edits it. A selection is the floating toolbar's.
-  editor.registerCommand(KEY_MODIFIER_COMMAND, (event) => {
+  // On the key itself, not on KEY_MODIFIER_COMMAND: Lexical sends that one after it has run its
+  // own shortcuts, and after an undo or a redo that is after the state was committed, which it
+  // then warns about.
+  editor.registerCommand(KEY_DOWN_COMMAND, (event) => {
     if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== 'k' || !shown.value)
       return false
     event.preventDefault()

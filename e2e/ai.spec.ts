@@ -31,13 +31,8 @@ test.beforeEach(async ({ page }) => {
   seen.set(page, record)
   page.on('pageerror', error => record.errors.push(error.message))
   page.on('console', (message) => {
-    if (message.type() !== 'error' && message.type() !== 'warning')
-      return
-    // Known, and not from this page: with the floating toolbar in an editor, undoing from the
-    // keyboard makes Lexical's development build print this. /editor does the same. The undo works.
-    if (message.text().startsWith('updateEditorSync: an editor update'))
-      return
-    record.errors.push(message.text())
+    if (message.type() === 'error' || message.type() === 'warning')
+      record.errors.push(message.text())
   })
   // Anything that tries to leave the page is stopped, and counted.
   await page.route(url => url.protocol.startsWith('http') && url.hostname !== 'localhost', (route) => {

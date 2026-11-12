@@ -11,7 +11,7 @@ import {
   $selectAll,
   UNDO_COMMAND,
 } from 'lexical'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
 import { FloatingToolbarPlugin, normalizeUrl } from '../src'
 
@@ -290,6 +290,68 @@ describe('inline syntax', () => {
     await wrapper.setProps({ editable: false })
     await flushPromises()
     expect(toolbar()).toBeNull()
+  })
+})
+
+describe('the keyboard', () => {
+  it('opens the link field from ⌘K while the toolbar shows, and leaves ⌘K alone otherwise', async () => {
+    const { editor } = await mountWithToolbar()
+    const press = () => {
+      const event = new KeyboardEvent('keydown', {
+        key: 'k',
+        ctrlKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+      editor.getRootElement()!.dispatchEvent(event)
+      return event
+    }
+    editor.getRootElement()!.focus()
+    editor.update(() => $getRoot().selectEnd(), { discrete: true })
+    await flushPromises()
+    expect(toolbar()).toBeNull()
+    expect(press().defaultPrevented).toBe(false)
+
+    await selectAll(editor)
+    expect(press().defaultPrevented).toBe(true)
+    await flushPromises()
+    expect(toolbar()!.querySelector('.hlx-toolbar-link input')).not.toBeNull()
+  })
+
+  it('lets the keyboard undo and redo without a warning from the editor', async () => {
+    const { editor } = await mountWithToolbar()
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      editor.getRootElement()!.focus()
+      editor.update(() => {
+        $getRoot().selectEnd().insertText(' again')
+      }, { discrete: true })
+      await flushPromises()
+      expect(editor.getRootElement()!.textContent).toBe('hello world again')
+
+      // Lexical takes this environment for a PC, where the shortcuts are on Ctrl.
+
+      const press = (shiftKey: boolean) => editor.getRootElement()!.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'z',
+          code: 'KeyZ',
+          ctrlKey: true,
+          shiftKey,
+          bubbles: true,
+          cancelable: true,
+        }),
+      )
+      press(false)
+      await flushPromises()
+      expect(editor.getRootElement()!.textContent).toBe('hello world')
+      press(true)
+      await flushPromises()
+      expect(editor.getRootElement()!.textContent).toBe('hello world again')
+      expect(warn.mock.calls.map(call => String(call[0]))).toEqual([])
+    }
+    finally {
+      warn.mockRestore()
+    }
   })
 })
 

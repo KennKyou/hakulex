@@ -10,7 +10,6 @@ import {
   $isElementNode,
   $isNodeSelection,
   $isTextNode,
-  KEY_MODIFIER_COMMAND,
   UNDO_COMMAND,
 } from 'lexical'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -330,15 +329,56 @@ describe('editing', () => {
 
   it('opens editing from ⌘K with the caret in a link, and leaves ⌘K alone elsewhere', async () => {
     const { editor } = await mountWithPanel()
+    const press = () => {
+      const event = new KeyboardEvent('keydown', {
+        key: 'k',
+        ctrlKey: true,
+        bubbles: true,
+        cancelable: true,
+      })
+      editor.getRootElement()!.dispatchEvent(event)
+      return event
+    }
     await caretIn(editor, ' 中 ')
-    const elsewhere = new KeyboardEvent('keydown', { key: 'k', metaKey: true, cancelable: true })
-    expect(editor.dispatchCommand(KEY_MODIFIER_COMMAND, elsewhere)).toBe(false)
-    await caretIn(editor, '範例')
-    const inLink = new KeyboardEvent('keydown', { key: 'k', metaKey: true, cancelable: true })
-    expect(editor.dispatchCommand(KEY_MODIFIER_COMMAND, inLink)).toBe(true)
+    expect(press().defaultPrevented).toBe(false)
     await flushPromises()
-    expect(inLink.defaultPrevented).toBe(true)
+    expect(document.querySelector('.hlx-link-panel-form')).toBeNull()
+
+    await caretIn(editor, '範例')
+    expect(press().defaultPrevented).toBe(true)
+    await flushPromises()
     expect(document.activeElement).toBe(field('網址'))
+  })
+
+  it('lets the keyboard undo and redo without a warning from the editor', async () => {
+    const { editor } = await mountWithPanel()
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    await caretIn(editor, ' 中 ')
+    editor.update(() => {
+      $getRoot().getFirstChildOrThrow().selectEnd().insertText('多的字')
+    }, { discrete: true })
+    await flushPromises()
+    expect(editor.getRootElement()!.textContent).toContain('多的字')
+
+    // Lexical takes this environment for a PC, where the shortcuts are on Ctrl.
+
+    const press = (shiftKey: boolean) => editor.getRootElement()!.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'z',
+        code: 'KeyZ',
+        ctrlKey: true,
+        shiftKey,
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    press(false)
+    await flushPromises()
+    expect(editor.getRootElement()!.textContent).not.toContain('多的字')
+    press(true)
+    await flushPromises()
+    expect(editor.getRootElement()!.textContent).toContain('多的字')
+    expect(warn.mock.calls.map(call => String(call[0]))).toEqual([])
   })
 })
 
