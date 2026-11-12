@@ -3,6 +3,7 @@ import type { SerializedEditorState } from 'lexical'
 import type { Component } from 'vue'
 import type { PackageKind } from '../../site/packages'
 import { RichRenderer } from '@hakulex/renderer'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import DocPage from '../../components/doc/DocPage.vue'
 import { findPackage, neighbouringPackages, packagesPath } from '../../site/packages'
@@ -25,6 +26,16 @@ const path = `../../site/examples/${entry.id}.vue`
 const examples = import.meta.glob<Component>('../../site/examples/*.vue', { eager: true, import: 'default' })
 const sources = import.meta.glob<string>('../../site/examples/*.vue', { eager: true, import: 'default', query: '?raw' })
 const example = examples[path]
+
+/*
+ * The examples are written as they would be in an app, with no color scheme, and the page gives
+ * them the site's. One whose template starts with an editor, a renderer or a comparison takes it
+ * as its own setting; any other has nowhere to put it and follows the frame around it.
+ */
+const takesScheme = /<template>\s*<(?:RichEditor|RichRenderer|RichDiff)\b/.test(sources[path] ?? '')
+const exampleProps = computed(() => takesScheme
+  ? { colorScheme: siteScheme.value }
+  : {})
 
 function code(language: string, value: string) {
   return {
@@ -77,9 +88,8 @@ const tryText = entry.tryText
       <div v-if="tryText" class="pkg-try">
         <RichRenderer :value="tryText" :color-scheme="siteScheme" />
       </div>
-      <!-- The examples are written as they would be in an app, so they stay in one color scheme. -->
-      <div class="doc-preview pkg-demo hlx-root" data-color-scheme="light">
-        <component :is="example" />
+      <div class="doc-preview pkg-demo hlx-root" :data-color-scheme="siteScheme">
+        <component :is="example" v-bind="exampleProps" />
       </div>
     </section>
 

@@ -2,6 +2,7 @@ import type { Page } from '@playwright/test'
 import { Buffer } from 'node:buffer'
 import { expect, test } from '@playwright/test'
 import { findPackage, packages, packagesOf, packagesPath } from '../demo/src/site/packages'
+import { setTheme } from './theme'
 
 /* The plugin and package pages: their overviews, what each page has, and every plugin at work. */
 
@@ -138,6 +139,36 @@ test.describe('a page', () => {
     await codeReady(page)
     await page.goto(`/packages/${others[0].id}`)
     await expect(page.getByRole('link', { name: /上一個/ })).toHaveCount(0)
+  })
+
+  test('shows its demo in the site\'s theme, with the code left as written', async ({ page }) => {
+    const background = () => demo(page).evaluate(element => getComputedStyle(element).backgroundColor)
+    await page.goto('/packages/editor')
+    const light = await background()
+    await setTheme(page, '深色')
+
+    // An editor, a plugin in one, what a reader sees, and a result that is only text.
+    for (const path of [
+      '/packages/editor',
+      '/plugins/slash-menu',
+      '/packages/renderer',
+      '/packages/headless',
+    ]) {
+      await codeReady(page)
+      await page.goto(path)
+      await expect(demo(page)).toHaveAttribute('data-color-scheme', 'dark')
+      await expect(demo(page).locator('[data-color-scheme="light"]')).toHaveCount(0)
+      expect(await background()).not.toBe(light)
+      await expect(usage(page)).not.toContainText('color-scheme')
+    }
+
+    await codeReady(page)
+    await page.goto('/packages/editor')
+    await expect(demo(page).locator('.hlx-editor')).toHaveAttribute('data-color-scheme', 'dark')
+    await setTheme(page, '淺色')
+    await expect(demo(page)).toHaveAttribute('data-color-scheme', 'light')
+    await expect(demo(page).locator('.hlx-editor')).toHaveAttribute('data-color-scheme', 'light')
+    expect(await background()).toBe(light)
   })
 })
 
