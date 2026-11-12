@@ -15,6 +15,7 @@
     "@hakulex/editor": "workspace:*",
     "@hakulex/headless": "workspace:*",
     "@hakulex/litexml": "workspace:*",
+    "@hakulex/plugin-agent": "workspace:*",
     "@hakulex/plugin-block-handle": "workspace:*",
     "@hakulex/plugin-block-id": "workspace:*",
     "@hakulex/plugin-floating-toolbar": "workspace:*",

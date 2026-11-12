@@ -229,6 +229,9 @@ importers:
       '@hakulex/litexml':
         specifier: workspace:*
         version: link:../packages/litexml
+      '@hakulex/plugin-agent':
+        specifier: workspace:*
+        version: link:../packages/plugin-agent
       '@hakulex/plugin-block-handle':
         specifier: workspace:*
         version: link:../packages/plugin-block-handle
@@ -544,6 +547,33 @@ importers:
       '@types/node':
         specifier: ^26.6.6
         version: 26.6.6
+
+  packages/plugin-agent:
+    dependencies:
+      '@hakulex/agent-core':
+        specifier: workspace:*
+        version: link:../agent-core
+      '@hakulex/diff-core':
+        specifier: workspace:*
+        version: link:../diff-core
+      '@hakulex/editor':
+        specifier: workspace:*
+        version: link:../editor
+      '@hakulex/plugin-block-id':
+        specifier: workspace:*
+        version: link:../plugin-block-id
+      '@hakulex/renderer':
+        specifier: workspace:*
+        version: link:../renderer
+      '@hakulex/vue-lexical':
+        specifier: workspace:*
+        version: link:../vue-lexical
+      lexical:
+        specifier: ^0.53.0
+        version: 0.53.0(typescript@6.0.3)
+      vue:
+        specifier: ^3.5.0
+        version: 3.5.44(typescript@6.0.3)
 
   packages/plugin-block-handle:
     dependencies:

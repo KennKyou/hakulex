@@ -14,6 +14,7 @@ import '@hakulex/plugin-link-edit/style.css'
 import '@hakulex/plugin-block-handle/style.css'
 import '@hakulex/plugin-table/style.css'
 import '@hakulex/plugin-image-editor/style.css'
+import '@hakulex/plugin-agent/style.css'
 import '@hakulex/diff/style.css'
 
 import { createApp } from 'vue'

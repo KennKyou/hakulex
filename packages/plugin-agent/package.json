@@ -1,0 +1,69 @@
+{
+  "name": "@hakulex/plugin-agent",
+  "type": "module",
+  "version": "0.1.1",
+  "description": "AI review plugin for hakulex: edits a model proposes show beside the blocks they change, to accept or reject one by one",
+  "author": "Ken (https://github.com/KennKyou)",
+  "license": "MIT",
+  "homepage": "https://hakulex.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennKyou/hakulex.git",
+    "directory": "packages/plugin-agent"
+  },
+  "bugs": {
+    "url": "https://github.com/KennKyou/hakulex/issues"
+  },
+  "keywords": [
+    "hakulex",
+    "vue",
+    "vue3",
+    "lexical",
+    "rich-text-editor",
+    "wysiwyg",
+    "editor",
+    "plugin",
+    "ai",
+    "agent"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./style.css": "./src/styles.css"
+  },
+  "main": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev:build": "vite build --watch"
+  },
+  "peerDependencies": {
+    "lexical": "^0.53.0",
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@hakulex/agent-core": "workspace:*",
+    "@hakulex/diff-core": "workspace:*",
+    "@hakulex/editor": "workspace:*",
+    "@hakulex/plugin-block-id": "workspace:*",
+    "@hakulex/renderer": "workspace:*",
+    "@hakulex/vue-lexical": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs"
+      },
+      "./style.css": "./dist/style.css"
+    },
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
+  "devDependencies": {}
+}

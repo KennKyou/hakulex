@@ -1,0 +1,176 @@
+/*
+ * What an agent proposes, drawn as part of the page: revisions in a layer over the editor,
+ * marks on the blocks they are about, and the bar that counts them. In the editor's tokens,
+ * so the dark scheme and a site's own theme apply.
+ */
+.hlx-editor .hlx-agent-layer {
+  position: absolute;
+  inset: 0;
+  /* Only the answers take the pointer: the document under the layer stays clickable. */
+  pointer-events: none;
+}
+
+.hlx-agent-card {
+  position: absolute;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-sizing: border-box;
+  color: var(--hlx-color-text);
+}
+
+/* A merged replacement stands where its block was, so it has to stop clicks from reaching it. */
+.hlx-agent-card[data-mode='inline'] {
+  pointer-events: auto;
+}
+
+.hlx-agent-card[data-current],
+.hlx-agent-card:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid var(--hlx-color-ring);
+  outline-offset: 4px;
+}
+
+.hlx-agent-card:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.hlx-agent-card-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* The proposed blocks start and end flush with their place, whatever their own spacing is. */
+.hlx-agent-card .hlx-agent-card-body > :first-child {
+  margin-top: 0;
+}
+
+.hlx-agent-card .hlx-agent-card-body > :last-child {
+  margin-bottom: 0;
+}
+
+/*
+ * New blocks, and a new block shown under the one it would replace: marked as coming. Text is
+ * marked around the words, as the marks inside a paragraph are; anything else (a table, an
+ * image, code) keeps its own look and gets a line around it.
+ */
+.hlx-agent-card[data-mode='insert'] .hlx-agent-card-body > *,
+.hlx-agent-card[data-mode='stack'] .hlx-agent-card-body > * {
+  border-radius: 2px;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--hlx-color-alert-tip) 45%, transparent);
+}
+
+.hlx-agent-card[data-mode='insert'] .hlx-agent-card-body > :is(.hlx-paragraph, .hlx-heading, .hlx-quote),
+.hlx-agent-card[data-mode='stack'] .hlx-agent-card-body > :is(.hlx-paragraph, .hlx-heading, .hlx-quote) {
+  width: fit-content;
+  max-width: 100%;
+  background: color-mix(in srgb, var(--hlx-color-alert-tip) 22%, transparent);
+  box-shadow: none;
+}
+
+.hlx-agent-card-title {
+  margin: 0 0 4px;
+  color: var(--hlx-color-text-secondary);
+  font-family: var(--hlx-font-sans);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.hlx-agent-card-actions,
+.hlx-agent-bar-actions {
+  display: flex;
+  flex: none;
+  gap: 4px;
+  pointer-events: auto;
+}
+
+/* A deletion's answers sit on the block itself, clear of its text. */
+.hlx-agent-card[data-mode='delete'] {
+  justify-content: flex-end;
+}
+
+.hlx-agent-button {
+  padding: 2px 10px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 6px;
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  font: inherit;
+  font-family: var(--hlx-font-sans);
+  font-size: 12px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.hlx-agent-button[data-icon] {
+  width: 26px;
+  padding: 2px 0;
+  text-align: center;
+}
+
+.hlx-agent-button:hover:not(:disabled) {
+  background: var(--hlx-color-fill-tertiary);
+}
+
+.hlx-agent-button:focus-visible {
+  outline: 2px solid var(--hlx-color-ring);
+  outline-offset: 1px;
+}
+
+.hlx-agent-button:disabled {
+  color: var(--hlx-color-text-quaternary);
+  cursor: default;
+}
+
+.hlx-agent-button[data-primary]:not(:disabled) {
+  border-color: var(--hlx-color-text);
+  background: var(--hlx-color-text);
+  color: var(--hlx-color-bg);
+}
+
+/*
+ * A block that would go, removed or replaced by the one shown under it: struck through, as the
+ * words taken out of a paragraph are. What isn't text gets a line around it as well, since a
+ * tint behind an image or a table hardly shows.
+ */
+.hlx-content > [data-agent-change='delete'],
+.hlx-content > [data-agent-change='replace'] {
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--hlx-color-alert-caution) 22%, transparent);
+  text-decoration: line-through;
+}
+
+.hlx-content > [data-agent-change='delete']:not(.hlx-paragraph, .hlx-heading, .hlx-quote),
+.hlx-content > [data-agent-change='replace']:not(.hlx-paragraph, .hlx-heading, .hlx-quote) {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--hlx-color-alert-caution) 45%, transparent);
+}
+
+/* A block the user edited after the change was proposed: theirs, and left readable. */
+.hlx-content > [data-agent-change='conflict'] {
+  box-shadow: -3px 0 0 0 var(--hlx-color-alert-warning);
+}
+
+.hlx-agent-card[data-state='conflict'] {
+  padding-inline-start: 12px;
+  box-shadow: inset 3px 0 0 0 var(--hlx-color-alert-warning);
+}
+
+.hlx-agent-bar {
+  position: sticky;
+  z-index: 5;
+  bottom: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: var(--hlx-chrome-radius-lg);
+  background: var(--hlx-color-bg-elevated);
+  box-shadow: var(--hlx-chrome-shadow-popup);
+  color: var(--hlx-color-text);
+  font-family: var(--hlx-font-sans);
+  font-size: 13px;
+  line-height: 20px;
+}

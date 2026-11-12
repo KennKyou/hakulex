@@ -140,6 +140,16 @@ export const packages: PackageEntry[] = [
     hint: '每個區塊右邊是它的編號。按 Enter 新增一段會出現新的編號；修改文字或改成標題，編號不變。',
     props: [],
   }),
+  plugin({
+    id: 'agent',
+    label: 'AI 審查',
+    description: '把 AI 提議的修改顯示在它要改的區塊旁邊，逐項接受或拒絕。這裡的 AI 是照劇本回應的，沒有連到任何服務。',
+    hint: '按「讓 AI 修改」，文件裡會出現四項提議：劃掉的是要拿掉的字，標綠的是新加的。按 ✓ 接受、✕ 拒絕；接受的會寫進文件，按復原可以退回。有提議的段落要先回答才能再編輯。',
+    props: [
+      { name: 'agent', type: 'AgentController', description: '用 useAgent 建立的 agent。聊天介面拿的也是同一個。' },
+      { name: 'bar', type: 'boolean', description: '是否顯示下方的審查列，預設顯示。' },
+    ],
+  }),
 
   pack({
     id: 'editor',

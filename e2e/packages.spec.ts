@@ -175,7 +175,7 @@ test.describe('a page', () => {
 test.describe('the navigation', () => {
   test('reaches each overview and page from inside its section, and marks the current one', async ({ page }) => {
     for (const [kind, path, last] of [
-      ['plugin', '/plugins/table', '/plugins/block-id'],
+      ['plugin', '/plugins/table', '/plugins/agent'],
       ['package', '/packages/vue-lexical', '/packages/vue-lexical'],
     ] as const) {
       await page.goto(path)
@@ -345,6 +345,7 @@ test.describe('every page', () => {
     'image-editor',
     'litexml-paste',
     'block-id',
+    'agent',
     'editor',
     'renderer',
     'diff',
