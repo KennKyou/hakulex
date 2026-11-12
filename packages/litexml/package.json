@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/litexml",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Convert hakulex documents to and from LiteXML, a compact XML format for documents",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

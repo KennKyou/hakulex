@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/diff",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Show what changed between two hakulex documents, side by side or in one column",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

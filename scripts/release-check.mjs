@@ -150,6 +150,8 @@ writeFileSync(join(app, 'src/main.ts'), [
   'import \'@hakulex/editor/style.css\'',
   'import \'@hakulex/plugin-toolbar/style.css\'',
   'import \'@hakulex/plugin-slash-menu/style.css\'',
+  'import \'@hakulex/plugin-agent/style.css\'',
+  'import \'@hakulex/agent-chat/style.css\'',
   'import \'@hakulex/diff/style.css\'',
   'import { createApp } from \'vue\'',
   'import App from \'./App.vue\'',
@@ -159,14 +161,19 @@ writeFileSync(join(app, 'src/main.ts'), [
 ].join('\n'))
 writeFileSync(join(app, 'src/App.vue'), `<script setup lang="ts">
 import type { SerializedEditorState } from 'lexical'
+import { AgentChat } from '@hakulex/agent-chat'
+import { scriptedModel } from '@hakulex/agent-core'
 import { RichDiff } from '@hakulex/diff'
 import { RichEditor, validateUrl } from '@hakulex/editor'
+import { AgentPlugin, useAgent } from '@hakulex/plugin-agent'
+import { BlockIdPlugin } from '@hakulex/plugin-block-id'
 import { SlashMenuPlugin } from '@hakulex/plugin-slash-menu'
 import { ToolbarPlugin } from '@hakulex/plugin-toolbar'
 import { RichRenderer } from '@hakulex/renderer'
 import { shallowRef } from 'vue'
 
 const doc = shallowRef<SerializedEditorState | null>(null)
+const agent = useAgent({ model: scriptedModel([[{ text: 'Nothing to change.' }]]) })
 </script>
 
 <template>
@@ -175,13 +182,17 @@ const doc = shallowRef<SerializedEditorState | null>(null)
       <ToolbarPlugin :validate-url="validateUrl" />
     </template>
     <SlashMenuPlugin />
+    <BlockIdPlugin />
+    <AgentPlugin :agent="agent" />
   </RichEditor>
+  <AgentChat :agent="agent" :suggestions="['Make it shorter']" color-scheme="light" />
   <RichRenderer :value="doc" />
   <RichDiff v-if="doc" :old-value="doc" :new-value="doc" layout="inline" />
 </template>
 `)
 // Plain Node, no bundler: what a server does with a stored document.
-writeFileSync(join(app, 'ssr.mjs'), `import { $toMarkdown, allHeadlessNodes } from '@hakulex/headless'
+writeFileSync(join(app, 'ssr.mjs'), `import { createAgent, ensureBlockIds, scriptedModel } from '@hakulex/agent-core'
+import { $toMarkdown, allHeadlessNodes } from '@hakulex/headless'
 import { createDefaultRegistry, deserializeFromXml, serializeToXml } from '@hakulex/litexml'
 import { RichRenderer } from '@hakulex/renderer'
 import { createHeadlessEditor } from '@lexical/headless'
@@ -210,7 +221,26 @@ const markdown = editor.parseEditorState(JSON.stringify(doc)).read(() => $toMark
 if (!markdown.includes('## Release check'))
   throw new Error(\`unexpected Markdown: \${markdown}\`)
 
-console.log(\`html \${html.length} chars, xml \${xml.length} chars, markdown \${markdown.length} chars\`)
+// The agent core has no Vue and no browser in it: a whole turn, here, with a model that answers from a script.
+let held = ensureBlockIds(doc)
+const second = held.root.children[1].$.blockId
+const agent = createAgent({
+  getDocument: () => held,
+  model: scriptedModel([
+    [{ tool: 'replace_block', input: { blockId: second, xml: '<p>Proposed in Node.</p>' } }],
+    [{ text: 'One edit.' }],
+  ]),
+})
+await agent.send('Change the second block.')
+const state = agent.getState()
+if (state.status !== 'idle' || agent.items().length !== 1)
+  throw new Error(\`the agent ended \${state.status} (\${state.error ?? 'no error'}) with \${agent.items().length} items\`)
+const accepted = agent.acceptAll()
+if (!accepted.ok || !JSON.stringify(accepted.document).includes('Proposed in Node.'))
+  throw new Error(\`accepting failed: \${accepted.reason}\`)
+held = accepted.document
+
+console.log(\`html \${html.length} chars, xml \${xml.length} chars, markdown \${markdown.length} chars, agent 1 edit accepted\`)
 `)
 
 let installed = false
@@ -231,13 +261,15 @@ if (installed) {
       'toolbar plugin': '.hlx-fixed-toolbar-button',
       'slash menu plugin': '.hlx-slash-item',
       'comparison': '.hlx-diff',
+      'review plugin': '.hlx-agent-card',
+      'chat panel': '.hlx-chat-list',
     }
     const missing = Object.entries(wanted).filter(([, needle]) => !css.includes(needle)).map(([name]) => name)
     must(missing.length === 0, `the built CSS has nothing from: ${missing.join(', ')}`)
     return `${Math.round(css.length / 1024)} kB of CSS`
   })
 
-  step('server: rendering, LiteXML and Markdown run in plain Node', () => run('node', ['ssr.mjs'], app).trim())
+  step('server: rendering, LiteXML, Markdown and an agent turn run in plain Node', () => run('node', ['ssr.mjs'], app).trim())
 
   step('types: vue-tsc in strict mode', () => {
     run('pnpm', [

@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/agent-core",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "AI agent core for hakulex: how a model sees a document, proposes edits to it and has them reviewed, without any UI",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

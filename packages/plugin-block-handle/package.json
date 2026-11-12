@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/plugin-block-handle",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Block handle plugin for hakulex: drag, move, duplicate and turn blocks",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",
