@@ -409,3 +409,34 @@ describe('what it shares with code blocks', () => {
     expect(toggle().exists()).toBe(false)
   })
 })
+
+describe('when highlighting arrives', () => {
+  it('colors each line in place: the line elements are the ones already there', async () => {
+    const wrapper = mounted([
+      file('a.ts', 'const a = 1\n\nreturn a', {
+        highlightLines: [3],
+      }),
+    ])
+    const pre = wrapper.find('pre')
+    expect(pre.attributes('data-highlighted')).toBeUndefined()
+    const before = [
+      ...pre.element.querySelectorAll('.hlx-code-line'),
+    ]
+    expect(before).toHaveLength(3)
+
+    await vi.waitFor(async () => {
+      await flushPromises()
+      expect(wrapper.find('pre').attributes('data-highlighted')).toBe('')
+    }, { timeout: 10_000 })
+
+    const after = [
+      ...pre.element.querySelectorAll('.hlx-code-line'),
+    ]
+    // A press that began on a line still ends on it, so the click it makes isn't lost.
+    expect(after).toHaveLength(3)
+    after.forEach((line, index) => expect(line, `line ${index + 1}`).toBe(before[index]))
+    expect(after[0].querySelector('span[style]')).not.toBeNull()
+    expect(after.map(line => line.hasAttribute('data-highlight'))).toEqual([false, false, true])
+    expect(pre.element.textContent).toBe('const a = 1\n\nreturn a')
+  })
+})

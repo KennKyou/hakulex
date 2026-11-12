@@ -418,3 +418,29 @@ test('works inside a step', async ({ page }) => {
   await page.keyboard.press('ControlOrMeta+Z')
   await expect(page.locator('.hlx-step-content .hlx-snippet')).toHaveCount(0)
 })
+
+test('a click that spans the arrival of the colors still picks the block', async ({ page }) => {
+  // Hold the highlighter back, so the code stays plain until it is let through.
+  let letThrough = () => {}
+  const held = new Promise<void>(resolve => (letThrough = resolve))
+  await page.route(/\/code\/highlight(\.ts)?(\?|$)/, async (route) => {
+    await held
+    await route.continue()
+  })
+  await page.locator('details.dev-documents').evaluate((element: HTMLDetailsElement) => {
+    element.open = true
+  })
+  await page.getByRole('button', { name: '載入程式碼片段、圖庫和對話' }).click()
+  const body = block(page).locator('.hlx-code-body:visible')
+  await expect(body.locator('.hlx-code-line')).not.toHaveCount(0)
+  await expect(body).not.toHaveAttribute('data-highlighted')
+
+  const box = (await body.boundingBox())!
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
+  await page.mouse.down()
+  letThrough()
+  await expect(body).toHaveAttribute('data-highlighted', '')
+  await page.mouse.up()
+
+  await expect(page.locator('.hlx-block-toolbar').getByRole('button', { name: '編輯' })).toBeVisible()
+})
