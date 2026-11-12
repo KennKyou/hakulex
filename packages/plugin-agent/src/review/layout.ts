@@ -45,7 +45,10 @@ function merged(before: SerializedLexicalNode, after: SerializedLexicalNode): Se
     return null
   // Plain runs of text are compared letter by letter over the whole block. With links and the
   // like inside, the comparison goes node by node, and gives up when it can't mark the change.
+  // A block rewritten so much that it would not read as one is not merged at all.
   const letters = mergeText(before, after)
+  if (letters === 'apart')
+    return null
   if (letters)
     return letters
   const blocks = computeInlineDiff(documentOf([before]), documentOf([after]))

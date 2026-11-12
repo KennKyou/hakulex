@@ -40,8 +40,8 @@ function read(node: SerializedLexicalNode | null) {
 
 describe('mergeText', () => {
   it('keeps what both have once, strikes what went and marks what came', () => {
-    const merged = mergeText(paragraph(text('這篇是草稿，週五前要改完。')), paragraph(text('這篇已經定稿，今天就能發布。')))
-    expect(read(merged).join('|')).toBe('=這篇|-是草|+已經定|=稿，|-週五前要改完|+今天就能發布|=。')
+    const merged = mergeText(paragraph(text('這篇文章是草稿，預計週五前改完。')), paragraph(text('這篇文章是初稿，預計週四前改完。')))
+    expect(read(merged).join('|')).toBe('=這篇文章是|-草|+初|=稿，預計週|-五|+四|=前改完。')
     expect((merged as Json).$).toEqual({ blockId: 'b' })
   })
 
@@ -90,5 +90,57 @@ describe('mergeText', () => {
     }
     expect(mergeText(paragraph(text('前'), link), paragraph(text('後'), link))).toBeNull()
     expect(mergeText(paragraph(text('a'.repeat(4001))), paragraph(text('b')))).toBeNull()
+  })
+})
+
+const LONG = '大家好，首先非常感謝各位一直以來對讀書會的支持與參與，在這邊想要跟大家宣布一個消息，那就是我們預計將會在十二月的時候舉辦今年度的最後一場讀書會活動。'
+const CUT = '大家好，我們預計在十二月舉辦今年最後一場讀書會。'
+
+describe('mergeText, kept readable', () => {
+  const pieces = (node: SerializedLexicalNode | null | 'apart', sign: string) =>
+    read(node as SerializedLexicalNode).filter((piece: string) => piece.startsWith(sign)).map((piece: string) => piece.slice(1)).join('')
+
+  it('shows words that were only cut as strike-throughs, with nothing marked as new', () => {
+    const merged = mergeText(paragraph(text(LONG)), paragraph(text(CUT)))
+    expect(merged).not.toBe('apart')
+    expect(pieces(merged, '+')).toBe('')
+    expect(pieces(merged, '=')).toBe(CUT)
+    expect(read(merged as SerializedLexicalNode).map((piece: string) => piece.slice(1)).join('')).toBe(LONG)
+    // Short shared pieces between two cuts stay as they are: nothing is struck and put back.
+    expect(read(mergeText(paragraph(text('大家一起來聊一聊')), paragraph(text('大家一起聊聊'))))).toEqual(['=大家一起', '-來', '=聊', '-一', '=聊'])
+  })
+
+  it('shows words that were only added as marked, with nothing struck', () => {
+    const merged = mergeText(paragraph(text(CUT)), paragraph(text(LONG)))
+    expect(merged).not.toBe('apart')
+    expect(pieces(merged, '-')).toBe('')
+    expect(pieces(merged, '=')).toBe(CUT)
+  })
+
+  it('takes a stray shared letter between two changes into the change: old words, then new ones', () => {
+    const merged = mergeText(
+      paragraph(text('感謝各位一直以來對讀書會的支持，我們很高興。')),
+      paragraph(text('感謝各位今年最後一場讀書會的支持，我們很高興。')),
+    )
+    expect(read(merged as SerializedLexicalNode).join('|')).toBe('=感謝各位|-一直以來對|+今年最後一場|=讀書會的支持，我們很高興。')
+  })
+
+  it('puts what went before what came where several changes run together', () => {
+    const merged = mergeText(paragraph(text('我們預計將會在下個月的時候舉辦活動。')), paragraph(text('我們決定於十二月初舉辦活動。')))
+    const signs = read(merged as SerializedLexicalNode).map((piece: string) => piece[0]).join('')
+    expect(signs).not.toMatch(/\+-/)
+  })
+
+  it('says a block that was mostly rewritten is to be shown apart, not merged', () => {
+    expect(mergeText(paragraph(text(LONG)), paragraph(text('大家好，今年最後一場讀書會將在十二月舉辦。')))).toBe('apart')
+    expect(mergeText(paragraph(text('這篇是草稿，週五前要改完。')), paragraph(text('完全不同的另一句話，沒有關係。')))).toBe('apart')
+    // A fifth of the letters shared is still read as one; less is not.
+    expect(mergeText(paragraph(text('甲乙丙丁戊己庚辛壬癸')), paragraph(text('甲乙子丑寅卯辰巳午未')))).not.toBe('apart')
+    expect(mergeText(paragraph(text('甲乙丙丁戊己庚辛壬癸')), paragraph(text('甲丑子丑寅卯辰巳午未')))).toBe('apart')
+    // A short sentence with new words in the middle reads well merged.
+    expect(read(mergeText(paragraph(text('這篇是草稿，週五前要改完。')), paragraph(text('這篇已經定稿，今天就能發布。'))) as SerializedLexicalNode).join('|'))
+      .toBe('=這篇|-是草稿，週五前要改完|+已經定稿，今天就能發布|=。')
+    // Cutting or adding a lot is not rewriting: it stays one block.
+    expect(read(mergeText(paragraph(text('留下這句。其餘的字全部都要刪掉不留。')), paragraph(text('留下這句。'))) as SerializedLexicalNode)).toEqual(['=留下這句。', '-其餘的字全部都要刪掉不留。'])
   })
 })
