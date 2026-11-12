@@ -41,6 +41,8 @@ const spaced = {
   marginBottom: new Set<HTMLElement>(),
 }
 const marked = new Set<HTMLElement>()
+/** Each block's own margins as last measured, with what they were measured under. */
+const naturals = new WeakMap<HTMLElement, { key: string, marginTop?: number, marginBottom?: number }>()
 const covered = new Set<HTMLElement>()
 const observer = typeof ResizeObserver === 'undefined'
   ? null
@@ -152,10 +154,31 @@ function layout() {
     marginBottom: new Map<HTMLElement, number>(),
   }
   const above = below.get(START) ?? []
-  /** A block's own margin on one side, without what this layer has put there. */
+  /**
+   * A block's own margin on one side, without what this layer has put there. Measuring it means
+   * taking this layer's margin off for a moment, which moves the page, and a browser that keeps
+   * the reader's place while the page moves (scroll anchoring) gives up after a few of those. So
+   * it is measured once, and again only when it may have changed: another kind of block, another
+   * class, or another place at the start or the end.
+   */
   const natural = (element: HTMLElement, side: 'marginTop' | 'marginBottom') => {
-    element.style[side] = ''
-    return Number.parseFloat(getComputedStyle(element)[side]) || 0
+    const key = [
+      element.tagName,
+      element.className,
+      element === root.firstElementChild,
+      element === root.lastElementChild,
+    ].join(' ')
+    let known = naturals.get(element)
+    if (known?.key !== key) {
+      known = { key }
+      naturals.set(element, known)
+    }
+    if (known[side] === undefined) {
+      if (element.style[side] !== '')
+        element.style[side] = ''
+      known[side] = Number.parseFloat(getComputedStyle(element)[side]) || 0
+    }
+    return known[side]
   }
   // What goes above the first block is added to the space it already keeps above itself.
   const firstMargin = first && above.length > 0
@@ -184,8 +207,11 @@ function layout() {
         element.style[side] = ''
     }
     spaced[side] = new Set(wanted[side].keys())
-    for (const [element, size] of wanted[side])
-      element.style[side] = `${size}px`
+    // Only what differs is written: a style set again to what it was is still a change to the page.
+    for (const [element, size] of wanted[side]) {
+      if (element.style[side] !== `${size}px`)
+        element.style[side] = `${size}px`
+    }
   }
 
   // Then the cards, from where the blocks now are.

@@ -37,10 +37,6 @@ test.beforeEach(async ({ page }) => {
     // keyboard makes Lexical's development build print this. /editor does the same. The undo works.
     if (message.text().startsWith('updateEditorSync: an editor update'))
       return
-    // Known, from the review plugin: laying the cards out again clears and sets a block's margin
-    // to measure it, and with the page scrolled Firefox notes that it stopped anchoring the scroll.
-    if (message.text().includes('Scroll anchoring was disabled'))
-      return
     record.errors.push(message.text())
   })
   // Anything that tries to leave the page is stopped, and counted.

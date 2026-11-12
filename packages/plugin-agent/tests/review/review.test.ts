@@ -308,6 +308,58 @@ describe('the other kinds of item', () => {
     expect(blockElement(b).dataset.agentChange).toBeUndefined()
   })
 
+  it('leaves the blocks alone when it lays out again and nothing has moved', async () => {
+    const { editor } = await setup(retypeSecond)
+    const [, b] = ids(editor)
+    const kept = blockElement(b).style.marginBottom
+    expect(kept).toMatch(/px$/)
+
+    // Every write to a block's style, even one that is put back at once, moves the page for a moment.
+    const writes: MutationRecord[] = []
+    const watcher = new MutationObserver(records => writes.push(...records))
+    watcher.observe(root(), {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['style'],
+    })
+    // An update that changes no block: the layer lays out again all the same.
+    editor.update(() => {
+      $getRoot().getChildAtIndex(0)!.selectEnd()
+    }, { discrete: true })
+    await flushPromises()
+    editor.update(() => {
+      $getRoot().getChildAtIndex(0)!.selectStart()
+    }, { discrete: true })
+    await flushPromises()
+    writes.push(...watcher.takeRecords())
+    watcher.disconnect()
+
+    expect(writes).toEqual([])
+    expect(blockElement(b).style.marginBottom).toBe(kept)
+  })
+
+  it('measures a block\'s own margin again when the block is styled another way', async () => {
+    const sheet = document.createElement('style')
+    sheet.textContent = '.roomy { margin-bottom: 40px; }'
+    document.head.append(sheet)
+    try {
+      const { editor } = await setup(retypeSecond)
+      const [, b] = ids(editor)
+      const before = Number.parseFloat(blockElement(b).style.marginBottom)
+
+      blockElement(b).classList.add('roomy')
+      editor.update(() => {
+        $getRoot().getChildAtIndex(0)!.selectEnd()
+      }, { discrete: true })
+      await flushPromises()
+
+      expect(Number.parseFloat(blockElement(b).style.marginBottom)).toBe(before + 40)
+    }
+    finally {
+      sheet.remove()
+    }
+  })
+
   it('mark a block to be removed, and show new blocks where they would go', async () => {
     const { editor } = await setup(everyKind)
     const [a, b, c, d] = ids(editor)
