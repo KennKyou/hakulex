@@ -196,6 +196,17 @@ litexml post.json --input-format json --format html --theme dark -o post.html`,
     description: 'AI 協作的核心，不含畫面：模型怎麼看到文件、怎麼提出修改、修改怎麼逐項接受或拒絕。這裡用照劇本回應的模型跑一輪，印出得到的待審項目，沒有連到任何服務。',
   }),
   pack({
+    id: 'agent-chat',
+    description: '和 AI 討論文件的聊天面板：對話、AI 正在做的事和輸入框。這裡的 AI 是照劇本回應的，沒有連到任何服務。',
+    hint: '按面板裡一句建議的問法，回覆會逐段出現，提議的修改顯示在編輯器裡，按 ✓ 接受、✕ 拒絕。自己打別的話，會得到一則說明這是示範的回覆。在編輯器裡選取文字，它會出現在輸入框上方，跟著下一則訊息送出。',
+    props: [
+      { name: 'agent', type: 'AgentController', description: '用 useAgent 建立的 agent，和 AgentPlugin 拿的是同一個。' },
+      { name: 'placeholder', type: 'string', description: '輸入框空白時的提示，預設「輸入訊息」。' },
+      { name: 'suggestions', type: 'string[]', description: '對話還是空的時候顯示的幾句問法，按了就送出。' },
+      { name: 'colorScheme', type: '\'light\' | \'dark\'', description: '淺色或深色，預設淺色。面板在編輯器外面，要和編輯器各自設定。' },
+    ],
+  }),
+  pack({
     id: 'style-token',
     description: '設計 token、CSS 變數和各種排版的預設值，可以用 ThemeTokens 覆寫。',
   }),

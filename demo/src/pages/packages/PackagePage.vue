@@ -30,9 +30,10 @@ const example = examples[path]
 /*
  * The examples are written as they would be in an app, with no color scheme, and the page gives
  * them the site's. One whose template starts with an editor, a renderer or a comparison takes it
- * as its own setting; any other has nowhere to put it and follows the frame around it.
+ * as its own setting, and so does one that asks for it with a `colorScheme` prop; any other has
+ * nowhere to put it and follows the frame around it.
  */
-const takesScheme = /<template>\s*<(?:RichEditor|RichRenderer|RichDiff)\b/.test(sources[path] ?? '')
+const takesScheme = /<template>\s*<(?:RichEditor|RichRenderer|RichDiff)\b|defineProps<\{\s*colorScheme\b/.test(sources[path] ?? '')
 const exampleProps = computed(() => takesScheme
   ? { colorScheme: siteScheme.value }
   : {})

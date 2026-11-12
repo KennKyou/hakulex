@@ -1,0 +1,68 @@
+{
+  "name": "@hakulex/agent-chat",
+  "type": "module",
+  "version": "0.1.1",
+  "description": "Chat panel for hakulex: talk to an AI agent about the document in the editor, and follow what it does",
+  "author": "Ken (https://github.com/KennKyou)",
+  "license": "MIT",
+  "homepage": "https://hakulex.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennKyou/hakulex.git",
+    "directory": "packages/agent-chat"
+  },
+  "bugs": {
+    "url": "https://github.com/KennKyou/hakulex/issues"
+  },
+  "keywords": [
+    "hakulex",
+    "vue",
+    "vue3",
+    "rich-text-editor",
+    "editor",
+    "ai",
+    "agent",
+    "chat"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./style.css": "./src/styles.css"
+  },
+  "main": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev:build": "vite build --watch"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@hakulex/agent-core": "workspace:*",
+    "@hakulex/plugin-agent": "workspace:*",
+    "@hakulex/renderer": "workspace:*",
+    "@hakulex/style-token": "workspace:*",
+    "@lucide/vue": "^1.66.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs"
+      },
+      "./style.css": "./dist/style.css"
+    },
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.ts"
+  },
+  "devDependencies": {
+    "@hakulex/editor": "workspace:*",
+    "lexical": "^0.53.0"
+  }
+}

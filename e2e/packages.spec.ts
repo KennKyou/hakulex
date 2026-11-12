@@ -354,6 +354,7 @@ test.describe('every page', () => {
     'litexml-cli',
     'headless',
     'agent-core',
+    'agent-chat',
     'style-token',
     'vue-lexical',
   ]

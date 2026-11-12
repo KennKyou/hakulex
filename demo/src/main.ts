@@ -15,6 +15,7 @@ import '@hakulex/plugin-block-handle/style.css'
 import '@hakulex/plugin-table/style.css'
 import '@hakulex/plugin-image-editor/style.css'
 import '@hakulex/plugin-agent/style.css'
+import '@hakulex/agent-chat/style.css'
 import '@hakulex/diff/style.css'
 
 import { createApp } from 'vue'

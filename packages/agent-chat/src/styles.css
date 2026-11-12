@@ -1,0 +1,360 @@
+/*
+ * The chat with an agent. It fills the box it is put in; only the list of messages scrolls.
+ * In the editor's tokens, so the dark scheme and a site's own theme apply.
+ */
+.hlx-chat {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  color: var(--hlx-color-text);
+  font-family: var(--hlx-font-sans);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.hlx-chat-body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.hlx-chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 14px 14px 8px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.hlx-chat-list:focus-visible {
+  outline: 2px solid var(--hlx-color-ring);
+  outline-offset: -2px;
+}
+
+/* The start of a conversation sits at the bottom, by the input. */
+.hlx-chat-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.hlx-chat-empty p {
+  margin: 0 0 4px;
+  color: var(--hlx-color-text-secondary);
+  font-size: 13px;
+}
+
+.hlx-chat-suggestion {
+  padding: 7px 10px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--hlx-color-text);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: start;
+  cursor: pointer;
+}
+
+.hlx-chat-suggestion:hover:not(:disabled) {
+  background: var(--hlx-color-fill-tertiary);
+}
+
+.hlx-chat-suggestion:disabled {
+  color: var(--hlx-color-text-quaternary);
+  cursor: default;
+}
+
+.hlx-chat-message {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* What the reader wrote stands apart; what the agent says reads as plain text. */
+.hlx-chat-message[data-role='user'] {
+  align-self: flex-end;
+  max-width: 85%;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: var(--hlx-color-fill-tertiary);
+  white-space: pre-wrap;
+}
+
+.hlx-chat-text > :first-child {
+  margin-top: 0;
+}
+
+.hlx-chat-text > :last-child {
+  margin-bottom: 0;
+}
+
+.hlx-chat-text p,
+.hlx-chat-text ul,
+.hlx-chat-text ol,
+.hlx-chat-text pre {
+  margin: 0 0 6px;
+}
+
+.hlx-chat-text ul,
+.hlx-chat-text ol {
+  padding-inline-start: 20px;
+}
+
+.hlx-chat-text code {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--hlx-color-code-bg);
+  font-family: var(--hlx-font-mono);
+  font-size: 0.9em;
+}
+
+/* A wide table or a long line of code scrolls by itself, not the whole panel. */
+.hlx-chat-text pre,
+.hlx-chat-text table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.hlx-chat-text pre code {
+  padding: 0;
+  background: none;
+}
+
+.hlx-chat-text a {
+  color: var(--hlx-color-link);
+}
+
+/* The small lines around a reply: its thinking, what it did, how it ended. */
+.hlx-chat-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 0;
+  color: var(--hlx-color-text-tertiary);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.hlx-chat-step[data-state='failed'] {
+  color: var(--hlx-color-alert-caution);
+}
+
+.hlx-chat-icon {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.hlx-chat-icon[data-open] {
+  transform: rotate(90deg);
+}
+
+.hlx-chat-spin {
+  animation: hlx-chat-spin 1s linear infinite;
+}
+
+@keyframes hlx-chat-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hlx-chat-spin {
+    animation: none;
+  }
+}
+
+.hlx-chat-thinking-toggle {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.hlx-chat-thinking-toggle:hover {
+  color: var(--hlx-color-text-secondary);
+}
+
+.hlx-chat-thinking {
+  margin: 2px 0 6px;
+  padding-inline-start: 10px;
+  border-inline-start: 2px solid var(--hlx-color-border);
+  color: var(--hlx-color-text-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.hlx-chat-error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  color: var(--hlx-color-alert-caution);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.hlx-chat-button {
+  padding: 1px 10px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 6px;
+  background: var(--hlx-color-bg);
+  color: var(--hlx-color-text);
+  font: inherit;
+  font-size: 12px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.hlx-chat-button:hover {
+  background: var(--hlx-color-fill-tertiary);
+}
+
+.hlx-chat-jump {
+  position: absolute;
+  right: 12px;
+  bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 999px;
+  background: var(--hlx-color-bg-elevated);
+  box-shadow: var(--hlx-chrome-shadow-popup);
+  color: var(--hlx-color-text);
+  cursor: pointer;
+}
+
+.hlx-chat-box {
+  flex: none;
+  margin: 6px 10px 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--hlx-color-border);
+  border-radius: 12px;
+  background: var(--hlx-color-bg);
+}
+
+.hlx-chat-box:focus-within {
+  border-color: var(--hlx-color-ring);
+}
+
+.hlx-chat-note {
+  margin: 0 0 6px;
+  color: var(--hlx-color-text-tertiary);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.hlx-chat-selection {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  max-width: 100%;
+  margin-bottom: 6px;
+  padding: 2px 4px 2px 10px;
+  border-radius: 999px;
+  background: var(--hlx-color-fill-tertiary);
+  color: var(--hlx-color-text-secondary);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.hlx-chat-selection-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hlx-chat-selection-remove {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.hlx-chat-selection-remove:hover {
+  background: var(--hlx-color-fill-secondary);
+}
+
+.hlx-chat-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.hlx-chat-input {
+  flex: 1;
+  min-width: 0;
+  max-height: 160px;
+  padding: 3px 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  line-height: 22px;
+  resize: none;
+}
+
+.hlx-chat-input::placeholder {
+  color: var(--hlx-color-text-quaternary);
+}
+
+.hlx-chat-send {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--hlx-color-text);
+  color: var(--hlx-color-bg);
+  cursor: pointer;
+}
+
+.hlx-chat-send:disabled {
+  background: var(--hlx-color-fill-secondary);
+  color: var(--hlx-color-text-quaternary);
+  cursor: default;
+}
+
+.hlx-chat :is(button, .hlx-chat-input):focus-visible {
+  outline: 2px solid var(--hlx-color-ring);
+  outline-offset: 2px;
+}
+
+.hlx-chat-input:focus-visible {
+  outline: none;
+}
