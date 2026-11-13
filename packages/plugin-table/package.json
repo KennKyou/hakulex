@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/plugin-table",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Table row and column handles plugin for hakulex",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

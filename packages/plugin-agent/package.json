@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/plugin-agent",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "AI review plugin for hakulex: edits a model proposes show beside the blocks they change, to accept or reject one by one",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

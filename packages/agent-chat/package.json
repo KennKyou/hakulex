@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/agent-chat",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Chat panel for hakulex: talk to an AI agent about the document in the editor, and follow what it does",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

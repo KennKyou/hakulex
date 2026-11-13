@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/plugin-floating-toolbar",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Floating format toolbar plugin for hakulex",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

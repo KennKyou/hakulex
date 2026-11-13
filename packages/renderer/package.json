@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/renderer",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "SSR-safe read-only renderer for hakulex (Lexical JSON → Vue), no Lexical runtime",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

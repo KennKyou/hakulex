@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/diff-core",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Compare two hakulex documents: aligned blocks, character marks and change counts",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",
