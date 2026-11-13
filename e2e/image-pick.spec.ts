@@ -186,3 +186,37 @@ test('without addresses, the dialog, gallery and panel offer none to type', asyn
   await expect(panel(page).locator('[name="src"]')).toHaveValue('https://picsum.photos/id/1015/800/600')
   await expect(panel(page).getByText('選擇檔案替換…')).toBeVisible()
 })
+
+test('the demo library follows the site\'s scheme, and switches with it', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' })
+  await slash(page, '/image')
+  await imageDialog(page).getByRole('button', { name: '選擇圖片' }).click()
+  await picker(page).getByRole('button', { name: '河谷' }).click()
+  /** How light the panel, its text and the chosen picture's border are, from 0 to 1. */
+  const looks = () => picker(page).evaluate((panel) => {
+    const lightness = (color: string) => {
+      const [r, g, b] = color.match(/[\d.]+/g)!.map(Number)
+      return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255
+    }
+    const style = getComputedStyle(panel)
+    const chosen = getComputedStyle(panel.querySelector('[aria-pressed="true"]')!)
+    return {
+      background: lightness(style.backgroundColor),
+      text: lightness(style.color),
+      chosen: chosen.borderTopColor,
+      border: style.borderTopColor,
+    }
+  })
+  const light = await looks()
+  expect(light.background).toBeGreaterThan(0.8)
+  expect(light.text).toBeLessThan(0.3)
+
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await expect.poll(async () => (await looks()).background).toBeLessThan(0.3)
+  const dark = await looks()
+  expect(dark.text).toBeGreaterThan(0.7)
+  expect(dark.border).not.toBe(light.border)
+  // The chosen one stands out in both.
+  expect(dark.chosen).not.toBe(dark.border)
+  expect(light.chosen).not.toBe(light.border)
+})
