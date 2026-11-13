@@ -114,7 +114,16 @@ const pickImages: PickImages = async ({ multiple, signal }) => {
 
 ### 不提供網址輸入 `allowImageUrl`
 
-預設作者也可以輸入圖片網址。如果你的網站要求每張圖片都有 `fileId`（網址輸入的圖片沒有），設成 `false`：插入圖片的對話框和圖庫都不再提供網址輸入，圖片面板只顯示目前的網址、不能修改，圖片只能上傳或用 `pickImages` 選。
+預設作者也可以輸入圖片網址。設成 `false` 時，插入圖片的對話框和圖庫都不再提供網址輸入，圖片面板只顯示目前的網址、不能修改。在這些地方，作者只能上傳圖片或用 `pickImages` 選。適合要求圖片都有 `fileId` 的網站（輸入網址加入的圖片沒有 `fileId`）。
+
+它只管這三個地方。下面這些方式仍然會加入沒有 `fileId` 的圖片：
+
+- 在編輯器裡打 Markdown 的 `![說明](網址)`，或貼上含有這種寫法的 Markdown。
+- 貼上從網頁複製的內容，裡面的 `<img>` 會變成圖片。
+- 用 [`@hakulex/plugin-litexml-paste`](https://hakulex.dev/plugins/litexml-paste) 貼上 LiteXML。
+- 讓 AI 用 [`@hakulex/agent-core`](https://hakulex.dev/packages/agent-core) 新增或改寫圖片。它不會讓圖片帶上對不上的 `fileId`，但不會擋掉沒有 `fileId` 的圖片。
+
+所以如果每張圖片都必須有 `fileId`，要在伺服器端儲存文件時檢查，沒有的就拒絕或另外處理。`allowImageUrl` 是讓作者在編輯器裡不容易誤加，不是保證。
 
 ```vue
 <RichEditor v-model="doc" :upload-image="uploadImage" :pick-images="pickImages" :allow-image-url="false" />

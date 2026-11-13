@@ -45,7 +45,9 @@ const props = withDefaults(defineProps<{
   pickImagesLabel?: string
   /**
    * Whether an image may be given by its address. Off, the image dialog and the gallery offer
-   * only uploads and `pickImages`, as for a site that needs every image to have a `fileId`.
+   * only uploads and `pickImages`, and an image's panel shows its address read-only, as for a
+   * site that wants images to have a `fileId`. Markdown, pasting and an AI agent can still add
+   * an image by its address: a site that needs every image to have one checks on its server.
    */
   allowImageUrl?: boolean
   /**
