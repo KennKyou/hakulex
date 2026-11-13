@@ -2,6 +2,7 @@ import type { LitexmlRegistry } from '@hakulex/litexml'
 import type { AgentDocument, Block, Change, InsertChange, Proposal, ToolCall, ToolCallOptions, ToolCallResult, ToolDefinition } from './types'
 import { checkXml, deserializeNodesFromXml } from '@hakulex/litexml'
 import { createBlockId, same, withId } from './blocks'
+import { knownFileIds, withKnownFileIds } from './file-ids'
 import { stateOf, viewOf } from './state'
 import { blockToXml, registryOf } from './xml'
 
@@ -149,6 +150,17 @@ export function applyToolCall(document: AgentDocument, proposal: Proposal, call:
     ? viewOf(options.seen)
     : null
 
+  /** The blocks the model wrote, with a picture's file id kept only on the address it is known with. */
+  let droppedFileIds = 0
+  function written(xml: string): Block[] {
+    const guarded = withKnownFileIds(blocksFrom(xml, registry), knownFileIds(document, proposal))
+    droppedFileIds += guarded.dropped
+    return guarded.blocks
+  }
+  const fileIdNote = () => droppedFileIds > 0
+    ? ` ${droppedFileIds} file-id attribute(s) were left out: a file-id stays only on the picture it came with, at the same src.`
+    : ''
+
   /** A block of the document the model may change: there, not staged for deletion, and as the model saw it. */
   function target(id: string): Block {
     const block = view.byId.get(id)
@@ -259,7 +271,7 @@ export function applyToolCall(document: AgentDocument, proposal: Proposal, call:
       const position = args.position
       if (position !== 'after' && position !== 'before' && position !== 'start' && position !== 'end')
         throw new Refused('"position" has to be one of: after, before, start, end.')
-      const blocks = blocksFrom(text(args, 'xml'), registry)
+      const blocks = written(text(args, 'xml'))
       const where = position === 'start' || position === 'end'
         ? position
         : position === 'after'
@@ -270,12 +282,12 @@ export function applyToolCall(document: AgentDocument, proposal: Proposal, call:
               before: text(args, 'blockId'),
             }
       const result = add(blocks, where, proposal)
-      return { ok: true, proposal: result.proposal, content: `Proposed ${blocks.length} new block(s) with the ids ${result.ids.join(', ')}. ${STAGED}` }
+      return { ok: true, proposal: result.proposal, content: `Proposed ${blocks.length} new block(s) with the ids ${result.ids.join(', ')}. ${STAGED}${fileIdNote()}` }
     }
 
     if (call.name === 'replace_block') {
       const id = text(args, 'blockId')
-      const [first, ...rest] = blocksFrom(text(args, 'xml'), registry)
+      const [first, ...rest] = written(text(args, 'xml'))
       const inGap = staged(proposal, id)
       let next: Proposal
       if (inGap) {
@@ -312,7 +324,7 @@ export function applyToolCall(document: AgentDocument, proposal: Proposal, call:
         proposal: extra?.proposal ?? next,
         content: `Proposed new content for the block "${id}"${extra
           ? `, and ${rest.length} new block(s) after it with the ids ${extra.ids.join(', ')}`
-          : ''}. ${STAGED}`,
+          : ''}. ${STAGED}${fileIdNote()}`,
       }
     }
 

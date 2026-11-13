@@ -27,6 +27,12 @@ const xml = serializeToXml(article, createDefaultRegistry())
 </template>
 ```
 
+## 圖片的檔案編號
+
+圖片和圖庫裡的圖片如果有 `fileId`（應用程式自己的檔案編號，見 [`@hakulex/editor`](https://hakulex.dev/packages/editor) 的說明），會寫成 `img` 的 `file-id` 屬性，讀回來時還原成 `fileId`。空的屬性會被略過。
+
+讀取時不會檢查這個編號和 `src` 是不是原本的那一對：LiteXML 手上只有這一段文字，沒有可以比對的文件。讓模型改寫文件時，這項檢查由 [`@hakulex/agent-core`](https://hakulex.dev/packages/agent-core) 負責。
+
 ## 檢查
 
 `deserializeFromXml` 和 `deserializeNodesFromXml` 讀取時很寬鬆：格式有錯會盡量讀，不認得的標籤會略過，不會報錯。要知道一段 LiteXML 哪裡寫錯（例如檢查程式或模型產生的內容），用 `checkXml`：

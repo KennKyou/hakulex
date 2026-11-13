@@ -33,6 +33,7 @@ The xml you pass to a tool holds block elements only, never a whole <doc>. It is
 - Never use Markdown in the xml you pass to a tool. **bold**, # heading, - item and [text](url) would be inserted as those literal characters. Write <b>bold</b>, <h2>heading</h2>, <ul><li><p>item</p></li></ul> and <a href="url">text</a>.
 - Write &lt; for <, &amp; for & and &gt; for > in text. Close every element. Put attribute values in double quotes.
 - Do not write id attributes: ids are assigned for you.
+- A file-id on <img> is the application's own name for that stored picture. Keep it exactly as it is while the src stays the same, leave it out when you change the src, and never write one of your own. One that does not match is left out for you.
 
 ## How to answer
 
