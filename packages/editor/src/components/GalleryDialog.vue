@@ -65,6 +65,7 @@ function toStored({ source, src, alt }: Row) {
     delete rest.width
     delete rest.height
     delete rest.thumbhash
+    delete rest.fileId
   }
   return {
     src: trimmed,
@@ -144,6 +145,10 @@ async function onFiles(event: Event) {
             : {}),
           ...(item.value.height
             ? { height: item.value.height }
+            : {}),
+          // Already checked by the upload: only a non-empty string comes through.
+          ...(item.value.fileId
+            ? { fileId: item.value.fileId }
             : {}),
         }),
       ]

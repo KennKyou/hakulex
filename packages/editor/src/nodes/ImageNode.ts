@@ -12,6 +12,7 @@ import { imageLayoutAttrs, isSafeImageSrc, normalizeCaption, normalizeDisplayWid
 import { vueDecorator } from '@hakulex/vue-lexical'
 import { $applyNodeReplacement, createCommand, DecoratorNode } from 'lexical'
 import ImageEditor from '../components/ImageEditor.vue'
+import { isFileId } from '../image/types'
 
 export type SerializedImageNode = Spread<{
   src: string
@@ -23,12 +24,18 @@ export type SerializedImageNode = Spread<{
   thumbhash?: unknown
   accent?: unknown
   layout?: unknown
+  fileId?: unknown
 }, SerializedLexicalNode>
 
 /** Fields only stored: nothing here reads them, but they stay in the document. */
-const KEPT_FIELDS = ['thumbhash', 'accent', 'layout'] as const
+const KEPT_FIELDS = [
+  'thumbhash',
+  'accent',
+  'layout',
+  'fileId',
+] as const
 /** These describe the picture, so they don't outlive it. */
-const PICTURE_FIELDS: readonly string[] = ['thumbhash', 'accent']
+const PICTURE_FIELDS: readonly string[] = ['thumbhash', 'accent', 'fileId']
 
 /** The renderer's attributes for a layout, on a block that may have had others. */
 function applyLayout(block: HTMLElement, layout: unknown, displayWidth: number | undefined) {
@@ -73,7 +80,9 @@ export class ImageNode extends DecoratorNode<VueDecorator> {
   }
 
   static importJSON(serialized: SerializedImageNode): ImageNode {
-    const node = $createImageNode(serialized).updateFromJSON(serialized)
+    // Kept fields, `fileId` among them, are copied as they were just below.
+    const { fileId: _fileId, ...data } = serialized
+    const node = $createImageNode(data).updateFromJSON(serialized)
     for (const field of KEPT_FIELDS) {
       if (Object.hasOwn(serialized, field))
         node.__kept[field] = serialized[field]
@@ -202,7 +211,7 @@ export class ImageNode extends DecoratorNode<VueDecorator> {
     }
   }
 
-  setData({ src, altText, width, height, caption, displayWidth, layout }: ImageData): this {
+  setData({ src, altText, width, height, caption, displayWidth, layout, fileId }: ImageData): this {
     const writable = this.getWritable()
     const { layout: _layout, ...rest } = writable.__kept
     writable.__kept = {
@@ -212,6 +221,10 @@ export class ImageNode extends DecoratorNode<VueDecorator> {
       ...(layout === undefined
         ? {}
         : { layout }),
+      // A new picture brings its own id; without one, the old id went with the old picture.
+      ...(isFileId(fileId)
+        ? { fileId }
+        : {}),
     }
     writable.__src = src
     writable.__altText = altText
@@ -235,10 +248,16 @@ export class ImageNode extends DecoratorNode<VueDecorator> {
   }
 }
 
-export function $createImageNode({ src, altText, width, height, caption, displayWidth, layout }: ImageData): ImageNode {
+export function $createImageNode({ src, altText, width, height, caption, displayWidth, layout, fileId }: ImageData): ImageNode {
   const node = $applyNodeReplacement(new ImageNode(src, altText, width, height, caption, displayWidth))
-  if (layout !== undefined)
-    node.__kept = { layout }
+  node.__kept = {
+    ...(layout === undefined
+      ? {}
+      : { layout }),
+    ...(isFileId(fileId)
+      ? { fileId }
+      : {}),
+  }
   return node
 }
 

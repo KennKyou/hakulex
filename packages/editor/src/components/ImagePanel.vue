@@ -129,6 +129,7 @@ async function onFile(event: Event) {
       width: image.width,
       height: image.height,
       altText: props.data.altText || image.altText,
+      fileId: image.fileId,
     })
   }
   catch (cause) {

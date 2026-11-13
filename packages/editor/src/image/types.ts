@@ -9,6 +9,11 @@ export interface ImageData {
   displayWidth?: number
   /** As stored: it can hold what there's no look for, which is then shown as the default. */
   layout?: unknown
+  /**
+   * The application's own id for the stored file, from `uploadImage`. Only kept: it goes
+   * with this picture, so a new `src` without a new id drops it.
+   */
+  fileId?: string
 }
 
 export interface UploadedImage {
@@ -16,6 +21,13 @@ export interface UploadedImage {
   width?: number
   height?: number
   altText?: string
+  /** The application's own id for the stored file. Kept in the document when it's a non-empty string. */
+  fileId?: string
+}
+
+/** A file id worth keeping: a non-empty string. */
+export function isFileId(value: unknown): value is string {
+  return typeof value === 'string' && value !== ''
 }
 
 /**

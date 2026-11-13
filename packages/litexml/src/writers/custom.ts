@@ -7,6 +7,13 @@ function blockId(node: any): Record<string, string> {
     : {}
 }
 
+/** An image's file id, the application's own: only a non-empty string is written. */
+function fileIdAttr(value: unknown): string | undefined {
+  return typeof value === 'string' && value !== ''
+    ? value
+    : undefined
+}
+
 function optAttr(attrs: Record<string, string | undefined>): Record<string, string> {
   const result: Record<string, string> = {}
   for (const [k, v] of Object.entries(attrs)) {
@@ -36,6 +43,7 @@ export function registerCustomWriters(registry: LitexmlRegistry): void {
         'caption': n.caption,
         'thumbhash': n.thumbhash,
         'accent': n.accent,
+        'file-id': fileIdAttr(n.fileId),
         'display-width': n.displayWidth != null
           ? String(n.displayWidth)
           : undefined,
@@ -401,7 +409,11 @@ export function registerCustomWriters(registry: LitexmlRegistry): void {
     const n = node as any
     const images: XmlElement[] = (n.images ?? []).map((img: any) => ({
       tag: 'img',
-      attrs: optAttr({ src: img.src, alt: img.alt }),
+      attrs: optAttr({
+        'src': img.src,
+        'alt': img.alt,
+        'file-id': fileIdAttr(img.fileId),
+      }),
       selfClosing: true,
     }))
     return {

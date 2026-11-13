@@ -2,6 +2,7 @@ import type { ImageData, UploadImage } from './types'
 import { isSafeImageSrc, normalizeImageSize } from '@hakulex/renderer'
 import { keepsOriginal } from './dialog-model'
 import { probeImageSize } from './probe'
+import { isFileId } from './types'
 
 /** Why an uploaded file can't become an image; the message is shown to the author. */
 export class ImageUploadError extends Error {}
@@ -38,5 +39,8 @@ export async function uploadToImage(file: File, upload: UploadImage): Promise<Im
     altText: result.altText ?? '',
     width,
     height,
+    ...(isFileId(result.fileId)
+      ? { fileId: result.fileId }
+      : {}),
   }
 }

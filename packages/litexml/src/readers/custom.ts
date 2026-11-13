@@ -71,6 +71,14 @@ function imageLayoutAttr(el: Element): string | undefined {
     : undefined
 }
 
+/** An image's file id from `file-id`, left out when it is missing or empty. */
+function fileIdOf(el: Element): { fileId: string } | Record<string, never> {
+  const fileId = el.getAttribute('file-id')
+  return fileId
+    ? { fileId }
+    : {}
+}
+
 // The gallery's types (the editor isn't a dependency of this package)
 const GALLERY_ASPECTS = new Set(['auto', '1:1', '4:3', '16:9', '3:4'])
 const GALLERY_FITS = new Set(['cover', 'contain'])
@@ -135,6 +143,7 @@ export function registerCustomReaders(registry: LitexmlRegistry): void {
       caption: el.getAttribute('caption') ?? undefined,
       thumbhash: el.getAttribute('thumbhash') ?? undefined,
       accent: el.getAttribute('accent') ?? undefined,
+      ...fileIdOf(el),
       ...exclusiveImageDisplayAttrs(el),
       layout: imageLayoutAttr(el),
       version: 1,
@@ -430,12 +439,13 @@ export function registerCustomReaders(registry: LitexmlRegistry): void {
   })
 
   registry.registerReader('gallery', (el) => {
-    const images: Array<{ src: string, alt?: string }> = []
+    const images: Array<{ src: string, alt?: string, fileId?: string }> = []
     for (const child of el.children) {
       if (child.tagName.toLowerCase() === 'img') {
         images.push({
           src: child.getAttribute('src') ?? '',
           alt: child.getAttribute('alt') ?? undefined,
+          ...fileIdOf(child),
         })
       }
     }
