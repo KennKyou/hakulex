@@ -29,7 +29,7 @@ test.beforeEach(async ({ page }) => {
     seen.push(`a dialog opened: ${alert.message()}`)
     void alert.dismiss()
   })
-  await page.route(/picsum\.photos/, route => route.abort())
+  await page.route(/dummyimage\.com/, route => route.abort())
   await page.goto('/editor')
 })
 

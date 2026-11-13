@@ -17,28 +17,28 @@ interface LibraryImage extends UploadedImage {
 
 const library: LibraryImage[] = [
   {
-    src: 'https://picsum.photos/id/1015/800/600',
+    src: 'https://dummyimage.com/800x600/4a6b8a/fff.png?text=River',
     width: 800,
     height: 600,
     fileId: 'media-1015',
     altText: '河谷',
   },
   {
-    src: 'https://picsum.photos/id/1025/800/600',
+    src: 'https://dummyimage.com/800x600/a0785a/fff.png?text=Dog',
     width: 800,
     height: 600,
     fileId: 'media-1025',
     altText: '小狗',
   },
   {
-    src: 'https://picsum.photos/id/1035/800/600',
+    src: 'https://dummyimage.com/800x600/3f7f6f/fff.png?text=Waterfall',
     width: 800,
     height: 600,
     fileId: 'media-1035',
     altText: '瀑布',
   },
   {
-    src: 'https://picsum.photos/id/1043/800/600',
+    src: 'https://dummyimage.com/800x600/2f5f8f/fff.png?text=Coast',
     width: 800,
     height: 600,
     fileId: 'media-1043',

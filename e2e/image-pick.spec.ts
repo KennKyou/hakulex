@@ -31,7 +31,7 @@ test.beforeEach(async ({ page }) => {
     if (message.type() === 'error' && !message.text().startsWith('Failed to load resource'))
       seen.push(message.text())
   })
-  await page.route(/picsum\.photos/, route => route.fulfill({ status: 200, contentType: 'image/png', body: PNG }))
+  await page.route(/dummyimage\.com/, route => route.fulfill({ status: 200, contentType: 'image/png', body: PNG }))
   await page.goto('/editor')
 })
 
@@ -114,7 +114,7 @@ test('the gallery adds what was chosen at the end, with file ids', async ({ page
   await expect.poll(async () => (await stored(page)).find(node => node.type === 'gallery')?.images)
     .toEqual([
       {
-        src: 'https://picsum.photos/id/1025/800/600',
+        src: 'https://dummyimage.com/800x600/a0785a/fff.png?text=Dog',
         alt: '小狗',
         width: 800,
         height: 600,
@@ -161,7 +161,7 @@ test('the image panel replaces the picture with a chosen one, staying open under
   await expect(pick).toBeFocused()
   await expect.poll(async () => (await stored(page)).find(node => node.type === 'image'))
     .toMatchObject({
-      src: 'https://picsum.photos/id/1043/800/600',
+      src: 'https://dummyimage.com/800x600/2f5f8f/fff.png?text=Coast',
       fileId: 'media-1043',
       altText: '河谷',
       caption: '圖說',
@@ -183,7 +183,7 @@ test('without addresses, the dialog, gallery and panel offer none to type', asyn
 
   await openPanel(page)
   await expect(panel(page).locator('[name="src"]')).not.toBeEditable()
-  await expect(panel(page).locator('[name="src"]')).toHaveValue('https://picsum.photos/id/1015/800/600')
+  await expect(panel(page).locator('[name="src"]')).toHaveValue('https://dummyimage.com/800x600/4a6b8a/fff.png?text=River')
   await expect(panel(page).getByText('選擇檔案替換…')).toBeVisible()
 })
 

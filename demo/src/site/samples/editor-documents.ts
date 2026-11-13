@@ -55,8 +55,16 @@ function blocksSample(): SerializedEditorState {
     direction: null,
     children,
   })
+  // Placeholder pictures, one colour each, with their number on them.
+  const colours: Record<number, string> = {
+    10: '4a6b8a',
+    20: 'a0785a',
+    30: '3f7f6f',
+    40: '2f5f8f',
+    50: '7a5c8f',
+  }
   const photos = [10, 20, 30, 40, 50].map(id => ({
-    src: `https://picsum.photos/id/${id}/800/600`,
+    src: `https://dummyimage.com/800x600/${colours[id]}/fff.png?text=Photo+${id}`,
     alt: `照片 ${id}`,
     width: 800,
     height: 600,
@@ -515,7 +523,7 @@ function storedFormatsSample(): SerializedEditorState {
   const image = {
     type: 'image',
     version: 1,
-    src: 'https://picsum.photos/seed/hakulex/120/80',
+    src: 'https://dummyimage.com/120x80/336699/fff.png',
     altText: '表格裡的圖片',
     thumbhash: 'abc=',
     accent: '#336699',

@@ -29,7 +29,7 @@ test.beforeEach(async ({ page }) => {
     if (message.type() === 'error' && !message.text().startsWith('Failed to load resource'))
       seen.push(message.text())
   })
-  await page.route(/picsum\.photos|example\.com/, route => route.fulfill({ status: 200, contentType: 'image/png', body: PNG }))
+  await page.route(/dummyimage\.com|example\.com/, route => route.fulfill({ status: 200, contentType: 'image/png', body: PNG }))
   await page.goto('/editor')
 })
 
