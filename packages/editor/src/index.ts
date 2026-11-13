@@ -24,7 +24,6 @@ export type {
 export { registerImageEditor, registerImagePreprocess, resolvePreprocessTargets, useImageTools } from './image/editor-registry'
 export { IMAGE } from './image/transformer'
 export type { ImageData, PickImages, PickImagesOptions, UploadedImage, UploadImage, UploadImageOptions } from './image/types'
-export { toImageData } from './image/upload'
 export { $canApplyRuby, $isSelectionInSpoiler, $rubyOfSelection } from './inline/commands'
 export {
   RUBY_MARKDOWN,

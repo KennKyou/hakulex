@@ -3,8 +3,9 @@ import type { PickImages, PickImagesOptions, UploadedImage } from '../src'
 import { flushPromises, mount } from '@vue/test-utils'
 import { $createParagraphNode, $getRoot } from 'lexical'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { OPEN_BLOCK_DIALOG_COMMAND, OPEN_IMAGE_DIALOG_COMMAND, RichEditor, serializeEditorState, toImageData } from '../src'
+import { OPEN_BLOCK_DIALOG_COMMAND, OPEN_IMAGE_DIALOG_COMMAND, RichEditor, serializeEditorState } from '../src'
 import ImageDialog from '../src/components/ImageDialog.vue'
+import { toImageData } from '../src/image/upload'
 
 /*
  * `pickImages` lets the author choose images the site already has. The image dialog lists
