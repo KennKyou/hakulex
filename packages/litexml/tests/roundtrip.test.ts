@@ -935,7 +935,7 @@ const EVERY_NODE = {
   },
 } as unknown as SerializedEditorState
 
-const EVERY_NODE_XML = '<doc>\n  <img src="https://x.test/a.png" alt="圖" width="800" height="600" caption="說明" thumbhash="abc" accent="#112233" display-width="60" layout="float-left" />\n  <video src="https://x.test/v.mp4" poster="https://x.test/p.jpg" />\n  <attachment src="https://x.test/f.pdf" name="報告.pdf" size="2048" mime-type="application/pdf" ext="pdf" display="inline" />\n  <link-card url="https://github.com/a/b" source="github" title="a/b" description="desc" favicon="https://x.test/f.ico" image="https://x.test/i.png" />\n  <embed url="https://www.youtube.com/watch?v=x" source="youtube" />\n  <codeblock lang="ts">const a = 1 &lt; 2 &amp;&amp; b\n# not md</codeblock>\n  <mermaid>graph TD\n  A--&gt;B</mermaid>\n  <math display="block">\\int_0^1 x\\,dx</math>\n  <p>x <math color="#ff0000">a^2</math> <mention platform="GH" handle="octocat">Octocat</mention> <tag>標籤</tag><comment>註解</comment><spoiler>雷</spoiler><ruby rt="かん">漢</ruby><footnote ref="1" /></p>\n  <alert type="warning">\n    <p>小心</p>\n  </alert>\n  <banner type="tip">\n    <p>提示</p>\n  </banner>\n  <details summary="更多" open="true">\n    <p>內容</p>\n  </details>\n  <nested-doc>\n    <p>巢狀</p>\n  </nested-doc>\n  <grid cols="2" gap="16px">\n    <cell>\n      <p>左</p>\n    </cell>\n    <cell>\n      <p>右</p>\n    </cell>\n  </grid>\n  <steps>\n    <step id="s_one" title="第一步">\n      <p>做這個</p>\n    </step>\n    <step id="s_two" title="第二步">\n      <p>再做那個</p>\n    </step>\n  </steps>\n  <gallery layout="grid" aspect="4:3" fit="contain" max-item-height="320"><img src="https://x.test/1.png" alt="一" /><img src="https://x.test/2.png" alt="二" /></gallery>\n  <code-snippet>\n    <file name="a.ts" lang="ts">export const a = 1</file>\n    <file name="b.css" lang="css">a { color: red }</file>\n  </code-snippet>\n  <chart><![CDATA[{"type":"bar","data":[1,2]}\n<&>]]></chart>\n  <chat variant="user-agent">\n    <participants>\n      <participant id="p_u" kind="user" name="我" avatar="https://x.test/u.png" />\n      <participant id="p_a" kind="agent" name="助理" />\n    </participants>\n    <messages>\n      <message id="m_1" participant="p_u">你好</message>\n      <message id="m_2" participant="p_a">**哈囉**</message>\n    </messages>\n  </chat>\n  <poll poll-id="p_poll1" mode="multiple" close-at="2026-12-01" show-results="after-vote">\n    <question>哪個？</question>\n    <option id="o_a">A</option>\n    <option id="o_b">B</option>\n  </poll>\n  <dynamic url="https://x.test/widget.js" initial-height="240"><![CDATA[{"a":1,"b":"<x>"}]]></dynamic>\n  <footnote-section>\n    <def ref="1">註腳內容</def>\n  </footnote-section>\n  <excalidraw><![CDATA[{"elements":[]}]]></excalidraw>\n  <blockquote rich="true">\n    <p>無出處</p>\n  </blockquote>\n</doc>\n'
+const EVERY_NODE_XML = '<doc>\n  <img src="https://x.test/a.png" alt="圖" width="800" height="600" caption="說明" thumbhash="abc" accent="#112233" display-width="60" layout="float-left" />\n  <video src="https://x.test/v.mp4" poster="https://x.test/p.jpg" />\n  <attachment src="https://x.test/f.pdf" name="報告.pdf" size="2048" mime-type="application/pdf" ext="pdf" display="inline" />\n  <link-card url="https://github.com/a/b" source="github" title="a/b" description="desc" favicon="https://x.test/f.ico" image="https://x.test/i.png" />\n  <embed url="https://www.youtube.com/watch?v=x" source="youtube" />\n  <codeblock lang="ts">const a = 1 &lt; 2 &amp;&amp; b\n# not md</codeblock>\n  <mermaid>graph TD\n  A--&gt;B</mermaid>\n  <math display="block">\\int_0^1 x\\,dx</math>\n  <p>x <math color="#ff0000">a^2</math> <mention platform="GH" handle="octocat">Octocat</mention> <tag>標籤</tag><comment>註解</comment><spoiler>雷</spoiler><ruby rt="かん">漢</ruby><footnote ref="1" /></p>\n  <alert type="warning">\n    <p>小心</p>\n  </alert>\n  <banner type="tip">\n    <p>提示</p>\n  </banner>\n  <details summary="更多" open="true">\n    <p>內容</p>\n  </details>\n  <nested-doc>\n    <p>巢狀</p>\n  </nested-doc>\n  <grid cols="2" gap="16px">\n    <cell>\n      <p>左</p>\n    </cell>\n    <cell>\n      <p>右</p>\n    </cell>\n  </grid>\n  <steps>\n    <step id="s_one" title="第一步">\n      <p>做這個</p>\n    </step>\n    <step id="s_two" title="第二步">\n      <p>再做那個</p>\n    </step>\n  </steps>\n  <gallery layout="grid" aspect="4:3" fit="contain" max-item-height="320"><img src="https://x.test/1.png" alt="一" width="100" height="80" /><img src="https://x.test/2.png" alt="二" /></gallery>\n  <code-snippet>\n    <file name="a.ts" lang="ts">export const a = 1</file>\n    <file name="b.css" lang="css">a { color: red }</file>\n  </code-snippet>\n  <chart><![CDATA[{"type":"bar","data":[1,2]}\n<&>]]></chart>\n  <chat variant="user-agent">\n    <participants>\n      <participant id="p_u" kind="user" name="我" avatar="https://x.test/u.png" />\n      <participant id="p_a" kind="agent" name="助理" />\n    </participants>\n    <messages>\n      <message id="m_1" participant="p_u">你好</message>\n      <message id="m_2" participant="p_a">**哈囉**</message>\n    </messages>\n  </chat>\n  <poll poll-id="p_poll1" mode="multiple" close-at="2026-12-01" show-results="after-vote">\n    <question>哪個？</question>\n    <option id="o_a">A</option>\n    <option id="o_b">B</option>\n  </poll>\n  <dynamic url="https://x.test/widget.js" initial-height="240"><![CDATA[{"a":1,"b":"<x>"}]]></dynamic>\n  <footnote-section>\n    <def ref="1">註腳內容</def>\n  </footnote-section>\n  <excalidraw><![CDATA[{"elements":[]}]]></excalidraw>\n  <blockquote rich="true">\n    <p>無出處</p>\n  </blockquote>\n</doc>\n'
 
 const EVERY_NODE_BACK = {
   root: {
@@ -1407,6 +1407,8 @@ const EVERY_NODE_BACK = {
           {
             src: 'https://x.test/1.png',
             alt: '一',
+            width: 100,
+            height: 80,
           },
           {
             src: 'https://x.test/2.png',
@@ -1551,13 +1553,8 @@ const EVERY_NODE_BACK = {
   },
 }
 
-/** What the format has no place for, so it doesn't come back. */
-const NOT_CARRIED: Record<string, (node: any) => any> = {
-  gallery: node => ({
-    ...node,
-    images: node.images.map(({ width: _w, height: _h, ...image }: any) => image),
-  }),
-}
+/** What the format leaves out of a node, by type. Nothing now: a gallery's image sizes used to be. */
+const NOT_CARRIED: Record<string, (node: any) => any> = {}
 
 /** Defaults the readers fill in that the original left out. */
 function withDefaults(node: any): any {

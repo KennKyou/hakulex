@@ -79,6 +79,14 @@ function fileIdOf(el: Element): { fileId: string } | Record<string, never> {
     : {}
 }
 
+/** A gallery image's width or height: only a whole number of pixels above zero is a size. */
+function gallerySizeAttr(el: Element, name: 'width' | 'height'): number | undefined {
+  const raw = el.getAttribute(name)
+  if (raw === null || !/^[1-9]\d*$/.test(raw.trim()))
+    return undefined
+  return Number(raw)
+}
+
 // The gallery's types (the editor isn't a dependency of this package)
 const GALLERY_ASPECTS = new Set(['auto', '1:1', '4:3', '16:9', '3:4'])
 const GALLERY_FITS = new Set(['cover', 'contain'])
@@ -439,12 +447,24 @@ export function registerCustomReaders(registry: LitexmlRegistry): void {
   })
 
   registry.registerReader('gallery', (el) => {
-    const images: Array<{ src: string, alt?: string, fileId?: string }> = []
+    const images: Array<{ src: string, alt?: string, width?: number, height?: number, thumbhash?: string, fileId?: string }> = []
     for (const child of el.children) {
       if (child.tagName.toLowerCase() === 'img') {
+        const width = gallerySizeAttr(child, 'width')
+        const height = gallerySizeAttr(child, 'height')
+        const thumbhash = child.getAttribute('thumbhash')
         images.push({
           src: child.getAttribute('src') ?? '',
           alt: child.getAttribute('alt') ?? undefined,
+          ...(width === undefined
+            ? {}
+            : { width }),
+          ...(height === undefined
+            ? {}
+            : { height }),
+          ...(thumbhash
+            ? { thumbhash }
+            : {}),
           ...fileIdOf(child),
         })
       }

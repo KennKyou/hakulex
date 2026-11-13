@@ -14,6 +14,13 @@ function fileIdAttr(value: unknown): string | undefined {
     : undefined
 }
 
+/** A gallery image's width or height: a whole number of pixels above zero, or nothing. */
+function sizeAttr(value: unknown): string | undefined {
+  return typeof value === 'number' && Number.isInteger(value) && value > 0
+    ? String(value)
+    : undefined
+}
+
 function optAttr(attrs: Record<string, string | undefined>): Record<string, string> {
   const result: Record<string, string> = {}
   for (const [k, v] of Object.entries(attrs)) {
@@ -409,9 +416,15 @@ export function registerCustomWriters(registry: LitexmlRegistry): void {
     const n = node as any
     const images: XmlElement[] = (n.images ?? []).map((img: any) => ({
       tag: 'img',
+      // As on an image by itself: the page holds a picture's place with these before it has loaded.
       attrs: optAttr({
         'src': img.src,
         'alt': img.alt,
+        'width': sizeAttr(img.width),
+        'height': sizeAttr(img.height),
+        'thumbhash': typeof img.thumbhash === 'string' && img.thumbhash !== ''
+          ? img.thumbhash
+          : undefined,
         'file-id': fileIdAttr(img.fileId),
       }),
       selfClosing: true,
