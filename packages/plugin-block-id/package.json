@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/plugin-block-id",
   "type": "module",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Block ID plugin for hakulex: every top-level block gets an ID that stays with it",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",

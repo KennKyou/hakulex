@@ -1,7 +1,7 @@
 {
   "name": "@hakulex/editor",
   "type": "module",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Core hakulex rich text editor for Vue 3",
   "author": "Ken (https://github.com/KennKyou)",
   "license": "MIT",
