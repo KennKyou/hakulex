@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { EditorVariant, GpsInfo, ImageEditPrivacy, UploadImageOptions } from '@hakulex/editor'
+import type { EditorVariant, GpsInfo, ImageEditPrivacy, PickImagesOptions, UploadedImage, UploadImageOptions } from '@hakulex/editor'
 import type { SerializedEditorState } from 'lexical'
 import type { Preset } from '../site/presets'
 import { RichDiff } from '@hakulex/diff'
@@ -22,6 +22,7 @@ import AccentSwatches from '../components/doc/AccentSwatches.vue'
 import SegmentedControl from '../components/doc/SegmentedControl.vue'
 import TabBar from '../components/doc/TabBar.vue'
 import InspectorSection from '../components/workbench/InspectorSection.vue'
+import SiteImagePicker from '../components/workbench/SiteImagePicker.vue'
 import WorkbenchLayout from '../components/workbench/WorkbenchLayout.vue'
 import { diffSample } from '../diff-sample'
 import { pollBackend } from '../poll-backend'
@@ -182,6 +183,25 @@ async function uploadImage(file: File, options?: UploadImageOptions) {
 }
 
 /*
+ * Stands in for a site's media library: `pickImages` opens the site's own dialog and returns
+ * what the author chose there. The editor aborts the signal if its dialog closes first.
+ */
+const picker = shallowRef<{ multiple: boolean, done: (images: UploadedImage[]) => void } | null>(null)
+function pickImages({ multiple, signal }: PickImagesOptions) {
+  return new Promise<UploadedImage[]>((resolve) => {
+    const controller = new AbortController()
+    const done = (images: UploadedImage[]) => {
+      picker.value = null
+      controller.abort()
+      resolve(images)
+    }
+    // The editor's dialog closed first: close the library too.
+    signal.addEventListener('abort', () => done([]), { signal: controller.signal })
+    picker.value = { multiple, done }
+  })
+}
+
+/*
  * A site's own way to find and remove a photo's location, shown with a small reader of a
  * JPEG's EXIF GPS block. Removing draws the picture again, which leaves its EXIF behind.
  */
@@ -315,6 +335,7 @@ watch([tab, doc, variant, scheme, theme], async () => {
         <RichEditor
           v-model="doc"
           :upload-image="uploadImage"
+          :pick-images="pickImages"
           :image-privacy="imagePrivacy"
           allow-keep-original
           :upload-video="store"
@@ -344,6 +365,7 @@ watch([tab, doc, variant, scheme, theme], async () => {
           <BlockHandlePlugin />
           <ImageEditorPlugin />
         </RichEditor>
+        <SiteImagePicker v-if="picker" :multiple="picker.multiple" @done="picker.done" />
       </div>
 
       <div v-if="tab === 'preview'" class="editor-frame">

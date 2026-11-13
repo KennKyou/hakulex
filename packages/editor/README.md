@@ -73,6 +73,52 @@ const uploadImage: UploadImage = async (file) => {
 
 **不要直接相信文件裡的 `fileId`。** 文件的 JSON 可以被修改，也可以從別的文件或別的網站貼過來，所以裡面的編號不一定屬於正在編輯的這位使用者。在伺服器端拿它做判斷之前（例如「這個檔案還有文章在用，不能刪」），先確認這個編號是你的檔案、而且這位使用者有權使用它。
 
+## 選擇網站已有的圖片
+
+圖片已經存在你的媒體庫、素材庫或其他地方時，給 `pickImages`，作者就能直接選一張已有的圖片，不用重新上傳。編輯器不知道圖片在哪裡：插入圖片的對話框和圖庫多一個按鈕，按下時呼叫這個函式，由你打開自己的選擇畫面，再回傳作者選了哪些圖片。
+
+```vue
+<script setup lang="ts">
+import type { PickImages } from '@hakulex/editor'
+import type { SerializedEditorState } from 'lexical'
+import { RichEditor } from '@hakulex/editor'
+import { shallowRef } from 'vue'
+import { openMediaLibrary } from './media-library'
+
+const doc = shallowRef<SerializedEditorState | null>(null)
+
+const pickImages: PickImages = async ({ multiple, signal }) => {
+  // 編輯器的對話框先關掉時，signal 會中止：把你的選擇畫面也關掉。
+  const files = await openMediaLibrary({ multiple, signal })
+  return files.map(file => ({
+    src: file.url,
+    width: file.width,
+    height: file.height,
+    fileId: file.id
+  }))
+}
+</script>
+
+<template>
+  <RichEditor v-model="doc" :pick-images="pickImages" pick-images-label="從媒體庫選擇" />
+</template>
+```
+
+- 函式收到 `purpose`（`'insert'`、`'replace'` 或 `'gallery'`）、`multiple`（替換一張圖片時是 `false`）和 `signal`。回傳空陣列表示作者沒有選；丟出的錯誤會以「選擇失敗：…」顯示給作者。
+- 回傳的每一張和 `uploadImage` 的結果一樣檢查：網址要安全，沒有寬高就載入圖片量取，`fileId` 是非空字串才保留。不能用的那張不加入，並告訴作者原因，其他照常加入。這個檢查也以 `toImageData` 匯出，寫測試時可以用。
+- 插入圖片時，選來的圖片和上傳的檔案列在同一份清單裡，插入時不會再上傳，也不能用圖片編輯器編輯。替換時只用回傳的第一張。圖庫把它們加在最後。
+- 編輯器不限制一次能選幾張，要限制就在你的選擇畫面裡處理。
+- 你的選擇畫面開著的時候，編輯器的對話框不搶焦點，也不處理 Esc 和點外面關閉，所以作者在你的畫面按 Esc 只會關掉你的畫面。編輯器的對話框被關閉（取消、編輯器卸載）時 `signal` 會中止，之後才回來的結果會被忽略。
+- 按鈕文字預設是「選擇圖片」，用 `pickImagesLabel` 換掉。沒有給 `pickImages` 時，畫面和以前一樣。
+
+### 不提供網址輸入 `allowImageUrl`
+
+預設作者也可以輸入圖片網址。如果你的網站要求每張圖片都有 `fileId`（網址輸入的圖片沒有），設成 `false`：插入圖片的對話框和圖庫都不再提供網址輸入，圖片只能上傳或用 `pickImages` 選。
+
+```vue
+<RichEditor v-model="doc" :upload-image="uploadImage" :pick-images="pickImages" :allow-image-url="false" />
+```
+
 ## 授權
 
 [MIT](./LICENSE)

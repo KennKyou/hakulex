@@ -922,6 +922,18 @@
   border-color: transparent !important;
 }
 
+.hlx-image-add-row,
+.hlx-image-pick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.hlx-image-add-row .hlx-image-add-more {
+  align-self: auto;
+}
+
 .hlx-image-check {
   display: inline-flex;
   align-items: center;
@@ -1697,13 +1709,29 @@
   gap: 8px;
 }
 
+/* A label around a hidden file input, in the look of the dialog's buttons beside it. */
 .hlx-gallery-upload {
   position: relative;
-  padding: 5px 12px;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: var(--hlx-chrome-height-md);
+  padding: 0 10px;
   overflow: hidden;
   border: 1px solid var(--hlx-color-border);
   border-radius: var(--hlx-chrome-radius-md);
+  font-weight: 500;
   cursor: pointer;
+}
+
+.hlx-gallery-upload:hover {
+  background: var(--hlx-color-bg-subtle);
+}
+
+/* The hidden file input has keyboard focus: the ring goes on the label. */
+.hlx-gallery-upload:focus-within {
+  outline: 2px solid var(--hlx-color-accent);
+  outline-offset: 2px;
 }
 
 .hlx-block-dialog .hlx-gallery-upload > input {

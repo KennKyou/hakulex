@@ -41,3 +41,22 @@ export interface UploadImageOptions {
   /** The author asked to keep the original: skip compressing it. Only from the image list. */
   keepOriginal?: boolean
 }
+
+export interface PickImagesOptions {
+  /** Where the author asked: inserting images, replacing one, or a gallery. */
+  purpose: 'insert' | 'replace' | 'gallery'
+  /** Whether more than one may be chosen. False when replacing. */
+  multiple: boolean
+  /**
+   * Aborted when the dialog that asked closes (cancelled, or the editor unmounted). The site
+   * should close whatever it showed; what it returns after that is ignored.
+   */
+  signal: AbortSignal
+}
+
+/**
+ * Lets the author choose images the site already has, from wherever it keeps them. Returns the
+ * chosen ones; an empty list means none were. Errors it throws are shown to the author. Each
+ * result is checked like an upload's, so a `fileId` is kept the same way.
+ */
+export type PickImages = (options: PickImagesOptions) => Promise<UploadedImage[]>

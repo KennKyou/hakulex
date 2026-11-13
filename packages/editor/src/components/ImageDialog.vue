@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { FileRow, ImageDialogEntry, ImageDialogMode, ReviewRow } from '../image/dialog-model'
 import type { GpsInfo, ImageEditorCapability, ImageEditPrivacy } from '../image/editor-registry'
+import type { PickImages } from '../image/types'
 import {
   DialogContent,
   DialogDescription,
@@ -21,9 +22,11 @@ import {
   markKeepOriginal,
   nextRowId,
   toFileRow,
+  toPickedRow,
   urlFileName,
 } from '../image/dialog-model'
 import { probeImageSize } from '../image/probe'
+import { pickToImages } from '../image/upload'
 import { useEditorTheme } from '../theme-context'
 
 /*
@@ -40,6 +43,9 @@ const props = withDefaults(defineProps<{
   editor?: ImageEditorCapability | null
   privacy?: ImageEditPrivacy
   allowKeepOriginal?: boolean
+  /** The site's own images to choose from. Chosen ones aren't uploaded or edited. */
+  pickImages?: PickImages | null
+  pickLabel?: string
 }>(), {
   mode: 'insert',
   initialFiles: undefined,
@@ -48,6 +54,8 @@ const props = withDefaults(defineProps<{
   editor: null,
   privacy: undefined,
   allowKeepOriginal: false,
+  pickImages: null,
+  pickLabel: '選擇圖片',
 })
 const emit = defineEmits<{ submit: [entries: ImageDialogEntry[]], cancel: [] }>()
 
@@ -76,6 +84,9 @@ const keepOriginal = shallowRef(false)
 const confirming = shallowRef(false)
 const fileError = shallowRef<string | null>(null)
 const dragActive = shallowRef(false)
+/** `pickImages` is running: the site's dialog is over this one. */
+const picking = shallowRef(false)
+const pickError = shallowRef<string | null>(null)
 
 const copy = computed(() => imageDialogCopy(props.mode, step.value === 'review'
   ? rows.value.length
@@ -195,9 +206,19 @@ async function editRow(target: FileRow) {
 }
 
 function rowName(row: ReviewRow) {
-  return row.kind === 'file'
-    ? row.original.name
-    : urlFileName(row.src)
+  if (row.kind === 'file')
+    return row.original.name
+  return urlFileName(row.kind === 'picked'
+    ? row.image.src
+    : row.src)
+}
+
+function rowThumb(row: ReviewRow) {
+  if (row.kind === 'file')
+    return infoOf(row.current)?.url
+  return row.kind === 'picked'
+    ? row.image.src
+    : row.src
 }
 
 function rowMeta(row: FileRow) {
@@ -292,9 +313,73 @@ function addUrl() {
   step.value = 'review'
 }
 
+// ---- The site's own images.
+
+let pickAbort: AbortController | null = null
+onBeforeUnmount(() => pickAbort?.abort())
+/** Where focus goes once the site's dialog is gone: this one is modal again, and remounted. */
+let focusAfterPick: 'pick' | 'list' | null = null
+
+async function pickFromSite() {
+  const pickImages = props.pickImages
+  if (!pickImages || picking.value || inserting.value)
+    return
+  const controller = new AbortController()
+  pickAbort = controller
+  picking.value = true
+  pickError.value = null
+  const result = await pickToImages(pickImages, {
+    purpose: props.mode,
+    multiple: props.mode !== 'replace',
+    signal: controller.signal,
+  })
+  // Closed while choosing: whatever came back is not wanted.
+  if (!result)
+    return
+  pickAbort = null
+  pickError.value = result.errors.join(' ') || null
+  if (result.images.length) {
+    const added = result.images.map(toPickedRow)
+    failedIds.value = []
+    rows.value = props.mode === 'replace'
+      ? added.slice(0, 1)
+      : [
+          ...rows.value,
+          ...added,
+        ]
+  }
+  focusAfterPick = result.images.length && step.value === 'source'
+    ? 'list'
+    : 'pick'
+  if (result.images.length)
+    step.value = 'review'
+  picking.value = false
+  await nextTick()
+  focusAfterPicking()
+}
+
+function focusAfterPicking() {
+  const target = focusAfterPick
+  if (!target)
+    return false
+  focusAfterPick = null
+  const root = content.value?.$el
+  const element = target === 'list'
+    ? root?.querySelector<HTMLElement>('.hlx-image-dialog-foot [data-primary]')
+    : root?.querySelector<HTMLElement>('[data-pick]')
+  element?.focus()
+  return !!element
+}
+
+function onInteractOutside(event: Event) {
+  // A click in the site's dialog is outside this one.
+  if (picking.value)
+    event.preventDefault()
+}
+
 // The list takes over: the insert button is next, so Enter inserts.
 watch(step, async (value) => {
-  if (value !== 'review')
+  if (value !== 'review' || picking.value)
     return
   await nextTick()
   content.value?.$el.querySelector<HTMLElement>('.hlx-image-dialog-foot [data-primary]')?.focus()
@@ -303,7 +388,7 @@ watch(step, async (value) => {
 // ---- Inserting.
 
 async function insert() {
-  if (inserting.value || blocked.value || !rows.value.length)
+  if (inserting.value || picking.value || blocked.value || !rows.value.length)
     return
   inserting.value = true
   // A location still being looked for is waited for: a photo mustn't slip through with it.
@@ -341,13 +426,14 @@ function leave() {
 }
 
 function onOpenChange(value: boolean) {
-  if (!value)
+  if (!value && !picking.value)
     leave()
 }
 
 function onEscape(event: KeyboardEvent) {
   event.preventDefault()
-  if (event.isComposing)
+  // An Esc in the site's dialog closes that one, not both.
+  if (event.isComposing || picking.value)
     return
   if (confirming.value)
     confirming.value = false
@@ -406,14 +492,19 @@ function onZoneKeydown(event: KeyboardEvent) {
 
 function focusFirst(event: Event) {
   event.preventDefault()
+  if (picking.value || focusAfterPicking())
+    return
   content.value?.$el.querySelector<HTMLElement>('[data-autofocus]')?.focus()
 }
 </script>
 
 <template>
-  <DialogRoot :open="true" @update:open="onOpenChange">
+  <!-- While the site's dialog is over this one, this one doesn't hold focus or block the page. -->
+  <DialogRoot :open="true" :modal="!picking" @update:open="onOpenChange">
     <DialogPortal>
       <DialogOverlay class="hlx-dialog-overlay" />
+      <!-- Reka draws its overlay only for a modal dialog. -->
+      <div v-if="picking" class="hlx-dialog-overlay" />
       <DialogContent
         ref="content"
         class="hlx-root hlx-dialog hlx-image-dialog hlx-image-list-dialog"
@@ -423,6 +514,7 @@ function focusFirst(event: Event) {
         @open-auto-focus="focusFirst"
         @close-auto-focus.prevent
         @escape-key-down="onEscape"
+        @interact-outside="onInteractOutside"
         @keydown.capture="onKeydown"
         @paste="onPaste"
         @dragover.prevent
@@ -478,8 +570,29 @@ function focusFirst(event: Event) {
             <p v-if="fileError" class="hlx-image-dialog-error" role="alert">
               {{ fileError }}
             </p>
-            <template v-if="allowUrl">
+            <template v-if="pickImages">
               <div v-if="canUpload" class="hlx-image-dialog-divider">
+                或
+              </div>
+              <div class="hlx-image-pick">
+                <button
+                  type="button"
+                  data-pick
+                  :data-autofocus="canUpload || allowUrl ? undefined : ''"
+                  :disabled="picking"
+                  @click="pickFromSite"
+                >
+                  <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21" /></svg>
+                  {{ pickLabel }}
+                </button>
+                <span v-if="picking" class="hlx-image-dialog-hint" role="status">選擇圖片中…</span>
+              </div>
+              <p v-if="pickError" class="hlx-image-dialog-error" role="alert">
+                {{ pickError }}
+              </p>
+            </template>
+            <template v-if="allowUrl">
+              <div v-if="canUpload || pickImages" class="hlx-image-dialog-divider">
                 或從網址
               </div>
               <label class="hlx-image-url-field">
@@ -518,18 +631,19 @@ function focusFirst(event: Event) {
                 :data-failed="row.kind === 'file' && blocksInsert(row, failedIds) ? '' : undefined"
               >
                 <img
-                  v-if="row.kind === 'url' || infoOf(row.current)?.url"
+                  v-if="rowThumb(row)"
                   class="hlx-image-row-thumb"
-                  :src="row.kind === 'url' ? row.src : infoOf(row.current)!.url"
+                  :src="rowThumb(row)"
                   alt=""
                 >
                 <span v-else class="hlx-image-row-thumb" />
                 <div class="hlx-image-row-body">
                   <div class="hlx-image-row-title">
-                    <span class="hlx-image-row-name" :title="row.kind === 'url' ? row.src : row.original.name">{{ rowName(row) }}</span>
+                    <span class="hlx-image-row-name" :title="row.kind === 'file' ? row.original.name : rowThumb(row)">{{ rowName(row) }}</span>
                     <span v-if="row.kind === 'file' && row.current !== row.original" class="hlx-image-row-edited">已編輯</span>
                   </div>
                   <span v-if="row.kind === 'url'" class="hlx-image-row-meta">{{ row.width }} × {{ row.height }} · 來自連結</span>
+                  <span v-else-if="row.kind === 'picked'" class="hlx-image-row-meta">{{ row.image.width }} × {{ row.image.height }} · 已選擇</span>
                   <template v-else>
                     <span class="hlx-image-row-meta">{{ rowMeta(row) }}</span>
                     <span v-if="editor && !isEditableImage(row.current)" class="hlx-image-row-meta">動畫或向量圖，編輯後會變成靜態圖</span>
@@ -564,10 +678,27 @@ function focusFirst(event: Event) {
                 </button>
               </li>
             </ul>
-            <button v-if="mode !== 'replace' && canUpload" type="button" class="hlx-image-add-more" @click="pickFiles">
-              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-              加入更多
-            </button>
+            <div v-if="mode !== 'replace' && (canUpload || pickImages)" class="hlx-image-add-row">
+              <button v-if="canUpload" type="button" class="hlx-image-add-more" @click="pickFiles">
+                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                加入更多
+              </button>
+              <button
+                v-if="pickImages"
+                type="button"
+                class="hlx-image-add-more"
+                data-pick
+                :disabled="picking"
+                @click="pickFromSite"
+              >
+                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                {{ pickLabel }}
+              </button>
+              <span v-if="picking" class="hlx-image-dialog-hint" role="status">選擇圖片中…</span>
+            </div>
+            <p v-if="pickError" class="hlx-image-dialog-error" role="alert">
+              {{ pickError }}
+            </p>
             <label v-if="allowKeepOriginal && rows.some(row => row.kind === 'file')" class="hlx-image-check">
               <input v-model="keepOriginal" type="checkbox">
               <span>保留原圖（不壓縮）</span>
@@ -600,7 +731,7 @@ function focusFirst(event: Event) {
             <button v-else type="button" @click="step = 'source'">
               返回
             </button>
-            <button type="button" data-primary data-autofocus :disabled="inserting || blocked" @click="insert">
+            <button type="button" data-primary data-autofocus :disabled="inserting || picking || blocked" @click="insert">
               {{ copy.action }}
               <kbd>⌘↵</kbd>
             </button>

@@ -4,7 +4,7 @@ import type { ColorScheme, EditorVariant, ThemeTokens } from '@hakulex/style-tok
 import type { InitialConfig } from '@hakulex/vue-lexical'
 import type { EditorState, LexicalEditor, SerializedEditorState } from 'lexical'
 import type { ImageEditPrivacy } from './image/editor-registry'
-import type { UploadImage } from './image/types'
+import type { PickImages, UploadImage } from './image/types'
 import type { UploadFile, UploadVideo } from './media/types'
 import type { EditorNode } from './nodes'
 import { LinkCardSettingsKey } from '@hakulex/renderer'
@@ -37,6 +37,18 @@ const props = withDefaults(defineProps<{
   /** Stores a chosen image file. Without it, images can only be inserted by URL. */
   uploadImage?: UploadImage
   /**
+   * Lets the author choose images the site already has, such as from its media library. With
+   * it, the image dialog and the gallery get a button that calls it.
+   */
+  pickImages?: PickImages
+  /** The text of that button. */
+  pickImagesLabel?: string
+  /**
+   * Whether an image may be given by its address. Off, the image dialog and the gallery offer
+   * only uploads and `pickImages`, as for a site that needs every image to have a `fileId`.
+   */
+  allowImageUrl?: boolean
+  /**
    * Finds and removes a photo's location. With it, the list of images to insert offers to
    * remove the location before uploading.
    */
@@ -68,6 +80,9 @@ const props = withDefaults(defineProps<{
   namespace: 'hakulex',
   nodes: () => [],
   uploadImage: undefined,
+  pickImages: undefined,
+  pickImagesLabel: '選擇圖片',
+  allowImageUrl: true,
   imagePrivacy: undefined,
   allowKeepOriginal: false,
   uploadVideo: undefined,
@@ -99,6 +114,9 @@ provide(LinkCardSettingsKey, () => props.linkCards)
 provide(EditorCoreKey, {
   history: createEmptyHistoryState(),
   uploadImage: () => props.uploadImage,
+  pickImages: () => props.pickImages,
+  pickImagesLabel: () => props.pickImagesLabel,
+  allowImageUrl: () => props.allowImageUrl,
   imageTools: createImageTools(),
   imagePrivacy: () => props.imagePrivacy,
   allowKeepOriginal: () => props.allowKeepOriginal,

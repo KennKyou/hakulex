@@ -1,9 +1,10 @@
 import type { GpsInfo, ImageEditPrivacy } from './editor-registry'
+import type { ImageData } from './types'
 import { isSafeImageSrc } from '@hakulex/renderer'
 
 /*
- * The list of images to insert: each row is a file (as
- * chosen and as edited) or an address already loaded.
+ * The list of images to insert: each row is a file (as chosen and as edited), an address
+ * already loaded, or an image the site's `pickImages` gave, already checked.
  */
 
 export type ImageDialogMode = 'insert' | 'replace'
@@ -11,6 +12,7 @@ export type ImageDialogMode = 'insert' | 'replace'
 export type ImageDialogEntry
   = | { kind: 'file', file: File }
     | { kind: 'url', src: string, width: number, height: number }
+    | { kind: 'picked', image: ImageData }
 
 export interface FileRow {
   kind: 'file'
@@ -32,7 +34,14 @@ export interface UrlRow {
   height: number
 }
 
-export type ReviewRow = FileRow | UrlRow
+/** Chosen from the site's own images: nothing to upload, and not for the image editor. */
+export interface PickedRow {
+  kind: 'picked'
+  id: string
+  image: ImageData
+}
+
+export type ReviewRow = FileRow | UrlRow | PickedRow
 
 /** Canvas flattens these: an edited GIF loses its animation, an SVG becomes pixels. */
 const FLATTENED_BY_CANVAS = new Set(['image/gif', 'image/svg+xml'])
@@ -52,6 +61,14 @@ export function toFileRow(file: File): FileRow {
     gps: null,
     removeGps: true,
     summary: '',
+  }
+}
+
+export function toPickedRow(image: ImageData): PickedRow {
+  return {
+    kind: 'picked',
+    id: nextRowId(),
+    image,
   }
 }
 
@@ -106,6 +123,8 @@ export async function finalizeRows(
 ): Promise<{ entries: ImageDialogEntry[], failedIds: string[] }> {
   const failedIds: string[] = []
   const entries = await Promise.all(rows.map(async (row): Promise<ImageDialogEntry | null> => {
+    if (row.kind === 'picked')
+      return { kind: 'picked', image: row.image }
     if (row.kind === 'url') {
       return {
         kind: 'url',

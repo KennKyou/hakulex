@@ -122,6 +122,16 @@ export const ImagePlugin = defineComponent({
       }, { discrete: true })
       const upload = props.upload
       void addImages(entries.flatMap((entry): Job[] => {
+        // Already checked when it was chosen; nothing to upload.
+        if (entry.kind === 'picked') {
+          const { image } = entry
+          return [
+            {
+              uploads: false,
+              run: async () => image,
+            },
+          ]
+        }
         if (entry.kind === 'url') {
           const { src, width, height } = entry
           return [
@@ -306,6 +316,9 @@ export const ImagePlugin = defineComponent({
       open.value
         ? h(ImageDialog, {
             canUpload: !!props.upload,
+            allowUrl: core?.allowImageUrl() ?? true,
+            pickImages: core?.pickImages() ?? null,
+            pickLabel: core?.pickImagesLabel(),
             editor: tools?.editor.value ?? null,
             privacy: core?.imagePrivacy(),
             allowKeepOriginal: core?.allowKeepOriginal() ?? false,

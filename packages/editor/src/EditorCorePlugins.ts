@@ -2,7 +2,7 @@ import type { HistoryState } from '@lexical/history'
 import type { Transformer } from '@lexical/markdown'
 import type { PropType } from 'vue'
 import type { ImageEditPrivacy, ImageTools } from './image/editor-registry'
-import type { UploadImage } from './image/types'
+import type { PickImages, UploadImage } from './image/types'
 import type { UploadFile, UploadVideo } from './media/types'
 import type { EditorNode } from './nodes'
 import { validateUrl } from '@hakulex/renderer'
@@ -51,6 +51,12 @@ import { registeredTypes } from './unknown/document'
 export interface EditorCoreConfig {
   history: HistoryState
   uploadImage: () => UploadImage | undefined
+  /** The site's own images to choose from; see `<RichEditor>`. */
+  pickImages: () => PickImages | undefined
+  /** The text of the button that calls `pickImages`. */
+  pickImagesLabel: () => string
+  /** Whether an image may be given by its address; see `<RichEditor>`. */
+  allowImageUrl: () => boolean
   /** What plugins add to how images are added: an editor, and a step before uploads. */
   imageTools: ImageTools
   /** The site's way to find and remove a photo's location; see `<RichEditor>`. */

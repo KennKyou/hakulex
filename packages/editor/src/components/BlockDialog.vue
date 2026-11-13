@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DialogContent, DialogDescription, DialogOverlay, DialogPortal, DialogRoot, DialogTitle } from 'reka-ui'
-import { shallowRef, useTemplateRef } from 'vue'
+import { nextTick, shallowRef, useTemplateRef, watch } from 'vue'
 import { useEditorTheme } from '../theme-context'
 
 const props = defineProps<{
@@ -10,6 +10,12 @@ const props = defineProps<{
   dirty: boolean
   /** Something is going on that saving has to wait for. */
   busy?: boolean
+  /**
+   * The site's own dialog is over this one, as while `pickImages` runs: this one stops holding
+   * focus and leaves Esc and clicks outside alone. Afterwards focus goes back to the element
+   * marked `data-return-focus`.
+   */
+  away?: boolean
 }>()
 const emit = defineEmits<{ save: [], cancel: [] }>()
 
@@ -23,6 +29,25 @@ const theme = useEditorTheme()
 const content = useTemplateRef<{ $el: HTMLElement }>('content')
 const confirming = shallowRef(false)
 
+// Modal holds focus inside and blocks the page; the site's dialog needs both.
+let returning = false
+watch(() => props.away, async (away, was) => {
+  if (away || !was)
+    return
+  returning = true
+  await nextTick()
+  returnFocus()
+})
+
+function returnFocus() {
+  if (!returning)
+    return false
+  returning = false
+  const target = content.value?.$el.querySelector<HTMLElement>('[data-return-focus]')
+  target?.focus()
+  return !!target
+}
+
 function leave() {
   if (props.dirty)
     confirming.value = true
@@ -31,14 +56,14 @@ function leave() {
 }
 
 function onOpenChange(open: boolean) {
-  if (!open)
+  if (!open && !props.away)
     leave()
 }
 
 function onEscape(event: KeyboardEvent) {
   event.preventDefault()
-  // The Esc that closes the word list isn't ours.
-  if (event.isComposing)
+  // The Esc that closes the word list isn't ours, nor the one in the site's dialog.
+  if (event.isComposing || props.away)
     return
   if (confirming.value)
     confirming.value = false
@@ -55,16 +80,25 @@ function onKeydown(event: KeyboardEvent) {
   }
 }
 
+function onInteractOutside(event: Event) {
+  if (props.away)
+    event.preventDefault()
+}
+
 function focusFirst(event: Event) {
   event.preventDefault()
+  if (props.away || returnFocus())
+    return
   content.value?.$el.querySelector<HTMLElement>('[data-autofocus], input, textarea')?.focus()
 }
 </script>
 
 <template>
-  <DialogRoot :open="true" @update:open="onOpenChange">
+  <DialogRoot :open="true" :modal="!away" @update:open="onOpenChange">
     <DialogPortal>
       <DialogOverlay class="hlx-dialog-overlay" />
+      <!-- Reka draws its overlay only for a modal dialog. -->
+      <div v-if="away" class="hlx-dialog-overlay" />
       <DialogContent
         ref="content"
         class="hlx-root hlx-dialog hlx-block-dialog"
@@ -74,6 +108,7 @@ function focusFirst(event: Event) {
         @open-auto-focus="focusFirst"
         @close-auto-focus.prevent
         @escape-key-down="onEscape"
+        @interact-outside="onInteractOutside"
         @keydown.capture="onKeydown"
       >
         <div class="hlx-dialog-head">

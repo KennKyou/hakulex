@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { GalleryAspect, GalleryFit, GalleryLayout, GalleryPerView } from '@hakulex/renderer'
+import type { ImageData } from '../image/types'
 import type { BlockFields } from '../plugins/ContentBlockPlugin'
 import { GALLERY_ASPECTS, GALLERY_FITS, GALLERY_LAYOUTS, GALLERY_PER_VIEWS, isSafeImageSrc, normalizeGallery, normalizeMaxItemHeight } from '@hakulex/renderer'
 import { computed, inject, onBeforeUnmount, reactive, shallowRef } from 'vue'
 import { EditorCoreKey } from '../editor-core-key'
 import { resolvePreprocessTargets } from '../image/editor-registry'
-import { uploadToImage } from '../image/upload'
+import { pickToImages, uploadToImage } from '../image/upload'
 import BlockDialog from './BlockDialog.vue'
 
 const props = defineProps<{ initial?: BlockFields }>()
@@ -13,6 +14,10 @@ const emit = defineEmits<{ save: [fields: BlockFields, unchanged: boolean], canc
 
 const core = inject(EditorCoreKey)!
 const upload = core.uploadImage()
+const pickImages = core.pickImages()
+const pickLabel = core.pickImagesLabel()
+/** Without it, an image only comes from an upload or the site's own images. */
+const allowUrl = core.allowImageUrl()
 
 interface Row {
   id: number
@@ -41,7 +46,8 @@ const stored = Array.isArray(props.initial?.images)
   : []
 const settings = normalizeGallery(props.initial ?? {})
 
-const rows = reactive<Row[]>(stored.length
+// A new gallery starts with a row to type an address in, when there's typing to do.
+const rows = reactive<Row[]>(stored.length || !allowUrl
   ? stored.map(toRow)
   : [
       toRow({}),
@@ -56,6 +62,7 @@ const maxItemHeight = shallowRef(settings.maxItemHeight === undefined
 const error = shallowRef<string | null>(null)
 const invalid = shallowRef(new Set<number>())
 const uploading = shallowRef(0)
+const picking = shallowRef(false)
 
 function toStored({ source, src, alt }: Row) {
   const trimmed = src.trim()
@@ -106,9 +113,36 @@ function move(index: number, delta: -1 | 1) {
 /* Uploads */
 
 let closed = false
+let pickAbort: AbortController | null = null
 onBeforeUnmount(() => {
   closed = true
+  pickAbort?.abort()
 })
+
+/** Adds checked images at the end, in place of the blank row there to be filled. */
+function append(images: ImageData[]) {
+  if (!images.length)
+    return
+  const blank = rows.length === 1 && !rows[0].src.trim() && !rows[0].alt.trim()
+  if (blank)
+    rows.splice(0, 1)
+  rows.push(...images.map(image => toRow({
+    src: image.src,
+    ...(image.altText
+      ? { alt: image.altText }
+      : {}),
+    ...(image.width
+      ? { width: image.width }
+      : {}),
+    ...(image.height
+      ? { height: image.height }
+      : {}),
+    // Already checked: only a non-empty string comes through.
+    ...(image.fileId
+      ? { fileId: image.fileId }
+      : {}),
+  })))
+}
 
 async function onFiles(event: Event) {
   const input = event.target as HTMLInputElement
@@ -131,34 +165,37 @@ async function onFiles(event: Event) {
   if (closed)
     return
   uploading.value -= images.length
-  // A blank row is there to be filled, and now it won't be.
-  const blank = rows.length === 1 && !rows[0].src.trim() && !rows[0].alt.trim()
   const added = results.flatMap(item => (item.status === 'fulfilled'
-    ? [
-        toRow({
-          src: item.value.src,
-          ...(item.value.altText
-            ? { alt: item.value.altText }
-            : {}),
-          ...(item.value.width
-            ? { width: item.value.width }
-            : {}),
-          ...(item.value.height
-            ? { height: item.value.height }
-            : {}),
-          // Already checked by the upload: only a non-empty string comes through.
-          ...(item.value.fileId
-            ? { fileId: item.value.fileId }
-            : {}),
-        }),
-      ]
+    ? [item.value]
     : []))
-  if (blank && added.length)
-    rows.splice(0, 1)
-  rows.push(...added)
+  append(added)
   const failed = results.length - added.length
   if (failed)
     error.value = `有 ${failed} 個檔案沒有上傳成功。`
+}
+
+/* The site's own images */
+
+async function pick() {
+  if (!pickImages || picking.value)
+    return
+  const controller = new AbortController()
+  pickAbort = controller
+  picking.value = true
+  error.value = null
+  const result = await pickToImages(pickImages, {
+    purpose: 'gallery',
+    multiple: true,
+    signal: controller.signal,
+  })
+  // Closed while choosing: the dialog is gone.
+  if (!result)
+    return
+  pickAbort = null
+  picking.value = false
+  append(result.images)
+  if (result.errors.length)
+    error.value = result.errors.join(' ')
 }
 
 /* Saving */
@@ -188,7 +225,8 @@ function save() {
     :title="initial ? '編輯圖庫' : '插入圖庫'"
     description="修改版面和圖片。⌘Enter 儲存。"
     :dirty="dirty"
-    :busy="uploading > 0"
+    :busy="uploading > 0 || picking"
+    :away="picking"
     @save="save"
     @cancel="emit('cancel')"
   >
@@ -246,6 +284,7 @@ function save() {
           placeholder="圖片網址"
           :aria-label="`第 ${index + 1} 張的網址`"
           :aria-invalid="invalid.has(row.id) || undefined"
+          :readonly="!allowUrl"
           autocomplete="off"
           spellcheck="false"
         >
@@ -268,19 +307,30 @@ function save() {
       </li>
     </ol>
     <div class="hlx-gallery-add">
-      <button type="button" @click="rows.push(toRow({}))">
+      <button v-if="allowUrl" type="button" @click="rows.push(toRow({}))">
         新增圖片
       </button>
       <label v-if="upload" class="hlx-gallery-upload">
         <span>上傳圖片</span>
         <input type="file" accept="image/*" multiple @change="onFiles">
       </label>
+      <button
+        v-if="pickImages"
+        type="button"
+        data-pick
+        data-return-focus
+        :disabled="picking"
+        @click="pick"
+      >
+        {{ pickLabel }}
+      </button>
     </div>
     <p v-if="error" class="hlx-block-dialog-error" role="alert">
       {{ error }}
     </p>
     <template #status>
-      <span v-if="uploading" role="status">上傳 {{ uploading }} 個檔案中…</span>
+      <span v-if="picking" role="status">選擇圖片中…</span>
+      <span v-else-if="uploading" role="status">上傳 {{ uploading }} 個檔案中…</span>
       <span v-else>{{ rows.filter(row => row.src.trim()).length }} 張圖片</span>
     </template>
   </BlockDialog>
