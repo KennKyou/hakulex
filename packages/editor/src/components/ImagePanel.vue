@@ -1,31 +1,54 @@
 <script setup lang="ts">
-import type { ImageData, UploadImage } from '../image/types'
+import type { ImageData, PickImages, UploadImage } from '../image/types'
 import { isSafeImageSrc, normalizeImageLayout, normalizeImageSize } from '@hakulex/renderer'
-import { inject, onBeforeUnmount, shallowRef } from 'vue'
+import { inject, nextTick, onBeforeUnmount, shallowRef, useTemplateRef } from 'vue'
 import { EditorCoreKey } from '../editor-core-key'
 import { resolvePreprocessTargets } from '../image/editor-registry'
 import { probeImageSize } from '../image/probe'
-import { ImageUploadError, uploadToImage } from '../image/upload'
+import { ImageUploadError, pickToImages, uploadToImage } from '../image/upload'
 
 /*
  * An image's fields, beside it. Text goes in as it is typed; an address only when it is
  * entered, once it has loaded and its size is known.
  */
 
-const props = defineProps<{ data: ImageData, upload?: UploadImage }>()
-const emit = defineEmits<{ write: [patch: Partial<ImageData>, field?: string], endTyping: [] }>()
+const props = withDefaults(defineProps<{
+  data: ImageData
+  upload?: UploadImage
+  /** The site's own images, to replace this one with. */
+  pickImages?: PickImages
+  pickLabel?: string
+  /** Off, the address is only shown: a typed one would have no `fileId`. */
+  allowUrl?: boolean
+}>(), {
+  upload: undefined,
+  pickImages: undefined,
+  pickLabel: '選擇圖片',
+  allowUrl: true,
+})
+const emit = defineEmits<{
+  write: [patch: Partial<ImageData>, field?: string]
+  endTyping: []
+  /** The site's dialog is over the panel, or gone again. */
+  away: [away: boolean]
+}>()
 const tools = inject(EditorCoreKey, null)?.imageTools ?? null
+const pickButton = useTemplateRef<HTMLButtonElement>('pickButton')
 
 const src = shallowRef(props.data.src)
 const altText = shallowRef(props.data.altText)
 const caption = shallowRef(props.data.caption ?? '')
 const displayWidth = shallowRef(String(props.data.displayWidth ?? ''))
 const layout = shallowRef<string>(normalizeImageLayout(props.data.layout) ?? '')
-const busy = shallowRef<'uploading' | 'checking' | null>(null)
+const busy = shallowRef<'uploading' | 'checking' | 'picking' | null>(null)
 const error = shallowRef<{ field: string, message: string } | null>(null)
 // Bumped on every new address, file and close, so a result from an abandoned one is ignored.
 let attempt = 0
-onBeforeUnmount(() => attempt++)
+let pickAbort: AbortController | null = null
+onBeforeUnmount(() => {
+  attempt++
+  pickAbort?.abort()
+})
 
 const invalid = (name: string) => error.value?.field === name || undefined
 
@@ -65,6 +88,8 @@ function onLayout() {
 }
 
 async function onSrc() {
+  if (!props.allowUrl)
+    return
   const typed = src.value.trim()
   if (typed === props.data.src) {
     error.value = null
@@ -144,6 +169,50 @@ async function onFile(event: Event) {
     }
   }
 }
+
+/** Replaces the picture with one of the site's, keeping the alt text, caption, width and layout. */
+async function onPick() {
+  const pickImages = props.pickImages
+  if (!pickImages || busy.value)
+    return
+  const id = ++attempt
+  const controller = new AbortController()
+  pickAbort = controller
+  error.value = null
+  busy.value = 'picking'
+  emit('away', true)
+  const result = await pickToImages(pickImages, {
+    purpose: 'replace',
+    multiple: false,
+    signal: controller.signal,
+  })
+  // The panel closed while choosing.
+  if (!result || id !== attempt)
+    return
+  pickAbort = null
+  busy.value = null
+  emit('away', false)
+  const [image] = result.images
+  if (result.errors.length) {
+    error.value = {
+      field: 'pick',
+      message: result.errors.join(' '),
+    }
+  }
+  if (image) {
+    src.value = image.src
+    emit('write', {
+      src: image.src,
+      width: image.width,
+      height: image.height,
+      altText: props.data.altText || image.altText,
+      fileId: image.fileId,
+    })
+  }
+  // Back from the site's dialog.
+  await nextTick()
+  pickButton.value?.focus({ preventScroll: true })
+}
 </script>
 
 <template>
@@ -158,6 +227,7 @@ async function onFile(event: Event) {
       spellcheck="false"
       placeholder="https://example.com/image.png"
       :aria-invalid="invalid('src')"
+      :readonly="!allowUrl"
       @change="onSrc"
       @keydown.enter.prevent="onSrc"
     >
@@ -167,6 +237,17 @@ async function onFile(event: Event) {
     <input type="file" class="hlx-visually-hidden" accept="image/*" :disabled="!!busy" @change="onFile">
     選擇檔案替換…
   </label>
+  <button
+    v-if="pickImages"
+    ref="pickButton"
+    type="button"
+    class="hlx-chart-wide-button"
+    data-pick
+    :disabled="!!busy"
+    @click="onPick"
+  >
+    {{ pickLabel }}
+  </button>
   <label class="hlx-chart-field">
     <span>替代文字</span>
     <input
@@ -175,6 +256,7 @@ async function onFile(event: Event) {
       type="text"
       autocomplete="off"
       placeholder="描述這張圖片，給看不到圖片的讀者"
+      :data-autofocus="allowUrl ? undefined : ''"
       @input="onAlt"
       @change="onAltDone"
       @focusout="emit('endTyping')"
@@ -226,6 +308,6 @@ async function onFile(event: Event) {
     {{ error.message }}
   </p>
   <p v-else-if="busy" class="hlx-block-panel-status" role="status">
-    {{ busy === 'uploading' ? '上傳中…' : '載入圖片中…' }}
+    {{ busy === 'uploading' ? '上傳中…' : busy === 'picking' ? '選擇圖片中…' : '載入圖片中…' }}
   </p>
 </template>

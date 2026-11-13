@@ -37,7 +37,11 @@ function onClick() {
 
 /* Edited in a panel beside it: each change goes in as it is made. */
 
-const upload = inject(EditorCoreKey, null)?.uploadImage()
+const core = inject(EditorCoreKey, null)
+const upload = core?.uploadImage()
+const pickImages = core?.pickImages()
+/** The site's dialog from `pickImages` is over the panel. */
+const away = shallowRef(false)
 const {
   open,
   showToolbar,
@@ -59,6 +63,12 @@ const {
 }, {
   toolbar: useTemplateRef('blockToolbar'),
   panel: useTemplateRef('blockPanel'),
+  away,
+})
+// A panel that closed while choosing has nothing over it any more.
+watch(open, (now) => {
+  if (!now)
+    away.value = false
 })
 function current() {
   return editor.getEditorState().read(() => {
@@ -275,9 +285,19 @@ function startResize(event: PointerEvent, side: 'left' | 'right') {
     title="圖片"
     :icon="IconImage"
     :style="panelStyle"
+    :away="away"
     @close="close('keep')"
     @revert="close('revert')"
   >
-    <ImagePanel :data="data" :upload="upload" @write="onWrite" @end-typing="endTyping" />
+    <ImagePanel
+      :data="data"
+      :upload="upload"
+      :pick-images="pickImages"
+      :pick-label="core?.pickImagesLabel()"
+      :allow-url="core?.allowImageUrl() ?? true"
+      @write="onWrite"
+      @end-typing="endTyping"
+      @away="away = $event"
+    />
   </BlockPanel>
 </template>

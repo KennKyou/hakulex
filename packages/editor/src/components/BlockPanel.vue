@@ -5,7 +5,12 @@ import { useEditorTheme } from '../theme-context'
 
 // A class or style given to the panel is for the panel, not the Teleport around it.
 defineOptions({ inheritAttrs: false })
-defineProps<{ title: string, icon?: Component }>()
+const props = defineProps<{
+  title: string
+  icon?: Component
+  /** The site's own dialog is over the panel, as while `pickImages` runs: its Esc isn't ours. */
+  away?: boolean
+}>()
 const emit = defineEmits<{ close: [], revert: [] }>()
 const theme = useEditorTheme()
 const root = useTemplateRef<HTMLElement>('root')
@@ -22,7 +27,7 @@ onMounted(async () => {
 })
 
 function onKeydown(event: KeyboardEvent) {
-  if (event.key !== 'Escape' || event.isComposing)
+  if (event.key !== 'Escape' || event.isComposing || props.away)
     return
   event.preventDefault()
   event.stopPropagation()

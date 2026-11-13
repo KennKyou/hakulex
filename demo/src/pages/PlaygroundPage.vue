@@ -164,6 +164,8 @@ async function copyLitexml() {
 
 // Stands in for an application's upload endpoint: no server, so the file becomes a data URL.
 const failUploads = ref(false)
+/** Off, as for a site that needs every image to carry a file id: no typing an address. */
+const allowImageUrl = ref(true)
 /** What the last image upload was, so the list's choices can be seen to arrive. */
 const lastUpload = ref('')
 async function uploadImage(file: File, options?: UploadImageOptions) {
@@ -336,6 +338,7 @@ watch([tab, doc, variant, scheme, theme], async () => {
           v-model="doc"
           :upload-image="uploadImage"
           :pick-images="pickImages"
+          :allow-image-url="allowImageUrl"
           :image-privacy="imagePrivacy"
           allow-keep-original
           :upload-video="store"
@@ -442,6 +445,10 @@ watch([tab, doc, variant, scheme, theme], async () => {
           <label class="inspector-row">
             模擬上傳失敗
             <input v-model="failUploads" type="checkbox" class="pg-switch">
+          </label>
+          <label class="inspector-row">
+            允許輸入圖片網址
+            <input v-model="allowImageUrl" type="checkbox" class="pg-switch">
           </label>
           <p v-if="!DEV" class="upload-note">
             展示網站沒有上傳服務：影片和檔案請貼網址，圖片可以直接上傳。

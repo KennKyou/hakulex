@@ -110,7 +110,12 @@ export function useBlockPanel<T>(
   selected: Ref<boolean>,
   editable: Ref<boolean>,
   fields: LiveFields<T>,
-  parts: { toolbar: Readonly<Ref<HasElement | null>>, panel: Readonly<Ref<HasElement | null>> },
+  parts: {
+    toolbar: Readonly<Ref<HasElement | null>>
+    panel: Readonly<Ref<HasElement | null>>
+    /** The site's own dialog is over the panel: a press there doesn't close it. */
+    away?: Readonly<Ref<boolean>>
+  },
   width = 320,
 ): {
   open: ComputedRef<boolean>
@@ -129,7 +134,7 @@ export function useBlockPanel<T>(
   const open = computed(() => editable.value && panels.value === nodeKey)
   const showToolbar = computed(() => editable.value && (selected.value || open.value))
   const { toolbarStyle, panelStyle } = useBlockFloating(editor, element, showToolbar)
-  const { toolbar, panel } = parts
+  const { toolbar, panel, away } = parts
 
   let session: LiveEdit<T> | null = null
   watch(open, (now) => {
@@ -167,7 +172,10 @@ export function useBlockPanel<T>(
   }
 
   // A press anywhere but the panel, the toolbar or the block keeps what was written and closes.
-  useOutsidePress(() => [element.value, toolbar.value?.element, panel.value?.element], open, () => close('keep', false))
+  useOutsidePress(() => [element.value, toolbar.value?.element, panel.value?.element], open, () => {
+    if (!away?.value)
+      close('keep', false)
+  })
   // Read-only: what was written stays, the panel goes.
   watch(editable, (now) => {
     if (!now && panels.value === nodeKey) {
